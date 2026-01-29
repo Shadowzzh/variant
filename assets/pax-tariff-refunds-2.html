@@ -1,0 +1,251 @@
+<html lang="en" vid="0"><head vid="1">
+  <meta charset="UTF-8" vid="2">
+  <meta name="viewport" content="width=1280" vid="3">
+  <title vid="4">Pax — Automate tariff refunds with AI</title>
+  <script src="https://cdn.tailwindcss.com" vid="5"></script>
+  <style vid="6">
+    
+    @import url("https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/400.css");
+    @import url("https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/500.css");
+    @import url("https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/600.css");
+
+    :root{
+      
+      --color-canvas:#0d0e10;           
+      --color-ink:#f1f1f1;              
+      --color-ink-2:#b6b6b6;            
+      --color-ink-3:#7a7a7a;            
+      --color-accent:#c9f269;           
+      --rule:rgba(255,255,255,0.08);    
+
+      
+      --radius-0:0px;
+
+      
+      --shadow-0:none;
+
+      
+      --baseline:12px;
+      --section:72px;
+
+      
+      --gutter:6vw;
+
+      
+      --font-ui:"Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      --size-h1:56px;   --lh-h1:1.05; --track-h1:-0.01em; 
+      --size-h2:22px;   --lh-h2:1.2;  --track-h2:0em;
+      --size-body:16px; --lh-body:1.5; --track-body:0em;
+      --size-micro:12px;--lh-micro:1.4;--track-micro:0.04em; 
+    }
+
+    html,body{ background:var(--color-canvas); color:var(--color-ink); font-family:var(--font-ui); letter-spacing:var(--track-body); }
+    
+    .wrap{ padding-left:var(--gutter); padding-right:var(--gutter); }
+
+    
+    h1{
+      font-size:var(--size-h1); line-height:var(--lh-h1); letter-spacing:var(--track-h1);
+      font-weight:600;
+      max-width: 980px;
+    }
+
+    h2{ font-size:var(--size-h2); line-height:var(--lh-h2); font-weight:500; color:var(--color-ink-2); }
+    .sub{ font-size:18px; line-height:1.45; color:var(--color-ink-2); max-width:920px; }
+
+    
+    .rule{ border-bottom:1px solid var(--rule); }
+    .rule-top{ border-top:1px solid var(--rule); }
+
+    
+    .list-grid{
+      display:grid;
+      grid-template-columns: 1.1fr 120px 1.3fr; 
+      gap: 24px; 
+      align-items:center;
+    }
+    .row{ padding: calc(var(--baseline) * 1.25) 0; } 
+    .label{ font-size:var(--size-micro); letter-spacing:var(--track-micro); color:var(--color-ink-3); text-transform:uppercase; }
+    .mono{ font-variant-numeric: tabular-nums; }
+
+    
+    .ghost-link{
+      color:var(--color-ink);
+      text-decoration:none;
+      border-bottom:1px solid transparent;
+      transition:border-color .2s ease, color .2s ease;
+    }
+    .row:hover .ghost-link{ color:var(--color-accent); border-color:var(--color-accent); }
+
+    
+    .arrow{ width:14px; height:14px; stroke:currentColor; stroke-width:1; fill:none; vertical-align: text-top; }
+
+    
+    .stat{ font-size:28px; line-height:1.2; font-weight:600; }
+    .stat .unit{ color:var(--color-ink-2); font-weight:500; }
+
+    
+    .steps-grid{ display:grid; grid-template-columns: 220px 1fr; gap:24px; }
+
+    
+    @media (max-width: 1024px){
+      body::before{
+        content:"Desktop layout preview — expand width for intended view."; 
+        position:fixed; top:0; left:0; right:0; background:#b91c1c; color:white; font-size:14px; padding:6px 12px; z-index:50; text-align:center;
+      }
+    }
+  </style>
+</head>
+<body vid="7">
+  
+  <header class="wrap py-6 rule" vid="8">
+    <div class="flex items-center justify-between" vid="9">
+      <div class="text-sm tracking-wide text-zinc-400" vid="10">Pax</div>
+      <nav class="flex items-center gap-8" vid="11">
+        <a class="text-sm text-zinc-400 hover:text-[color:var(--color-ink)] transition" href="#" vid="12">Docs</a>
+        <a class="text-sm text-zinc-400 hover:text-[color:var(--color-ink)] transition" href="#" vid="13">Security</a>
+        <a class="text-sm text-[color:var(--color-accent)]" href="#" vid="14">Talk to us</a>
+      </nav>
+    </div>
+    
+  </header>
+
+  <main vid="15">
+    
+    <section class="wrap py-[var(--section)]" vid="16">
+      <h1 vid="17">
+        Automate tariff refunds with AI. Turn unclaimed duties into cash flow.
+      </h1>
+      
+      <p class="sub mt-5" vid="18">
+        Each year, most eligible refunds go unclaimed. Pax is the first AI‑powered broker for brands under $50M to reclaim 3–5% of revenue, producing 15% more refunds than manual workflows and cutting processing time by 99%.
+      </p>
+      
+      <div class="label mt-4" vid="19">HEADLINE · SUBHEAD — roles rewritten from brief</div>
+    </section>
+
+    
+    <section class="wrap rule-top" vid="20">
+      <div class="list-grid row rule" vid="21">
+        
+        <div class="stat mono" vid="22">$200K<span class="unit" vid="23"> in contracts</span></div>
+        <div class="label" vid="24">STAT</div>
+        <div class="text-[15px] text-zinc-400" vid="25">Launched 4 weeks ago · revenue committed</div>
+      </div>
+      <div class="list-grid row rule" vid="26">
+        <div class="stat mono" vid="27">$15B<span class="unit" vid="28"> unclaimed yearly</span></div>
+        <div class="label" vid="29">CONTEXT</div>
+        <div class="text-[15px] text-zinc-400" vid="30">80% of eligible drawback goes unclaimed across categories</div>
+      </div>
+    </section>
+
+    
+    <section class="wrap py-[calc(var(--section)*0.8)]" vid="31">
+      <h2 class="mb-3" vid="32">Pipelines we automate end‑to‑end</h2>
+      
+      <div class="list-grid label rule-top pt-3 pb-2 text-zinc-500" vid="33">
+        <div vid="34">Scenario</div>
+        <div vid="35">Mode</div>
+        <div vid="36">Outcome</div>
+      </div>
+
+      
+      <div class="rule list-grid row" vid="37">
+        
+        <a href="#" class="ghost-link flex items-center gap-2" vid="38">
+          Import → export within 5 years
+          <svg class="arrow" viewBox="0 0 16 16" vid="39"><path d="M3 8h10M9 4l4 4-4 4" vid="40"></path></svg>
+        </a>
+        <div class="label" vid="41">AI Match</div>
+        <div class="text-zinc-300" vid="42">Pairs entries and shipments automatically; increases match rate by 15% vs. industry manual.</div>
+      </div>
+
+      <div class="rule list-grid row" vid="43">
+        <a href="#" class="ghost-link flex items-center gap-2" vid="44">
+          Component substitution claims
+          <svg class="arrow" viewBox="0 0 16 16" vid="45"><path d="M3 8h10M9 4l4 4-4 4" vid="46"></path></svg>
+        </a>
+        <div class="label" vid="47">Classifier</div>
+        <div class="text-zinc-300" vid="48">Maps inputs to finished goods using ML bill‑of‑materials parsing; audit trail preserved.</div>
+      </div>
+
+      <div class="rule list-grid row" vid="49">
+        <a href="#" class="ghost-link flex items-center gap-2" vid="50">
+          Prior‑export drawback
+          <svg class="arrow" viewBox="0 0 16 16" vid="51"><path d="M3 8h10M9 4l4 4-4 4" vid="52"></path></svg>
+        </a>
+        <div class="label" vid="53">RPA</div>
+        <div class="text-zinc-300" vid="54">Collects proofs of export and compiles schedules; 99% cycle‑time reduction with AI agents.</div>
+      </div>
+
+      <div class="rule list-grid row" vid="55">
+        <a href="#" class="ghost-link flex items-center gap-2" vid="56">
+          Returned goods refunds
+          <svg class="arrow" viewBox="0 0 16 16" vid="57"><path d="M3 8h10M9 4l4 4-4 4" vid="58"></path></svg>
+        </a>
+        <div class="label" vid="59">Validation</div>
+        <div class="text-zinc-300" vid="60">Detects eligibility from RMAs and ASN feeds; flags exclusions before filing.</div>
+      </div>
+
+      <div class="rule list-grid row" vid="61">
+        <a href="#" class="ghost-link flex items-center gap-2" vid="62">
+          Small‑brand fast start
+          <svg class="arrow" viewBox="0 0 16 16" vid="63"><path d="M3 8h10M9 4l4 4-4 4" vid="64"></path></svg>
+        </a>
+        <div class="label" vid="65">Onboarding</div>
+        <div class="text-zinc-300" vid="66">Plug in commerce, freight, and ERP data; typical time‑to‑first refund: under a week.</div>
+      </div>
+
+      
+      <div class="label mt-3" vid="67">LIST — primary link · micro mode · descriptive outcome</div>
+    </section>
+
+    
+    <section class="wrap pb-[var(--section)]" vid="68">
+      <h2 class="mb-3" vid="69">How Pax handles compliance without slowing you down</h2>
+
+      <div class="rule-top" vid="70">
+        <div class="row steps-grid rule" vid="71">
+          <div class="label" vid="72">Ingest</div>
+          <div class="text-zinc-300" vid="73">Secure connectors pull import entries, exports, and returns. Normalization keeps your ERP untouched.</div>
+        </div>
+        <div class="row steps-grid rule" vid="74">
+          <div class="label" vid="75">Link</div>
+          <div class="text-zinc-300" vid="76">Models align entries to exports or substitutions with a confidence score and human‑review queue for edge cases.</div>
+        </div>
+        <div class="row steps-grid rule" vid="77">
+          <div class="label" vid="78">File</div>
+          <div class="text-zinc-300" vid="79">Automated preparation of schedules and forms; filings sent via broker rails with a verifiable audit log.</div>
+        </div>
+        <div class="row steps-grid rule" vid="80">
+          <div class="label" vid="81">Return</div>
+          <div class="text-zinc-300" vid="82">Funds land to your account; Pax tracks disbursements and re‑files if the agency requests clarifications.</div>
+        </div>
+      </div>
+
+      
+      <div class="flex items-center gap-6 mt-6" vid="83">
+        <a href="#" class="ghost-link flex items-center gap-2" vid="84">
+          See a sample claim
+          <svg class="arrow" viewBox="0 0 16 16" vid="85"><path d="M3 8h10M9 4l4 4-4 4" vid="86"></path></svg>
+        </a>
+        <a href="#" class="ghost-link flex items-center gap-2" vid="87">
+          Request a recovery estimate
+          <svg class="arrow" viewBox="0 0 16 16" vid="88"><path d="M3 8h10M9 4l4 4-4 4" vid="89"></path></svg>
+        </a>
+      </div>
+      <div class="label mt-3" vid="90">CTA — link style, no buttons to preserve reference tone</div>
+    </section>
+  </main>
+
+  <footer class="wrap py-10 rule-top" vid="91">
+    <div class="flex justify-between items-end" vid="92">
+      <div class="text-sm text-zinc-500" vid="93">Pax · AI‑powered tariff‑refund broker</div>
+      <div class="text-sm text-zinc-500" vid="94">Privacy · Terms · Security</div>
+    </div>
+    
+  </footer>
+
+  
+
+</body></html>

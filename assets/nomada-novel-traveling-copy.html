@@ -1,0 +1,220 @@
+<html lang="en" vid="0"><head vid="1">
+  <meta charset="UTF-8" vid="2">
+  <meta name="viewport" content="width=device-width, initial-scale=1" vid="3">
+  <title vid="4">Nómada — Novel Traveling</title>
+  <script src="https://cdn.tailwindcss.com" vid="5"></script>
+  <!-- Typography: the reference shows a high-contrast editorial serif for large titles and a neutral modern sans for small captions. 
+       Closest web choices: "Newsreader" (sharp, high contrast, elegant) and "Manrope" (clean geometric sans).
+       Both preserve the refined, print-poster feeling. -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&amp;family=Newsreader:opsz,wght@24..72,400;24..72,700;24..72,800&amp;display=swap" rel="stylesheet" vid="6">
+  <style vid="7">
+    :root{
+      /* Palette extracted by visual sampling of the reference posters:
+         - bone paper (#EDE6D9) and warmer sand (#D2BBA5)
+         - kraft tan (#B88E74)
+         - blush rose (#E7B0B9)
+         - dusty pink (#E8A7B2)
+         - leaf green (#5F8B64)
+         - cobalt ink (#2E4BFF) seen in the blue serif posters
+         - sunset orange (#FF6A2A) for the solid disc
+         - soft gray for shadows (#000000 with 12% opacity)
+      */
+      --paper:#EDE6D9;
+      --sand:#D2BBA5;
+      --kraft:#B88E74;
+      --blush:#E7B0B9;
+      --dusty:#E8A7B2;
+      --leaf:#5F8B64;
+      --cobalt:#2743D3;
+      --disc:#FF6A2A;
+      --ink:#2D2A26;
+      --shadow: rgba(0,0,0,0.12);
+      --shadow2: rgba(0,0,0,0.06);
+      /* Card corner radius in the reference is tight and consistent; measured against the poster grid it reads as ~12px on a 375px canvas. */
+      --r:12px;
+      /* Tight poster gutters in the reference ~12–14px on mobile scale; we use 12px for compactness. */
+      --g:12px;
+    }
+    html,body{height:100%;}
+    body{background:#FFFFFF; color:var(--ink); font-family:'Manrope', system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;}
+    /* The grid posters sit on a white surface with soft ambient shadows around each tile.
+       Shadow uses two layered blurs similar to the photographed mock: a wide 30px faint + a close 6px faint. */
+    .tile{
+      border-radius: var(--r);
+      box-shadow: 0 22px 30px var(--shadow), 0 3px 8px var(--shadow2);
+      overflow:hidden;
+      background:var(--paper);
+    }
+    /* Serif headline style mirrors the tall display serif seen on “STOP AND SMELL THE ROSES”, “CREATE MAKE CURATE”.
+       High contrast, tracking slightly negative to feel typographic rather than UI. */
+    .serif{ font-family:'Newsreader', serif; letter-spacing:-0.2px; }
+    /* Small uppercase captions mimic the tiny poster footers. */
+    .caption{ font-size:10px; letter-spacing:0.18em; text-transform:uppercase; }
+    /* Gradient backgrounds replicate the soft duotone gradients (pink->blue) seen in multiple posters. */
+    .soft-grad{ background: linear-gradient(180deg, #F6C6D2 0%, #BFD8F6 100%); }
+    .soft-grad-2{ background: linear-gradient(180deg, #F5E0B7 0%, #D7E6F3 100%); }
+    /* Subtle paper noise to avoid flat digital look; opacity kept very low like the reference print texture. */
+    .noise::after{
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background-image:url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop');
+      mix-blend-mode:multiply; opacity:0.06; filter:grayscale(1) contrast(1.1);
+    }
+    /* Circular text treatment from reference (curved phrases). We approximate with radial layout using CSS rotates. */
+    .circle-text span{ position:absolute; left:50%; top:50%; transform-origin:0 0; }
+    /* Tight line length similar to posters (35–45ch). */
+    .narrow{ max-width:45ch; }
+  </style>
+</head>
+
+<!-- Full-screen mobile-first layout. 
+     IMPORTANT: The reference is a compact, fixed-density poster grid with minimal outer margins.
+     We keep outer padding at 16px (close to the reference edges) and very tight 12px internal gutters. -->
+<body class="min-h-screen w-full flex flex-col" vid="8">
+
+  <!-- HEADER -->
+  <!-- Why: Reference has no conventional app chrome; it’s a print composition. 
+       We keep a lean typographic header with serif wordmark sized 22px, tight spacing, and no heavy bars or separators, to retain the airy art-board feeling. -->
+  <header class="px-4 pt-4 pb-3" style="padding-left:16px; padding-right:16px;" vid="9">
+    <div class="flex items-center justify-between" vid="10">
+      <!-- Wordmark uses the blue from reference (#2743D3) and editorial serif; exact size 22px/700 to echo poster titling. -->
+      <div class="serif text-[22px] font-extrabold" style="color:var(--cobalt)" vid="11">Nómada</div>
+      <!-- Micro caption mirrors the tiny poster footers; size 10px uppercase with letter-spacing 0.18em -->
+      <div class="caption opacity-70" vid="12">novel traveling</div>
+    </div>
+  </header>
+
+  <!-- INTRO COPY -->
+  <!-- Why: Several posters feature centered, short quips with large leading. We present a single-line invitation with serif, not a generic hero. 
+       Size 18px with 150% leading keeps it refined; no background or card to preserve full-bleed typographic look. -->
+  <section class="px-4" style="padding-left:16px; padding-right:16px;" vid="13">
+    <p class="serif text-[18px] leading-[27px] narrow" vid="14">
+      Wander cities through stories. Pick a mood, and we’ll map chapters to neighborhoods.
+    </p>
+  </section>
+
+  <!-- POSTER GRID -->
+  <!-- Why: The reference’s uniqueness is the tight 5xN poster matrix with consistent rounded tiles, mixed typographic experiments, and subtle shadows.
+       We translate that to a 2-column mobile grid (each tile ~ (375 - paddings - gutter)/2 ≈ 165px wide).
+       Gutter: 12px (var(--g)). Row spacing also 12px. -->
+  <main class="grid grid-cols-2 gap-[12px] px-4 pt-4 pb-6 flex-1" style="padding-left:16px; padding-right:16px;" vid="15">
+    
+    <!-- TILE A: Beige with centered serif ring title (inspired by “Here Comes The Sun” with a thin circular rule). -->
+    <article class="tile relative h-[180px] flex items-center justify-center" style="background:#E7DFCF;" vid="16">
+      <!-- Thin circle rule: 1px border radius 999px exactly; diameter chosen 122px to leave 16px breathing room around text. -->
+      <div class="relative h-[122px] w-[122px] rounded-full" style="border:1px solid rgba(0,0,0,0.35);" vid="17">
+        <div class="absolute inset-0 flex flex-col items-center justify-center" vid="18">
+          <h2 class="serif text-[16px] leading-tight text-center" vid="19">Lisbon</h2>
+          <div class="caption mt-[6px] opacity-70" vid="20">sunlit hills</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- TILE B: Solid orange disc on warm neutral, taken directly from the orange circle poster. -->
+    <article class="tile relative h-[180px] flex items-end justify-center pb-[22px]" style="background:#E3DACE;" vid="21">
+      <!-- Circle: exact 96px to feel bold within 180px tile, offset slightly upward like the reference. -->
+      <div class="absolute top-[22px] left-1/2 -translate-x-1/2 h-[96px] w-[96px] rounded-full" style="background:var(--disc);" vid="22"></div>
+      <div class="serif text-[13px]" vid="23">Kyoto at Dawn</div>
+    </article>
+
+    <!-- TILE C: Soft pink→blue gradient with tiny centered sans line, echoing the gradient posters with micro center caption. -->
+    <article class="tile relative h-[180px] soft-grad noise flex items-end justify-center pb-[18px]" vid="24">
+      <div class="text-[11px] opacity-90" vid="25">read by the river</div>
+    </article>
+
+    <!-- TILE D: Kraft tan background with black upper-left title and a small tag box, following the tan text-heavy posters. -->
+    <article class="tile relative h-[180px]" style="background:var(--kraft);" vid="26">
+      <div class="p-[14px]" vid="27">
+        <div class="serif text-[15px] leading-5 text-white" vid="28">Havana</div>
+        <!-- Small inset tag: 1px border, 6px radius exactly, matching the minimal labels in the reference. -->
+        <div class="mt-[10px] inline-block rounded-[6px] px-[8px] py-[4px] text-[10px] bg-white/90 text-[color:var(--ink)]" vid="29">boleros &amp; books</div>
+      </div>
+    </article>
+
+    <!-- TILE E: Circular text path inspired by the spiral/curved posters. We place 24 glyphs around a 110px circle. -->
+    <article class="tile relative h-[180px] flex items-center justify-center" style="background:#EAD6A6;" vid="30">
+      <div class="relative h-[110px] w-[110px]" vid="31">
+        <div class="circle-text serif text-[10px]" vid="32">
+          <!-- 24 characters laid around the circle at 15° increments (24*15=360). -->
+          <script vid="33">
+            // injected later to avoid clutter here
+          </script>
+        </div>
+      </div>
+    </article>
+
+    <!-- TILE F: Blue serif statement, left aligned, on pale paper, matching “You are just so very precious” style with cobalt text. -->
+    <article class="tile relative h-[180px] flex items-center" style="background:#F6EEDD;" vid="34">
+      <div class="px-[14px]" vid="35">
+        <div class="serif text-[18px] leading-[22px]" style="color:var(--cobalt)" vid="36">Read under <br vid="37">the Arcades</div>
+      </div>
+    </article>
+
+    <!-- TILE G: Heavy stacked sans in red on off-white copied from “you are so lovely” tone and weight. -->
+    <article class="tile relative h-[180px] flex items-end p-[14px]" style="background:#F3E9E1;" vid="38">
+      <div class="text-[20px] font-extrabold leading-[20px]" style="color:#E1483D" vid="39">Markets <br vid="40">at Midnight</div>
+    </article>
+
+    <!-- TILE H: Minimal cream with a vertical centered serif title like “Have less do more (simplicité)”. -->
+    <article class="tile relative h-[180px] flex items-center justify-center" style="background:#F5EDD9;" vid="41">
+      <div class="serif text-[17px] text-center" vid="42">Venetian <br vid="43">Passages</div>
+    </article>
+
+    <!-- TILE I: Repeated “HEARTS ON FIRE”-like stacked column using tight leading and left alignment. -->
+    <article class="tile relative h-[180px] flex items-center" style="background:#FFFFFF;" vid="44">
+      <div class="pl-[14px]" vid="45">
+        <div class="text-[12px] leading-[16px] tracking-wider" vid="46">STATIONS<br vid="47">ON<br vid="48">WATER<br vid="49">STATIONS<br vid="50">ON<br vid="51">WATER</div>
+      </div>
+    </article>
+
+    <!-- TILE J: Soft radial gradient like the “Kindness” poster with a single word. -->
+    <article class="tile relative h-[180px] noise flex items-center justify-center soft-grad-2" vid="52">
+      <div class="serif text-[16px] opacity-90" vid="53">Drift</div>
+    </article>
+
+    <!-- TILE K: White with wavy vertical poem similar to the sinuous text poster. -->
+    <article class="tile relative h-[180px] flex items-center justify-center bg-white" vid="54">
+      <div class="serif text-[11px] leading-[14px] text-center narrow" style="width:120px;" vid="55">
+        <span style="display:inline-block; transform:rotate(-6deg)" vid="56">walk</span> the alleys <span style="display:inline-block; transform:rotate(8deg)" vid="57">and</span> let the story <span style="display:inline-block; transform:rotate(-7deg)" vid="58">bend</span> you
+      </div>
+    </article>
+
+    <!-- TILE L: Strong serif block on blush, matching the pink “Today is a Good Day…” poster. -->
+    <article class="tile relative h-[180px] flex items-end p-[14px]" style="background:var(--blush);" vid="59">
+      <div vid="60">
+        <div class="serif text-[18px] leading-[20px]" vid="61">Today is a <br vid="62">Good Day to <br vid="63">Miss the Train</div>
+        <div class="caption mt-[6px] opacity-70" vid="64">Aoyama</div>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- BOTTOM ACTION STRIP -->
+  <!-- Why: Posters don’t have UI chrome; to stay true we keep a slim, single-row call-to-action with no heavy bars, using small caps and thin separators. -->
+  <footer class="px-4 pb-4" vid="65">
+    <div class="flex items-center justify-between" vid="66">
+      <div class="caption opacity-70" vid="67">picked • 6</div>
+      <button class="serif text-[15px] underline underline-offset-2" vid="68">Start wandering</button>
+    </div>
+  </footer>
+
+  <script vid="69">
+    // Populate the circular text tile (E) with evenly rotated glyphs to emulate curved copy posters.
+    (function(){
+      const container = document.querySelectorAll('.circle-text')[0];
+      if(!container) return;
+      const text = " follow the stories around the square • ";
+      const N = 24; // exact count chosen above
+      const step = 360 / N;
+      for(let i=0;i<N;i++){
+        const s = document.createElement('span');
+        s.textContent = text[i % text.length];
+        // radius 55px (half of 110), push glyphs outwards 55px then rotate tangentially.
+        s.style.transform = `rotate(${i*step}deg) translate(55px) rotate(${90}deg)`;
+        s.style.fontFamily = 'Newsreader, serif';
+        s.style.fontSize = '10px';
+        container.appendChild(s);
+      }
+    })();
+  </script>
+
+</body></html>

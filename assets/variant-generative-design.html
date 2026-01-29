@@ -1,0 +1,435 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Variant — Generative Design Systems</title>
+    <style vid="5">
+        :root {
+            --bg: #E4E3E0;
+            --ink: #141414;
+            --line: #141414;
+            --f-mono: 'Courier New', Courier, monospace;
+            --f-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --ease: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background: var(--ink);
+            color: var(--bg);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: var(--f-sans);
+            font-size: 14px;
+            line-height: 1.3;
+            overflow-x: hidden;
+            width: 100vw;
+        }
+
+        
+        .border-b { border-bottom: 1px solid var(--line); }
+        .border-t { border-top: 1px solid var(--line); }
+        .border-r { border-right: 1px solid var(--line); }
+        .border-l { border-left: 1px solid var(--line); }
+        
+        .flex { display: flex; }
+        .col { flex-direction: column; }
+        .row { flex-direction: row; }
+        .j-between { justify-content: space-between; }
+        .a-center { align-items: center; }
+        .a-start { align-items: flex-start; }
+        .w-full { width: 100%; }
+        .h-screen { height: 100vh; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .grid { display: grid; }
+        .uppercase { text-transform: uppercase; }
+        .mono { font-family: var(--f-mono); letter-spacing: -0.02em; }
+
+        
+        h1 {
+            font-size: 8vw;
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+            font-weight: 400;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.7;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        
+        
+        
+        .data-row {
+            display: grid;
+            grid-template-columns: 40px 1.5fr 1fr 1fr;
+            padding: 1rem 1rem;
+            border-bottom: 1px solid var(--line);
+            transition: background 0.2s var(--ease), color 0.2s var(--ease);
+            cursor: pointer;
+            align-items: baseline;
+        }
+
+        .data-row:hover {
+            background: var(--ink);
+            color: var(--bg);
+        }
+        
+        .data-row:hover .arrow {
+            transform: rotate(-45deg);
+        }
+
+        .data-row .arrow {
+            font-size: 1rem;
+            transition: transform 0.4s var(--ease);
+        }
+
+        
+        header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 100;
+        }
+
+        .nav-item {
+            padding: 1rem;
+            border-right: 1px solid var(--line);
+            font-size: 0.9rem;
+        }
+        .nav-item:last-child { border-right: none; }
+
+        
+        .canvas-area {
+            height: 60vh;
+            border-bottom: 1px solid var(--line);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        
+        .engine-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1px;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .engine-cell {
+            border-right: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .variant-object {
+            width: 200px;
+            height: 200px;
+            border: 1px solid var(--line);
+            position: absolute;
+            animation: mutate 8s infinite steps(1);
+            background: transparent;
+        }
+
+        .variant-object::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px; height: 10px;
+            background: var(--ink);
+            border-radius: 50%;
+        }
+
+        .variant-object::before {
+            content: 'Generating...';
+            position: absolute;
+            top: -20px; left: 0;
+            font-size: 10px;
+            font-family: var(--f-mono);
+        }
+
+        @keyframes mutate {
+            0% { width: 200px; height: 200px; border-radius: 0; transform: rotate(0deg); }
+            20% { width: 150px; height: 250px; border-radius: 50%; transform: rotate(15deg); border-style: dotted; }
+            40% { width: 300px; height: 100px; border-radius: 100px; transform: rotate(-5deg); border-width: 2px; }
+            60% { width: 180px; height: 180px; border-radius: 0; transform: skewX(20deg); }
+            80% { width: 220px; height: 220px; border-radius: 20px; transform: scale(1.1); }
+            100% { width: 200px; height: 200px; border-radius: 0; transform: rotate(0deg); }
+        }
+
+        
+        .controls {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 12px;
+            width: 12px;
+            background: var(--ink);
+            cursor: pointer;
+            border-radius: 0;
+            margin-top: -5px;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 1px;
+            background: var(--line);
+        }
+
+        
+        .manifesto {
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+        
+        .manifesto p {
+            font-size: 1.5rem;
+            max-width: 30ch;
+        }
+
+        .small-print {
+            font-size: 0.7rem;
+            display: grid;
+            gap: 0.5rem;
+            align-content: end;
+        }
+
+        
+        .btn-primary {
+            background: var(--ink);
+            color: var(--bg);
+            padding: 1rem 2rem;
+            border: 1px solid var(--ink);
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 500;
+            margin-top: 2rem;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--ink);
+        }
+
+        
+        .table-header {
+            display: grid;
+            grid-template-columns: 40px 1.5fr 1fr 1fr;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.5;
+            position: sticky;
+            top: 55px; 
+            background: var(--bg);
+            z-index: 90;
+        }
+
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 12vw; }
+            header { grid-template-columns: 1fr 1fr; }
+            .data-row, .table-header { grid-template-columns: 30px 1fr; }
+            .data-row > *:nth-child(3), .data-row > *:nth-child(4),
+            .table-header > *:nth-child(3), .table-header > *:nth-child(4) { display: none; }
+            .manifesto { grid-template-columns: 1fr; gap: 2rem; }
+            .controls { grid-template-columns: 1fr; }
+        }
+
+    </style>
+</head>
+<body vid="6">
+
+    
+    <header vid="7">
+        <div class="nav-item" vid="8"><strong vid="9">Variant</strong> <span style="opacity:0.5; margin-left:5px;" vid="10">v1.0.4</span></div>
+        <div class="nav-item" vid="11">System Status: <span style="color:#00AA00" vid="12">●</span> Online</div>
+        <div class="nav-item" vid="13">User: Guest</div>
+        <div class="nav-item" style="text-align: right;" vid="14">Menu +</div>
+    </header>
+
+    
+    <section class="canvas-area" vid="15">
+        <div class="engine-grid" vid="16">
+            
+            <div class="engine-cell" vid="17"></div><div class="engine-cell" vid="18"></div><div class="engine-cell" vid="19"></div><div class="engine-cell" vid="20"></div>
+            <div class="engine-cell" vid="21"></div><div class="engine-cell" vid="22"></div><div class="engine-cell" vid="23"></div><div class="engine-cell" vid="24"></div>
+            <div class="engine-cell" vid="25"></div><div class="engine-cell" vid="26"></div><div class="engine-cell" vid="27"></div><div class="engine-cell" vid="28"></div>
+            <div class="engine-cell" vid="29"></div><div class="engine-cell" vid="30"></div><div class="engine-cell" vid="31"></div><div class="engine-cell" vid="32"></div>
+            <div class="engine-cell" vid="33"></div><div class="engine-cell" vid="34"></div><div class="engine-cell" vid="35"></div><div class="engine-cell" vid="36"></div>
+            <div class="engine-cell" vid="37"></div><div class="engine-cell" vid="38"></div><div class="engine-cell" vid="39"></div><div class="engine-cell" vid="40"></div>
+        </div>
+        
+        <div class="variant-object" vid="41"></div>
+        
+        <div style="position: absolute; bottom: 20px; left: 20px; font-family: var(--f-mono); font-size: 10px;" vid="42">
+            RENDER_TARGET: NULL<br vid="43">
+            LATENCY: 12ms<br vid="44">
+            SEED: 9938210
+        </div>
+    </section>
+
+    
+    <section class="controls" vid="45">
+        <div vid="46">
+            <h1 vid="47">Infinite<br vid="48">Recursion.</h1>
+            <p style="max-width: 400px; margin-bottom: 2rem;" vid="49">
+                Variant is not a drawing tool. It is a logic engine for design systems. Define constraints, output infinity.
+            </p>
+            <div class="slider-group" vid="50">
+                <div vid="51">
+                    <span class="label" vid="52">Complexity</span>
+                    <input type="range" min="0" max="100" value="70" vid="53">
+                </div>
+                <div vid="54">
+                    <span class="label" vid="55">Entropy</span>
+                    <input type="range" min="0" max="100" value="20" vid="56">
+                </div>
+            </div>
+            <a href="#" class="btn-primary" vid="57">Initialize Engine</a>
+        </div>
+        <div style="display: flex; align-items: flex-end; justify-content: flex-end;" vid="58">
+            <p class="mono" style="font-size: 12px; text-align: right;" vid="59">
+                Compatible with Figma, React, &amp; WebGL.<br vid="60">
+                Export to JSON/CSS.<br vid="61">
+                No drag and drop. Pure logic.
+            </p>
+        </div>
+    </section>
+
+    
+    <section vid="62">
+        <div class="table-header" vid="63">
+            <div vid="64">idx</div>
+            <div vid="65">Module</div>
+            <div vid="66">Processing</div>
+            <div vid="67">Output Type</div>
+        </div>
+
+        <div class="data-row" vid="68">
+            <div class="arrow" vid="69">↓</div>
+            <div vid="70">Generative Layouts</div>
+            <div vid="71">Real-time GPU</div>
+            <div vid="72">Flexbox / Grid</div>
+        </div>
+        <div class="data-row" vid="73">
+            <div class="arrow" vid="74">↓</div>
+            <div vid="75">Typographic Scala</div>
+            <div vid="76">Modular Ratio</div>
+            <div vid="77">Fluid Clamp()</div>
+        </div>
+        <div class="data-row" vid="78">
+            <div class="arrow" vid="79">↓</div>
+            <div vid="80">Color Permutations</div>
+            <div vid="81">WCAG 2.1 Check</div>
+            <div vid="82">HSL Variables</div>
+        </div>
+        <div class="data-row" vid="83">
+            <div class="arrow" vid="84">↓</div>
+            <div vid="85">Asset Synthesis</div>
+            <div vid="86">Diffusion Model</div>
+            <div vid="87">SVG / PNG</div>
+        </div>
+        <div class="data-row" vid="88">
+            <div class="arrow" vid="89">↓</div>
+            <div vid="90">Code Export</div>
+            <div vid="91">Tree Shaking</div>
+            <div vid="92">React Component</div>
+        </div>
+        
+        <div class="data-row" vid="93">
+            <div class="arrow" vid="94">↓</div>
+            <div vid="95">Version Control</div>
+            <div vid="96">Git Integration</div>
+            <div vid="97">Branch / Merge</div>
+        </div>
+    </section>
+
+    
+    <footer class="manifesto border-t" vid="98">
+        <div vid="99">
+            <h2 vid="100">Design without drag-and-drop.</h2>
+            <br vid="101">
+            <p vid="102">
+                Stop pixel pushing. Start programming design logic. Variant takes your brand rules and generates every possible valid permutation.
+            </p>
+        </div>
+        <div class="small-print" vid="103">
+            <div style="border-top: 1px solid var(--line); padding-top: 1rem; width: 100%;" vid="104">
+                Variant Systems Inc.<br vid="105">
+                San Francisco, CA<br vid="106">
+                [420, 201, 99]<br vid="107">
+                <br vid="108">
+                © 2024 All Rights Reserved.
+            </div>
+            <div style="display: flex; gap: 2rem; margin-top: 1rem;" vid="109">
+                <a href="#" style="color: inherit; text-decoration: none;" vid="110">Documentation</a>
+                <a href="#" style="color: inherit; text-decoration: none;" vid="111">API Access</a>
+                <a href="#" style="color: inherit; text-decoration: none;" vid="112">Enterprise</a>
+            </div>
+        </div>
+    </footer>
+
+    <script vid="113">
+        
+        const obj = document.querySelector('.variant-object');
+        const inputs = document.querySelectorAll('input[type="range"]');
+        
+        inputs.forEach(input => {
+            input.addEventListener('input', (e) => {
+                const val = e.target.value;
+                
+                obj.style.transform = `scale(${1 + val/200}) rotate(${val}deg)`;
+            });
+        });
+    </script>
+
+</body></html>

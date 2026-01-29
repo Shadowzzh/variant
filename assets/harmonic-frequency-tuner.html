@@ -1,0 +1,375 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Harmonic Frequency Tuner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&amp;family=Zen+Maru+Gothic:wght@500;700&amp;display=swap" rel="stylesheet" vid="7">
+    <style vid="8">
+        :root {
+            --paper-bg: #e4e2d6;
+            --ink-blue: #007ac2;
+            --ink-orange: #cf4e26;
+            --stroke-width: 1.5px;
+            --node-size: 6px;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--paper-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Cutive Mono', monospace;
+            
+            background-image: 
+                linear-gradient(rgba(228, 226, 214, 0.9), rgba(228, 226, 214, 0.9)),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E");
+            color: var(--ink-blue);
+        }
+
+        
+        .tuner-assembly {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        
+        .wireframe-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none; 
+        }
+
+        path, circle, line, ellipse {
+            fill: none;
+            stroke: var(--ink-blue);
+            stroke-width: var(--stroke-width);
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .dashed {
+            stroke-dasharray: 4, 4;
+        }
+
+        .node {
+            fill: var(--ink-blue);
+            stroke: none;
+        }
+
+        .eye-shape {
+            fill: var(--paper-bg);
+            stroke: var(--ink-blue);
+        }
+
+        .eye-iris {
+            fill: none;
+            stroke: var(--ink-blue);
+        }
+
+        .eye-pupil {
+            fill: var(--ink-blue);
+        }
+
+        
+        .label-group {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .label-main {
+            font-family: 'Zen Maru Gothic', sans-serif; 
+            font-size: 24px;
+            color: var(--ink-orange);
+            letter-spacing: 2px;
+            position: absolute;
+            white-space: nowrap;
+        }
+
+        .label-data {
+            font-family: 'Cutive Mono', monospace;
+            font-size: 14px;
+            color: var(--ink-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: var(--paper-bg);
+            padding: 0 4px;
+        }
+
+        .value-display {
+            font-family: 'Zen Maru Gothic', sans-serif;
+            font-size: 64px;
+            color: var(--ink-orange);
+            font-weight: 700;
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        
+        .interaction-zone {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            z-index: 10;
+            cursor: grab;
+            touch-action: none;
+            
+        }
+
+        .interaction-zone:active {
+            cursor: grabbing;
+        }
+
+        
+        .knob-assembly {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            z-index: 5;
+            transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        
+        .knob-ring {
+            position: absolute;
+            width: 60px;
+            height: 24px;
+            border: 1.5px solid var(--ink-blue);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 0 4px var(--paper-bg); 
+        }
+        
+        .knob-connector {
+            position: absolute;
+            width: 2px;
+            height: 40px;
+            background: var(--ink-blue);
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%) rotate(90deg);
+            transform-origin: center;
+        }
+
+        
+        .decoration {
+            position: absolute;
+            color: var(--ink-orange);
+            font-family: 'Zen Maru Gothic', sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body vid="9">
+
+    <div class="tuner-assembly" id="tuner" vid="10">
+        
+        
+        <svg class="wireframe-layer" viewBox="0 0 400 500" vid="11">
+            
+            
+            <path d="M 50 250 A 150 150 0 0 1 350 250" class="tube-outer" vid="12"></path>
+            <path d="M 90 250 A 110 110 0 0 1 310 250" class="tube-inner" vid="13"></path>
+            
+            
+            <ellipse cx="70" cy="250" rx="20" ry="8" transform="rotate(-15 70 250)" vid="14"></ellipse>
+            <ellipse cx="330" cy="250" rx="20" ry="8" transform="rotate(15 330 250)" vid="15"></ellipse>
+
+            
+            <g id="eye-group" transform="translate(200, 262)" vid="16">
+                <defs vid="17">
+                    <clipPath id="eye-clip-path" vid="18">
+                        <path d="M -50 0 Q 0 -35 50 0 Q 0 35 -50 0 Z" vid="19"></path>
+                    </clipPath>
+                </defs>
+
+                
+                <path d="M -50 0 Q 0 -35 50 0 Q 0 35 -50 0 Z" class="eye-shape" vid="20"></path>
+                
+                
+                <line x1="-40" y1="-15" x2="-45" y2="-25" vid="21"></line>
+                <line x1="-25" y1="-25" x2="-28" y2="-38" vid="22"></line>
+                <line x1="0" y1="-30" x2="0" y2="-45" vid="23"></line>
+                <line x1="25" y1="-25" x2="28" y2="-38" vid="24"></line>
+                <line x1="40" y1="-15" x2="45" y2="-25" vid="25"></line>
+                
+                
+                <g clip-path="url(#eye-clip-path)" vid="26">
+                    <g id="iris" vid="27">
+                        <circle cx="0" cy="0" r="16" class="eye-iris" vid="28"></circle>
+                        <circle cx="0" cy="0" r="2" class="eye-pupil" vid="29"></circle>
+                        
+                        <line x1="0" y1="-16" x2="0" y2="-4" vid="30"></line>
+                        <line x1="0" y1="16" x2="0" y2="4" vid="31"></line>
+                        <line x1="-16" y1="0" x2="-4" y2="0" vid="32"></line>
+                        <line x1="16" y1="0" x2="4" y2="0" vid="33"></line>
+                        <line x1="-11" y1="-11" x2="-3" y2="-3" vid="34"></line>
+                        <line x1="11" y1="11" x2="3" y2="3" vid="35"></line>
+                        <line x1="11" y1="-11" x2="3" y2="-3" vid="36"></line>
+                        <line x1="-11" y1="11" x2="-3" y2="3" vid="37"></line>
+                    </g>
+                </g>
+            </g>
+
+            
+            <line x1="200" y1="250" x2="200" y2="400" class="dashed" opacity="0.5" vid="38"></line>
+            <line x1="50" y1="250" x2="50" y2="450" class="dashed" opacity="0.3" vid="39"></line>
+            <line x1="350" y1="250" x2="350" y2="450" class="dashed" opacity="0.3" vid="40"></line>
+
+            
+            <circle cx="50" cy="250" r="3" class="node" vid="41"></circle>
+            <circle cx="90" cy="250" r="3" class="node" vid="42"></circle>
+            <circle cx="350" cy="250" r="3" class="node" vid="43"></circle>
+            <circle cx="310" cy="250" r="3" class="node" vid="44"></circle>
+            <circle cx="200" cy="250" r="3" class="node" vid="45"></circle>
+        </svg>
+
+        
+        <div class="label-group" style="top: 100px; left: 20px;" vid="46">
+            <div class="label-main" style="transform: rotate(-10deg);" vid="47">周波数</div>
+        </div>
+        
+        <div class="label-group" style="top: 120px; right: 40px;" vid="48">
+            <div class="label-main" vid="49">同調</div>
+        </div>
+
+        <div class="label-group" style="bottom: 150px; left: 50%; transform: translateX(-50%);" vid="50">
+            <div class="label-data" vid="51">FREQ. MODULATION</div>
+        </div>
+
+        
+        <div class="value-display" id="value-display" vid="52">88.4</div>
+        <div class="label-group" style="bottom: 30px; left: 50%; transform: translateX(-50%);" vid="53">
+            <div class="label-data" vid="54">MHz // INPUT</div>
+        </div>
+
+        
+        <div class="knob-assembly" id="knob" vid="55">
+            
+            <div class="knob-ring" vid="56"></div>
+            
+            <div style="position: absolute; width: 0; height: 130px; border-left: 1.5px dashed var(--ink-blue); bottom: 0; left: 0; transform: translateX(-0.5px); transform-origin: bottom center;" vid="57"></div>
+        </div>
+
+        
+        <div class="interaction-zone" id="touch-zone" vid="58"></div>
+
+        
+        <div class="decoration" style="top: 50px; right: 50px;" vid="59">き</div>
+        <div class="decoration" style="bottom: 100px; left: 60px; color: var(--ink-blue);" vid="60">の</div>
+        <div class="decoration" style="bottom: 200px; right: 80px;" vid="61">み</div>
+
+    </div>
+
+    <script vid="62">
+        const touchZone = document.getElementById('touch-zone');
+        const knob = document.getElementById('knob');
+        const iris = document.getElementById('iris');
+        const valueDisplay = document.getElementById('value-display');
+        
+        
+        const CENTER_X = 200; 
+        const CENTER_Y = 250;
+        const RADIUS = 130; 
+        const MIN_ANGLE = -150 * (Math.PI / 180); 
+        const MAX_ANGLE = -30 * (Math.PI / 180);  
+        
+        
+        let isDragging = false;
+        let currentAngle = -90 * (Math.PI / 180); 
+        
+        function updateKnob(angle) {
+            
+            
+            
+            
+            
+            let displayAngle = angle;
+            
+            
+            if (angle > MAX_ANGLE) angle = MAX_ANGLE;
+            if (angle < MIN_ANGLE) angle = MIN_ANGLE;
+
+            currentAngle = angle;
+
+            
+            const x = Math.cos(angle) * RADIUS;
+            const y = Math.sin(angle) * RADIUS;
+
+            
+            
+            
+            knob.style.transform = `translate(${x}px, ${y}px) rotate(${angle + Math.PI/2}rad)`;
+
+            
+            const eyeLookFactor = 0.3; 
+            iris.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+
+            
+            
+            const percent = (angle - MIN_ANGLE) / (MAX_ANGLE - MIN_ANGLE);
+            const val = 80 + (percent * 28);
+            valueDisplay.innerText = val.toFixed(1);
+        }
+
+        function handleInput(e) {
+            if (!isDragging) return;
+            
+            e.preventDefault();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            
+            const rect = document.querySelector('.tuner-assembly').getBoundingClientRect();
+            const centerX = rect.left + (rect.width / 2);
+            const centerY = rect.top + (rect.height / 2);
+
+            const dx = clientX - centerX;
+            const dy = clientY - centerY;
+
+            let angle = Math.atan2(dy, dx);
+            
+            updateKnob(angle);
+        }
+
+        
+        updateKnob(-90 * (Math.PI / 180));
+
+        
+        touchZone.addEventListener('mousedown', (e) => { isDragging = true; handleInput(e); });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+        window.addEventListener('mousemove', handleInput);
+
+        touchZone.addEventListener('touchstart', (e) => { isDragging = true; handleInput(e); }, {passive: false});
+        window.addEventListener('touchend', () => { isDragging = false; });
+        window.addEventListener('touchmove', handleInput, {passive: false});
+
+    </script>
+
+
+</body></html>

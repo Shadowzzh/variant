@@ -1,0 +1,202 @@
+<html vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <script src="https://cdn.tailwindcss.com" vid="4"></script>
+    <style vid="5">
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f0f1f3;
+        }
+        .blue-container {
+            background-color: #0039d6;
+        }
+        .white-card {
+            background-color: #f0f1f3;
+            border: 1px solid #0039d6;
+        }
+        .blue-dot {
+            background-color: #0039d6;
+        }
+        .blue-line {
+            border-left: 2px solid #0039d6;
+        }
+        .dotted-line {
+            background-image: linear-gradient(to right, #0039d6 50%, transparent 50%);
+            background-size: 8px 1px;
+            background-repeat: repeat-x;
+        }
+        .pattern-bg {
+            background-image: repeating-linear-gradient(45deg, #0039d6 0, #0039d6 1px, transparent 1px, transparent 6px);
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body class="min-h-screen" vid="6">
+    <div class="blue-container p-4 min-h-screen" vid="7">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-4" vid="8">
+            <h1 class="text-white text-lg font-medium" vid="9">Wanderlust</h1>
+            <div class="flex space-x-2" vid="10">
+                <button class="text-white" vid="11">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" vid="12">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" vid="13"></path>
+                    </svg>
+                </button>
+                <button class="text-white" vid="14">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" vid="15">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" vid="16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Destination Card -->
+        <div class="white-card p-5 mb-4 rounded-none" vid="17">
+            <div class="flex items-start" vid="18">
+                <div class="w-1 h-6 bg-blue-600 mr-3" vid="19"></div>
+                <div vid="20">
+                    <h2 class="text-blue-600 font-medium text-lg" vid="21">Popular Destinations</h2>
+                    <p class="text-blue-600 text-sm" vid="22">Explore trending travel locations</p>
+                </div>
+            </div>
+
+            <div class="mt-6 relative" vid="23">
+                <div class="flex items-center mb-4" vid="24">
+                    <div class="blue-dot w-3 h-3 rounded-full" vid="25"></div>
+                    <div class="dotted-line h-[1px] flex-grow mx-2" vid="26"></div>
+                    <div class="text-blue-600 font-medium" vid="27">Paris</div>
+                </div>
+                
+                <div class="flex justify-between mb-2" vid="28">
+                    <div class="text-blue-600 text-xs" vid="29">0</div>
+                    <div class="text-blue-600 text-xs" vid="30">1.5</div>
+                    <div class="text-blue-600 text-xs" vid="31">3.0</div>
+                    <div class="text-blue-600 text-xs" vid="32">4.5</div>
+                    <div class="text-blue-600 text-xs" vid="33">6.0</div>
+                </div>
+                
+                <div class="h-8 w-full flex mb-6" vid="34">
+                    <div class="w-1/4 bg-blue-200" vid="35"></div>
+                    <div class="w-1/4 bg-blue-400" vid="36"></div>
+                    <div class="w-1/4 bg-blue-600" vid="37"></div>
+                    <div class="w-1/4 pattern-bg" vid="38"></div>
+                </div>
+                
+                <div class="text-blue-600 text-xs mb-6" vid="39">
+                    Paris offers a perfect blend of cultural experiences, historical sites, and culinary delights. The city's charm peaks during spring and fall seasons, with moderate crowds and pleasant weather.
+                </div>
+                
+                <div class="flex items-center" vid="40">
+                    <div class="w-3 h-3 pattern-bg mr-2" vid="41"></div>
+                    <div class="text-blue-600 text-xs" vid="42">Peak Season</div>
+                </div>
+                <div class="flex items-center" vid="43">
+                    <div class="w-3 h-3 bg-blue-600 mr-2" vid="44"></div>
+                    <div class="text-blue-600 text-xs" vid="45">Ideal Visit Time</div>
+                </div>
+                <div class="flex items-center" vid="46">
+                    <div class="w-3 h-3 bg-blue-400 mr-2" vid="47"></div>
+                    <div class="text-blue-600 text-xs" vid="48">Moderate Season</div>
+                </div>
+                <div class="flex items-center" vid="49">
+                    <div class="w-3 h-3 bg-blue-200 mr-2" vid="50"></div>
+                    <div class="text-blue-600 text-xs" vid="51">Off Season</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Travel Insights Card -->
+        <div class="white-card p-5 mb-4 rounded-none" vid="52">
+            <div class="flex items-start" vid="53">
+                <div class="w-1 h-6 bg-blue-600 mr-3" vid="54"></div>
+                <div vid="55">
+                    <h2 class="text-blue-600 font-medium text-lg" vid="56">Travel Insights</h2>
+                    <p class="text-blue-600 text-sm" vid="57">Climate data for planning</p>
+                </div>
+            </div>
+
+            <div class="mt-6" vid="58">
+                <div class="flex items-center space-x-2 mb-4" vid="59">
+                    <div class="blue-dot w-4 h-4 rounded-full" vid="60"></div>
+                    <div class="text-blue-600" vid="61">Temperature Range</div>
+                </div>
+                
+                <div class="relative h-32 mb-6" vid="62">
+                    <div class="absolute left-0 top-0 w-full h-full" vid="63">
+                        <svg viewBox="0 0 300 100" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" vid="64">
+                            <path d="M0,80 Q75,30 150,70 Q225,110 300,50" fill="none" stroke="#0039d6" stroke-width="2" vid="65"></path>
+                            <circle cx="75" cy="30" r="4" fill="#0039d6" vid="66"></circle>
+                            <circle cx="150" cy="70" r="4" fill="#0039d6" vid="67"></circle>
+                            <circle cx="225" cy="110" r="4" fill="#0039d6" vid="68"></circle>
+                        </svg>
+                    </div>
+                    <div class="absolute left-0 bottom-0 w-full flex justify-between text-xs text-blue-600" vid="69">
+                        <div vid="70">Jan</div>
+                        <div vid="71">Apr</div>
+                        <div vid="72">Jul</div>
+                        <div vid="73">Oct</div>
+                        <div vid="74">Dec</div>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-4 mb-6" vid="75">
+                    <div class="flex-1" vid="76">
+                        <div class="text-blue-600 text-xs mb-1" vid="77">Avg. High</div>
+                        <div class="h-4 bg-blue-400 w-full" vid="78"></div>
+                    </div>
+                    <div class="flex-1" vid="79">
+                        <div class="text-blue-600 text-xs mb-1" vid="80">Avg. Low</div>
+                        <div class="h-4 bg-blue-200 w-full" vid="81"></div>
+                    </div>
+                </div>
+                
+                <div class="text-blue-600 text-xs" vid="82">
+                    The climate varies significantly throughout the year. Summer months bring warmer temperatures ideal for outdoor activities, while winter offers a different experience with cooler temperatures and seasonal events.
+                </div>
+            </div>
+        </div>
+
+        <!-- Trip Planner Card -->
+        <div class="white-card p-5 rounded-none" vid="83">
+            <div class="flex items-start" vid="84">
+                <div class="w-1 h-6 bg-blue-600 mr-3" vid="85"></div>
+                <div vid="86">
+                    <h2 class="text-blue-600 font-medium text-lg" vid="87">Trip Planner</h2>
+                    <p class="text-blue-600 text-sm" vid="88">Optimize your journey</p>
+                </div>
+            </div>
+
+            <div class="mt-6" vid="89">
+                <div class="flex items-center mb-3" vid="90">
+                    <div class="blue-dot w-2 h-2 rounded-full" vid="91"></div>
+                    <div class="ml-2 text-blue-600" vid="92">Departure: New York</div>
+                </div>
+                <div class="flex items-center mb-6" vid="93">
+                    <div class="blue-dot w-2 h-2 rounded-full" vid="94"></div>
+                    <div class="ml-2 text-blue-600" vid="95">Arrival: Paris</div>
+                </div>
+                
+                <div class="relative h-24 mb-6" vid="96">
+                    <div class="absolute left-6 top-0 bottom-0 blue-line" vid="97"></div>
+                    <div class="absolute left-0 top-0 flex items-center" vid="98">
+                        <div class="blue-dot w-3 h-3 rounded-full" vid="99"></div>
+                        <div class="ml-6 text-blue-600 text-xs" vid="100">Day 1: Arrival</div>
+                    </div>
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center" vid="101">
+                        <div class="blue-dot w-3 h-3 rounded-full" vid="102"></div>
+                        <div class="ml-6 text-blue-600 text-xs" vid="103">Day 3: Museum Tour</div>
+                    </div>
+                    <div class="absolute left-0 bottom-0 flex items-center" vid="104">
+                        <div class="blue-dot w-3 h-3 rounded-full" vid="105"></div>
+                        <div class="ml-6 text-blue-600 text-xs" vid="106">Day 5: Departure</div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center" vid="107">
+                    <button class="bg-blue-600 text-white py-2 px-6 text-sm" vid="108">Customize Itinerary</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body></html>

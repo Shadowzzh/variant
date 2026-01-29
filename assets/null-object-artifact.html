@@ -1,0 +1,473 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">NULL_OBJECT // ARTIFACT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet" vid="7">
+    <style vid="8">
+        :root {
+            --c-pink: #FFC0CB;
+            --c-orange: #FF8C55;
+            --c-grey: #A6A6A6;
+            --c-blue: #4A6FA5;
+            --c-green: #2F5233;
+            --c-cream: #F2E8DC;
+            --c-black: #080808;
+            --border-width: 3px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--c-black);
+            font-family: 'Space Mono', monospace;
+            overflow: hidden; 
+            color: var(--c-black);
+        }
+
+        
+        .layout-grid {
+            display: grid;
+            grid-template-rows: 15vh 8vh 40vh 1fr 10vh;
+            grid-template-columns: 1fr;
+            width: 100%;
+            height: 100%;
+            gap: var(--border-width);
+            background-color: var(--c-black);
+            border: var(--border-width) solid var(--c-black);
+        }
+
+        .block {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0; 
+        }
+
+        
+        .stretch-type {
+            font-family: 'Archivo Black', sans-serif;
+            text-transform: uppercase;
+            line-height: 0.75;
+            width: 100%;
+            text-align: justify; 
+            transform: scaleY(1.2); 
+            transform-origin: center;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .stretch-type span {
+            display: block;
+        }
+
+        
+        .header {
+            background-color: var(--c-pink);
+            flex-direction: column;
+            padding: 10px;
+            justify-content: space-between;
+        }
+        
+        .header-top, .header-bottom {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-title {
+            font-size: 14vw; 
+            letter-spacing: -4px;
+            margin: -5px 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        
+        .sub-header {
+            background-color: var(--c-orange);
+            padding: 0 10px;
+        }
+
+        .marquee-static {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 24px;
+            text-transform: uppercase;
+            align-items: center;
+        }
+        
+        .arrow {
+            font-size: 20px;
+            transform: scaleX(1.5);
+        }
+
+        
+        .visual-split {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            gap: var(--border-width);
+            background-color: var(--c-black);
+        }
+
+        
+        .acid-container {
+            background-color: var(--c-grey);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #distortion-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.6;
+        }
+
+        .acid-text {
+            position: relative;
+            z-index: 2;
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 40px;
+            text-align: center;
+            line-height: 0.8;
+            mix-blend-mode: exclusion;
+            color: white;
+            transform: rotate(-90deg);
+        }
+
+        
+        .product-container {
+            background-color: var(--c-blue);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 15px;
+        }
+
+        .image-filter {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%) contrast(150%) brightness(0.9);
+            mix-blend-mode: multiply;
+            opacity: 0.8;
+        }
+
+        .product-overlay {
+            position: relative;
+            z-index: 2;
+            color: var(--c-cream);
+        }
+
+        .product-overlay h2 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 32px;
+            margin: 0;
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: var(--border-width);
+            background-color: var(--c-black);
+        }
+
+        .data-cell {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .data-cell:nth-child(1) { background-color: var(--c-green); color: var(--c-cream); }
+        .data-cell:nth-child(2) { background-color: var(--c-pink); color: var(--c-black); }
+        .data-cell:nth-child(3) { background-color: var(--c-cream); color: var(--c-black); }
+        .data-cell:nth-child(4) { background-color: var(--c-black); color: var(--c-cream); display: flex; align-items: center; justify-content: center; }
+
+        .data-label {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .data-value {
+            font-size: 24px;
+            font-family: 'Archivo Black', sans-serif;
+        }
+
+        
+        .geo-circle {
+            width: 60px;
+            height: 60px;
+            background-color: var(--c-orange);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+        }
+        .geo-inner {
+            width: 20px;
+            height: 20px;
+            background-color: var(--c-black);
+            border-radius: 50%;
+        }
+
+        
+        .action-bar {
+            background-color: var(--c-cream);
+            cursor: pointer;
+            transition: all 0.1s ease;
+        }
+
+        .action-bar:active {
+            background-color: var(--c-orange);
+            transform: scale(0.98);
+        }
+
+        .action-text {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 36px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.05;
+            z-index: 999;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJnoiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjY1IiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2cpIiBvcGFjaXR5PSIwLjUiLz48L3N2Zz4=');
+        }
+    </style>
+</head>
+<body vid="9">
+
+    
+    <div class="noise-overlay" vid="10"></div>
+
+    <div class="layout-grid" vid="11">
+        
+        
+        <div class="block header" vid="12">
+            <div class="header-top" vid="13">
+                <span vid="14">VOL. 09</span>
+                <span vid="15">[ARCHIVE]</span>
+                <span vid="16">2024</span>
+            </div>
+            <h1 class="brand-title" vid="17">NULL_OBJ</h1>
+            <div class="header-bottom" vid="18">
+                <span vid="19">LIMITED RUN</span>
+                <span vid="20">///</span>
+                <span vid="21">TOKYO / NY</span>
+            </div>
+        </div>
+
+        
+        <div class="block sub-header" vid="22">
+            <div class="marquee-static" vid="23">
+                <span class="arrow" vid="24">▶</span>
+                <span vid="25">PROTOTYPE_01</span>
+                <span class="arrow" vid="26">◀</span>
+                <span vid="27">HEAVY</span>
+                <span class="arrow" vid="28">▶</span>
+            </div>
+        </div>
+
+        
+        <div class="visual-split" vid="29">
+            
+            <div class="block acid-container" vid="30">
+                <canvas id="distortion-canvas" vid="31"></canvas>
+                <div class="acid-text" vid="32">
+                    RAW<br vid="33">DATA
+                </div>
+            </div>
+            
+            
+            <div class="block product-container" vid="34">
+                <div class="image-filter" vid="35"></div>
+                <div class="product-overlay" vid="36">
+                    <div style="font-size: 10px; margin-bottom: 5px;" vid="37">COLLECTION:</div>
+                    <h2 vid="38">STATIC<br vid="39">NOISE</h2>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="data-grid" vid="40">
+            <div class="block data-cell" vid="41">
+                <span class="data-label" vid="42">MATERIAL</span>
+                <span class="data-value" vid="43">NYLON</span>
+                <span class="data-value" style="font-size: 12px; margin-top: auto;" vid="44">100% RIPSTOP</span>
+            </div>
+            <div class="block data-cell" vid="45">
+                <span class="data-label" vid="46">SIZE</span>
+                <span class="data-value" vid="47">UNI</span>
+                <span class="data-value" style="font-size: 12px; margin-top: auto;" vid="48">ADJUSTABLE</span>
+            </div>
+            <div class="block data-cell" vid="49">
+                <span class="data-label" vid="50">STATUS</span>
+                <span class="data-value" vid="51">AVAIL</span>
+                <span class="data-value" style="font-size: 12px; margin-top: auto;" vid="52">IN STOCK</span>
+            </div>
+            <div class="block data-cell" vid="53">
+                <div class="geo-circle" vid="54">
+                    <div class="geo-inner" vid="55"></div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="block action-bar" vid="56">
+            <div class="action-text" vid="57">
+                <span vid="58">ACQUIRE</span>
+                <span vid="59">$240</span>
+            </div>
+        </div>
+    </div>
+
+    <script vid="60">
+        
+        const canvas = document.getElementById('distortion-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let time = 0;
+
+        function resize() {
+            const parent = canvas.parentElement;
+            width = parent.clientWidth;
+            height = parent.clientHeight;
+            canvas.width = width * 2; 
+            canvas.height = height * 2;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            ctx.scale(2, 2);
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#000000';
+            
+            const cols = 6;
+            const rows = 12;
+            const cellW = width / cols;
+            const cellH = height / rows;
+
+            for (let i = 0; i <= cols; i++) {
+                for (let j = 0; j <= rows; j++) {
+                    const x = i * cellW;
+                    const y = j * cellH;
+
+                    
+                    
+                    const distortionX = Math.sin(y * 0.05 + time) * 10;
+                    const distortionY = Math.cos(x * 0.05 + time) * 10;
+
+                    
+                    if (j < rows) {
+                        ctx.beginPath();
+                        ctx.moveTo(x + distortionX, y);
+                        ctx.lineTo(x + Math.sin((y + cellH) * 0.05 + time) * 10, y + cellH);
+                        ctx.stroke();
+                    }
+
+                    
+                    if (i < cols) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, y + distortionY);
+                        ctx.lineTo(x + cellW, y + Math.cos((x + cellW) * 0.05 + time) * 10);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            
+            
+            ctx.fillStyle = '#000000';
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    if ((i + j) % 2 === 0) {
+                        const x = i * cellW;
+                        const y = j * cellH;
+                        
+                        
+                        const dx = Math.sin((y + cellH/2) * 0.05 + time) * 10;
+                        const dy = Math.cos((x + cellW/2) * 0.05 + time) * 10;
+                        
+                        
+                        const size = 4;
+                        ctx.fillRect(x + cellW/2 + dx - size/2, y + cellH/2 + dy - size/2, size, size);
+                    }
+                }
+            }
+
+            time += 0.02;
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        draw();
+
+        
+        const productContainer = document.querySelector('.product-container');
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) - 0.5;
+            const y = (e.clientY / window.innerHeight) - 0.5;
+            
+            
+            const filter = productContainer.querySelector('.image-filter');
+            filter.style.transform = `translate(${x * 10}px, ${y * 10}px) scale(1.1)`;
+        });
+
+    </script>
+
+</body></html>
