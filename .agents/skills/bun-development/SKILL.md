@@ -4,8 +4,8 @@ description: Bun build system, development workflow, and TypeScript patterns. Us
 license: MIT
 metadata:
   author: liaison-toolkit
-  version: "1.0"
-  keywords: "bun, build, typescript, development, package-manager"
+  version: '1.0'
+  keywords: 'bun, build, typescript, development, package-manager'
 ---
 
 # Bun Development
@@ -15,6 +15,7 @@ Complete guide to development with Bun build system, TypeScript tooling, and pac
 ## When to use this skill
 
 Use this skill when:
+
 - Setting up a new Bun project
 - Configuring TypeScript with Bun
 - Building a project with Bun
@@ -30,6 +31,7 @@ Use this skill when:
 Bun is a fast JavaScript runtime and package manager with native TypeScript support.
 
 **Key Benefits:**
+
 - **Fast**: JavaScript runtime written in Rust, ~10x faster than Node.js
 - **Native TypeScript**: Built-in TypeScript support, no transpilation needed
 - **All-in-One**: Runtime and package manager combined
@@ -62,6 +64,7 @@ bun run dev --watch
 ```
 
 **Dev Mode Features:**
+
 - Live reload on file changes
 - Source maps for debugging
 - Faster rebuild times than tsc
@@ -111,6 +114,7 @@ bun run type-check --watch
 ```
 
 **Common Type Checking Issues:**
+
 - Missing imports: `@types/package-name`
 - Implicit any types: Avoid, use explicit types
 - Strict null checks: Enable strict mode for safety
@@ -136,6 +140,7 @@ bun install package-name@1.2.3
 ```
 
 **Bun Install Benefits:**
+
 - Fast downloads (concurrent package fetching)
 - Efficient caching
 - Lock file: bun.lock for reproducible installs
@@ -186,16 +191,19 @@ bun add @scope/package --workspace apps/my-app
 ### Setting Up a New Project
 
 1. **Initialize project**:
+
    ```bash
    bun init -y
    ```
 
 2. **Install dependencies**:
+
    ```bash
    bun install
    ```
 
 3. **Configure TypeScript**:
+
    ```bash
    # Copy recommended tsconfig from Bun
    # Or use `bunx create-react-app` for scaffolding
@@ -257,6 +265,7 @@ NODE_ENV=production bun run build
 ### Before Deploying
 
 Checklist:
+
 - [ ] All tests passing: `bun test`
 - [ ] Type check clean: `bun run type-check`
 - [ ] Linting passes: `bun run lint`
@@ -283,34 +292,34 @@ bun build --target browser
 
 ### Node.js Comparison
 
-| Feature | Bun | Node.js |
-|----------|-----|--------|
-| Speed | 10-20x faster | Baseline |
-| Startup | ~50-100ms faster | Baseline |
-| Memory | Lower | Higher (V8) |
-| TS Support | Native | Requires `tsc` |
+| Feature    | Bun              | Node.js        |
+| ---------- | ---------------- | -------------- |
+| Speed      | 10-20x faster    | Baseline       |
+| Startup    | ~50-100ms faster | Baseline       |
+| Memory     | Lower            | Higher (V8)    |
+| TS Support | Native           | Requires `tsc` |
 
 ### Bun vs Deno
 
-| Feature | Bun | Deno |
-|----------|-----|--------|
-| TypeScript | Native (fast) | Native |
-| Package Manger | Built-in | Native |
-| Web APIs | Built-in | No fetch API |
-| Stability | Production | Alpha |
+| Feature        | Bun           | Deno         |
+| -------------- | ------------- | ------------ |
+| TypeScript     | Native (fast) | Native       |
+| Package Manger | Built-in      | Native       |
+| Web APIs       | Built-in      | No fetch API |
+| Stability      | Production    | Alpha        |
 
 ### Common Patterns
 
 ### Environment Detection
 
 ```typescript
-const isBun = process.versions.bun !== undefined;
+const isBun = process.versions.bun !== undefined
 
 // Conditional imports
 if (isBun) {
-  const bun = await import('bun');
+  const bun = await import('bun')
 } else {
-  const node = await import('node');
+  const node = await import('node')
 }
 ```
 
@@ -357,22 +366,26 @@ bun run type-check --watch
 ### Common Issues
 
 **Build fails or produces no output:**
+
 - Check tsconfig.json `outDir` is set to `dist/`
 - Verify `sourceMap: true` is enabled
 - Run with verbose flag: `bun run build --verbose`
 
 **Type checking not finding files:**
+
 - Verify `tsconfig.json` `include` patterns match your files
 - Check `exclude` patterns aren't too broad
 - Run with absolute paths if needed: `bun run type-check /path/to/project`
 
 **Hot reloading not working:**
+
 - Verify you're in project root with package.json
 - Check dev server is running: `bun run dev`
 - Try stopping and restarting dev server
 - Check firewall allows dev server port
 
 **Module resolution fails:**
+
 - Use `moduleResolution: "bundler"` in tsconfig.json
 - For workspace projects, ensure paths alias is set correctly
 - Verify dependencies are installed in root workspace
@@ -475,6 +488,7 @@ bun run dev
 ### Example 2: Migration from npm
 
 **Before (package.json):**
+
 ```json
 {
   "scripts": {
@@ -485,6 +499,7 @@ bun run dev
 ```
 
 **After (migrated to Bun):**
+
 ```json
 {
   "scripts": {

@@ -1,139 +1,143 @@
-<html vid="0"><head vid="1">
-    <meta charset="UTF-8" vid="2">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+<html vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
     <script src="https://cdn.tailwindcss.com" vid="4"></script>
     <style vid="5">
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
-        
-        body {
-            font-family: 'Space Mono', monospace;
-            letter-spacing: 0.5px;
-        }
-        
-        .app-container {
-            max-width: 100%;
-            overflow: hidden;
-        }
-        
-        .grid-cell {
-            border: 1px solid #FF4B2B;
-        }
-        
-        .diagonal-line {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 40px;
-            height: 40px;
-            overflow: hidden;
-        }
-        
-        .diagonal-line:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 200%;
-            height: 200%;
-            border-top: 1px solid #FF4B2B;
-            transform: rotate(-45deg);
-            transform-origin: bottom right;
-        }
-    </style>
-</head>
-<body class="bg-neutral-800 text-[#FF4B2B]" vid="6">
-    <div class="app-container min-h-screen p-4" vid="7">
-        <!-- Header Section -->
-        <div class="grid-cell rounded-md overflow-hidden mb-4" vid="8">
-            <div class="bg-[#FF4B2B] text-neutral-800 p-4" vid="9">
-                <div class="text-2xl uppercase tracking-wide" vid="10">TEMPEST</div>
-            </div>
-            <div class="bg-[#FF4B2B] text-neutral-800 p-4 border-t border-neutral-800" vid="11">
-                <div class="text-2xl uppercase tracking-wide" vid="12">WEATHER™</div>
-            </div>
-        </div>
-        
-        <!-- Current Location Section -->
-        <div class="grid-cell rounded-md overflow-hidden mb-4" vid="13">
-            <div class="p-3 flex justify-between items-center" vid="14">
-                <div class="uppercase" vid="15">LOCATION &gt;&gt; NEW YORK CITY &gt;&gt; NOW</div>
-                <div class="text-sm" vid="16">V1.0</div>
-            </div>
-        </div>
-        
-        <!-- Current Weather Section -->
-        <div class="grid grid-cols-3 rounded-md overflow-hidden mb-4" vid="17">
-            <div class="grid-cell p-3 flex flex-col justify-center" vid="18">
-                <div class="uppercase text-sm" vid="19">CURRENT™</div>
-                <div class="text-4xl mt-2" vid="20">72°F</div>
-            </div>
-            <div class="grid-cell p-3 col-span-2 relative" vid="21">
-                <div class="uppercase text-sm mb-2" vid="22">STATUS: PARTLY CLOUDY</div>
-                <div class="text-xs" vid="23">
-                    HUMIDITY: 45%<br vid="24">
-                    WIND: 8 MPH NE<br vid="25">
-                    PRESSURE: 1012 MB<br vid="26">
-                    VISIBILITY: 10 MI
-                </div>
-                <div class="diagonal-line" vid="27"></div>
-            </div>
-        </div>
-        
-        <!-- Forecast Section -->
-        <div class="grid-cell rounded-md overflow-hidden mb-4" vid="28">
-            <div class="p-3 border-b border-[#FF4B2B]" vid="29">
-                <div class="uppercase" vid="30">FORECAST &gt;&gt; 5-DAY OUTLOOK</div>
-            </div>
-            
-            <!-- Forecast Days -->
-            <div class="grid grid-cols-5 border-b border-[#FF4B2B]" vid="31">
-                <div class="p-2 text-center uppercase text-xs" vid="32">MON</div>
-                <div class="p-2 text-center uppercase text-xs" vid="33">TUE</div>
-                <div class="p-2 text-center uppercase text-xs" vid="34">WED</div>
-                <div class="p-2 text-center uppercase text-xs" vid="35">THU</div>
-                <div class="p-2 text-center uppercase text-xs" vid="36">FRI</div>
-            </div>
-            
-            <!-- Forecast Temps -->
-            <div class="grid grid-cols-5" vid="37">
-                <div class="p-2 text-center" vid="38">75°</div>
-                <div class="p-2 text-center" vid="39">68°</div>
-                <div class="p-2 text-center" vid="40">71°</div>
-                <div class="p-2 text-center" vid="41">77°</div>
-                <div class="p-2 text-center" vid="42">80°</div>
-            </div>
-            
-            <!-- Forecast Icons (text-based to match style) -->
-            <div class="grid grid-cols-5 border-t border-[#FF4B2B]" vid="43">
-                <div class="p-2 text-center text-xs uppercase" vid="44">SUNNY</div>
-                <div class="p-2 text-center text-xs uppercase" vid="45">RAIN</div>
-                <div class="p-2 text-center text-xs uppercase" vid="46">CLOUD</div>
-                <div class="p-2 text-center text-xs uppercase" vid="47">SUNNY</div>
-                <div class="p-2 text-center text-xs uppercase" vid="48">SUNNY</div>
-            </div>
-        </div>
-        
-        <!-- Controls Section -->
-        <div class="grid grid-cols-2 rounded-md overflow-hidden" vid="49">
-            <div class="grid-cell p-3 flex items-center" vid="50">
-                <div class="uppercase" vid="51">MORE INFO &gt;&gt;</div>
-            </div>
-            <div class="grid-cell p-3 flex items-center justify-between relative" vid="52">
-                <div class="uppercase" vid="53">REFRESH</div>
-                <div class="text-sm" vid="54">ALL DATA</div>
-                <div class="diagonal-line" vid="55"></div>
-            </div>
-        </div>
-        
-        <!-- Navigation Bar -->
-        <div class="fixed bottom-0 left-0 right-0 bg-neutral-800 border-t border-[#FF4B2B] p-4" vid="56">
-            <div class="grid grid-cols-4 gap-2 text-center uppercase text-xs" vid="57">
-                <div vid="58">HOME</div>
-                <div vid="59">RADAR</div>
-                <div vid="60">ALERTS</div>
-                <div vid="61">SETTINGS</div>
-            </div>
-        </div>
-    </div>
+      @import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
 
-</body></html>
+      body {
+        font-family: 'Space Mono', monospace;
+        letter-spacing: 0.5px;
+      }
+
+      .app-container {
+        max-width: 100%;
+        overflow: hidden;
+      }
+
+      .grid-cell {
+        border: 1px solid #ff4b2b;
+      }
+
+      .diagonal-line {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+      }
+
+      .diagonal-line:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 200%;
+        height: 200%;
+        border-top: 1px solid #ff4b2b;
+        transform: rotate(-45deg);
+        transform-origin: bottom right;
+      }
+    </style>
+  </head>
+  <body class="bg-neutral-800 text-[#FF4B2B]" vid="6">
+    <div class="app-container min-h-screen p-4" vid="7">
+      <!-- Header Section -->
+      <div class="grid-cell rounded-md overflow-hidden mb-4" vid="8">
+        <div class="bg-[#FF4B2B] text-neutral-800 p-4" vid="9">
+          <div class="text-2xl uppercase tracking-wide" vid="10">TEMPEST</div>
+        </div>
+        <div class="bg-[#FF4B2B] text-neutral-800 p-4 border-t border-neutral-800" vid="11">
+          <div class="text-2xl uppercase tracking-wide" vid="12">WEATHER™</div>
+        </div>
+      </div>
+
+      <!-- Current Location Section -->
+      <div class="grid-cell rounded-md overflow-hidden mb-4" vid="13">
+        <div class="p-3 flex justify-between items-center" vid="14">
+          <div class="uppercase" vid="15">LOCATION &gt;&gt; NEW YORK CITY &gt;&gt; NOW</div>
+          <div class="text-sm" vid="16">V1.0</div>
+        </div>
+      </div>
+
+      <!-- Current Weather Section -->
+      <div class="grid grid-cols-3 rounded-md overflow-hidden mb-4" vid="17">
+        <div class="grid-cell p-3 flex flex-col justify-center" vid="18">
+          <div class="uppercase text-sm" vid="19">CURRENT™</div>
+          <div class="text-4xl mt-2" vid="20">72°F</div>
+        </div>
+        <div class="grid-cell p-3 col-span-2 relative" vid="21">
+          <div class="uppercase text-sm mb-2" vid="22">STATUS: PARTLY CLOUDY</div>
+          <div class="text-xs" vid="23">
+            HUMIDITY: 45%<br vid="24" />
+            WIND: 8 MPH NE<br vid="25" />
+            PRESSURE: 1012 MB<br vid="26" />
+            VISIBILITY: 10 MI
+          </div>
+          <div class="diagonal-line" vid="27"></div>
+        </div>
+      </div>
+
+      <!-- Forecast Section -->
+      <div class="grid-cell rounded-md overflow-hidden mb-4" vid="28">
+        <div class="p-3 border-b border-[#FF4B2B]" vid="29">
+          <div class="uppercase" vid="30">FORECAST &gt;&gt; 5-DAY OUTLOOK</div>
+        </div>
+
+        <!-- Forecast Days -->
+        <div class="grid grid-cols-5 border-b border-[#FF4B2B]" vid="31">
+          <div class="p-2 text-center uppercase text-xs" vid="32">MON</div>
+          <div class="p-2 text-center uppercase text-xs" vid="33">TUE</div>
+          <div class="p-2 text-center uppercase text-xs" vid="34">WED</div>
+          <div class="p-2 text-center uppercase text-xs" vid="35">THU</div>
+          <div class="p-2 text-center uppercase text-xs" vid="36">FRI</div>
+        </div>
+
+        <!-- Forecast Temps -->
+        <div class="grid grid-cols-5" vid="37">
+          <div class="p-2 text-center" vid="38">75°</div>
+          <div class="p-2 text-center" vid="39">68°</div>
+          <div class="p-2 text-center" vid="40">71°</div>
+          <div class="p-2 text-center" vid="41">77°</div>
+          <div class="p-2 text-center" vid="42">80°</div>
+        </div>
+
+        <!-- Forecast Icons (text-based to match style) -->
+        <div class="grid grid-cols-5 border-t border-[#FF4B2B]" vid="43">
+          <div class="p-2 text-center text-xs uppercase" vid="44">SUNNY</div>
+          <div class="p-2 text-center text-xs uppercase" vid="45">RAIN</div>
+          <div class="p-2 text-center text-xs uppercase" vid="46">CLOUD</div>
+          <div class="p-2 text-center text-xs uppercase" vid="47">SUNNY</div>
+          <div class="p-2 text-center text-xs uppercase" vid="48">SUNNY</div>
+        </div>
+      </div>
+
+      <!-- Controls Section -->
+      <div class="grid grid-cols-2 rounded-md overflow-hidden" vid="49">
+        <div class="grid-cell p-3 flex items-center" vid="50">
+          <div class="uppercase" vid="51">MORE INFO &gt;&gt;</div>
+        </div>
+        <div class="grid-cell p-3 flex items-center justify-between relative" vid="52">
+          <div class="uppercase" vid="53">REFRESH</div>
+          <div class="text-sm" vid="54">ALL DATA</div>
+          <div class="diagonal-line" vid="55"></div>
+        </div>
+      </div>
+
+      <!-- Navigation Bar -->
+      <div
+        class="fixed bottom-0 left-0 right-0 bg-neutral-800 border-t border-[#FF4B2B] p-4"
+        vid="56"
+      >
+        <div class="grid grid-cols-4 gap-2 text-center uppercase text-xs" vid="57">
+          <div vid="58">HOME</div>
+          <div vid="59">RADAR</div>
+          <div vid="60">ALERTS</div>
+          <div vid="61">SETTINGS</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

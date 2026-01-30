@@ -1,290 +1,375 @@
-<html lang="en" vid="0"><head vid="1">
-  <meta charset="utf-8" vid="2">
-  <meta name="viewport" content="width=device-width, initial-scale=1" vid="3">
-  <title vid="4">Typemotion Fitness</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;display=swap" rel="stylesheet" vid="6">
-  <style vid="7">
-    :root{
-      
-      --pink:#e9b7b0;
-      --peach:#f2c9be;
-      --yellow:#f2d867;
-      --orange:#f19b2c;
-      --deep-green:#1f3a34;
-      --ink:#231f20;
-      --slate:#332734;
-      --mint:#cfe3d6;
-      --rhythm:12px; 
-      --shadow:0 28px 60px rgba(0,0,0,.18), 0 4px 10px rgba(0,0,0,.12); 
-    }
-
-    html,body{height:100%;width:100%}
-    body{
-      font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      letter-spacing:0.01em; 
-      background: var(--peach);
-    }
-
-    
-    .sheet{
-      position:absolute;
-      inset:4vh 4vw auto 4vw; 
-      height:88vh;
-      box-shadow:var(--shadow);
-      transform-origin:center;
-    }
-    .sheet:nth-child(1){background:var(--pink); transform:rotate(-4deg)}
-    .sheet:nth-child(2){background:var(--mint); top:8vh; transform:rotate(2.8deg)}
-    .sheet:nth-child(3){background:#111827; color:#f4f4f4; top:12vh; transform:rotate(-1.6deg)}
-    .sheet:nth-child(4){background:var(--yellow); top:16vh; transform:rotate(4.8deg)}
-    .sheet.top{background:var(--orange); top:10vh; color:var(--ink); transform:rotate(-0.4deg)}
-
-    
-    .eyebrow{
-      font-weight:600;
-      font-size:clamp(12px, 1.4vw, 14px);
-      letter-spacing:.08em; 
-      text-transform:uppercase;
-      opacity:.9;
-    }
-    .headline{
-      font-weight:600;
-      font-size:clamp(36px, 6vw, 74px);
-      line-height:1.05; 
-      letter-spacing:.01em;
-    }
-    .deck{
-      font-size:clamp(16px, 1.6vw, 22px);
-      line-height:1.45;
-      max-width:40ch;
-    }
-    .label{ font-size:clamp(12px, 1.2vw, 14px); letter-spacing:.06em; text-transform:uppercase }
-    .cta{ text-decoration:underline; text-underline-offset:4px; }
-
-    
-    .beat    { transition: transform .18s ease, letter-spacing .18s ease, opacity .18s ease }
-    .stretch { transform:scaleY(1.26) scaleX(.98); letter-spacing:.08em }
-    .compress{ transform:scaleY(.78) scaleX(1.08); letter-spacing:-.02em }
-    .pulse   { opacity:.65 }
-    .shake   { animation:shake .28s linear infinite }
-    @keyframes shake{
-      0%,100%{ transform: translateX(0) }
-      25%{ transform: translateX(1px) }
-      50%{ transform: translateX(-1px) }
-      75%{ transform: translateX(0.8px) }
-    }
-
-    
-    .ticks span{
-      display:inline-block; width:8px; height:1px; background:currentColor; margin-right:6px; opacity:.35
-    }
-    .ticks span.active{ height:2px; opacity:.9 }
-
-    
-    .scrollsafe{overflow:auto; max-height:100%;}
-
-    
-    .control{cursor:pointer}
-    .control:hover{ text-decoration:underline; text-underline-offset:4px }
-    .control:active{ opacity:.7 }
-
-    
-    .cap{line-height:1}
-  </style>
-</head>
-<body class="w-screen h-screen relative overflow-hidden text-[var(--ink)]" vid="8">
-  
-  <div class="sheet" vid="9"></div>
-  <div class="sheet" vid="10"></div>
-  <div class="sheet" vid="11"></div>
-  <div class="sheet" vid="12"></div>
-
-  
-  <section class="sheet top scrollsafe flex flex-col" id="scene" vid="13">
-    <header class="px-[calc(var(--rhythm)*2)] pt-[calc(var(--rhythm)*2)]" vid="14">
-      <div class="eyebrow" vid="15">Coach says… Controlled motion first</div>
-    </header>
-
-    <main class="flex-1 px-[calc(var(--rhythm)*2)] pb-[calc(var(--rhythm)*2)] flex flex-col justify-center" vid="16">
-      
-      <h1 id="moveWord" class="headline cap beat select-none" vid="17">S Q U A T</h1>
-
-      
-      <div class="mt-[calc(var(--rhythm)*2)] label" vid="18">Rhythm</div>
-      <div class="ticks mt-[calc(var(--rhythm)*0.5)] flex flex-wrap gap-[6px]" id="ticks" vid="19"></div>
-
-      
-      <p class="deck mt-[calc(var(--rhythm)*2)]" id="instruction" vid="20">
-        Sink back, knees open. On every beat, drop and rise with calm breath. Let the word stretch with you.
-      </p>
-
-      
-      <div class="mt-[calc(var(--rhythm)*2.5)] flex flex-wrap gap-x-[calc(var(--rhythm)*2)] gap-y-[calc(var(--rhythm)*1.2)] label" vid="21">
-        <span class="control" data-action="toggle" id="toggle" vid="22">Start</span>
-        <span aria-hidden="true" vid="23">•</span>
-        <span class="control" data-action="next" id="next" vid="24">Next move</span>
-        <span aria-hidden="true" vid="25">•</span>
-        <span class="control" data-action="slower" id="slower" vid="26">- BPM</span>
-        <span aria-hidden="true" vid="27">/</span>
-        <span class="control" data-action="faster" id="faster" vid="28">+ BPM</span>
-        <span class="ml-auto" id="bpmReadout" vid="29">84 BPM</span>
-      </div>
-
-      
-      <footer class="mt-auto pt-[calc(var(--rhythm)*2)] label opacity-70" vid="30">
-        Keep it readable: if the word blurs, slow down.
-      </footer>
-    </main>
-  </section>
-
-  <script vid="31">
-    
-    const program = [
-      {
-        word: "S Q U A T",
-        mode: "stretch", 
-        bpm: 84,
-        copy: "Sink back, knees open. On every beat, drop and rise with calm breath. Let the word stretch with you.",
-      },
-      {
-        word: "L U N G E",
-        mode: "compress", 
-        bpm: 92,
-        copy: "Long step. Hips stay narrow. Compress on the return, lengthen on the reach. Keep shoulders still.",
-      },
-      {
-        word: "P L A N K",
-        mode: "hold", 
-        bpm: 60,
-        copy: "Wrists under shoulders. Ribcage tucked. Hold through the count. A faint tremor keeps you honest.",
-      },
-      {
-        word: "J U M P",
-        mode: "stretch",
-        bpm: 108,
-        copy: "Soft landing. Use ankles like springs. Stretch on the lift, reset on landing. Breathe out as you rise.",
-      },
-    ];
-
-    const moveWord = document.getElementById('moveWord');
-    const ticksEl  = document.getElementById('ticks');
-    const instruction = document.getElementById('instruction');
-    const toggle = document.getElementById('toggle');
-    const nextBtn = document.getElementById('next');
-    const slower = document.getElementById('slower');
-    const faster = document.getElementById('faster');
-    const bpmReadout = document.getElementById('bpmReadout');
-
-    let index = 0;
-    let playing = false;
-    let interval = null;
-    let beatIndex = 0;
-    const BEATS_VISIBLE = 16;
-
-    function buildTicks(){
-      ticksEl.innerHTML = '';
-      for(let i=0;i<BEATS_VISIBLE;i++){
-        const s = document.createElement('span');
-        ticksEl.appendChild(s);
-      }
-    }
-    buildTicks();
-
-    function setProgram(i){
-      index = (i + program.length) % program.length;
-      const step = program[index];
-      moveWord.textContent = step.word;
-      instruction.textContent = step.copy;
-      bpmReadout.textContent = `${step.bpm} BPM`;
-      document.querySelectorAll('.ticks span').forEach(el=>el.classList.remove('active'));
-      beatIndex = 0;
-
-      
-      const scene = document.getElementById('scene');
-      scene.style.background = index % 2 === 0 ? getComputedStyle(document.documentElement).getPropertyValue('--orange') : getComputedStyle(document.documentElement).getPropertyValue('--yellow');
-      scene.style.color = index % 2 === 0 ? 'var(--ink)' : '#1a1717';
-    }
-
-    function applyBeatMotion(){
-      const step = program[index];
-      moveWord.classList.remove('stretch','compress','pulse','shake');
-      
-      moveWord.style.lineHeight='1.05';
-
-      
-      if(step.mode === 'stretch'){
-        moveWord.classList.add('stretch');
-        setTimeout(()=>moveWord.classList.remove('stretch'), 130);
-      } else if(step.mode === 'compress'){
-        moveWord.classList.add('compress');
-        setTimeout(()=>moveWord.classList.remove('compress'), 130);
-      } else if(step.mode === 'hold'){
-        moveWord.classList.add('pulse');
-        moveWord.classList.add('shake'); 
-        setTimeout(()=>moveWord.classList.remove('pulse'), 160);
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="utf-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" vid="3" />
+    <title vid="4">Typemotion Fitness</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;display=swap"
+      rel="stylesheet"
+      vid="6"
+    />
+    <style vid="7">
+      :root {
+        --pink: #e9b7b0;
+        --peach: #f2c9be;
+        --yellow: #f2d867;
+        --orange: #f19b2c;
+        --deep-green: #1f3a34;
+        --ink: #231f20;
+        --slate: #332734;
+        --mint: #cfe3d6;
+        --rhythm: 12px;
+        --shadow: 0 28px 60px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.12);
       }
 
-      
-      const ticks = document.querySelectorAll('.ticks span');
-      ticks.forEach(t=>t.classList.remove('active'));
-      ticks[beatIndex % ticks.length].classList.add('active');
-      beatIndex++;
-    }
-
-    function start(){
-      if(playing) return;
-      playing = true;
-      toggle.textContent = 'Pause';
-      const step = program[index];
-      const ms = 60000 / step.bpm;
-      applyBeatMotion();
-      interval = setInterval(applyBeatMotion, ms);
-    }
-
-    function stop(){
-      playing = false;
-      toggle.textContent = 'Start';
-      clearInterval(interval);
-      interval = null;
-      moveWord.classList.remove('stretch','compress','pulse','shake');
-    }
-
-    function togglePlay(){
-      playing ? stop() : start();
-    }
-
-    function next(){
-      stop();
-      setProgram(index+1);
-      start();
-    }
-
-    function changeBPM(delta){
-      const step = program[index];
-      step.bpm = Math.max(40, Math.min(160, step.bpm + delta));
-      bpmReadout.textContent = `${step.bpm} BPM`;
-      if(playing){
-        stop(); start();
+      html,
+      body {
+        height: 100%;
+        width: 100%;
       }
-    }
+      body {
+        font-family:
+          'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+          'Courier New', monospace;
+        letter-spacing: 0.01em;
+        background: var(--peach);
+      }
 
-    
-    toggle.addEventListener('click', togglePlay);
-    nextBtn.addEventListener('click', next);
-    slower.addEventListener('click', ()=>changeBPM(-4));
-    faster.addEventListener('click', ()=>changeBPM(4));
+      .sheet {
+        position: absolute;
+        inset: 4vh 4vw auto 4vw;
+        height: 88vh;
+        box-shadow: var(--shadow);
+        transform-origin: center;
+      }
+      .sheet:nth-child(1) {
+        background: var(--pink);
+        transform: rotate(-4deg);
+      }
+      .sheet:nth-child(2) {
+        background: var(--mint);
+        top: 8vh;
+        transform: rotate(2.8deg);
+      }
+      .sheet:nth-child(3) {
+        background: #111827;
+        color: #f4f4f4;
+        top: 12vh;
+        transform: rotate(-1.6deg);
+      }
+      .sheet:nth-child(4) {
+        background: var(--yellow);
+        top: 16vh;
+        transform: rotate(4.8deg);
+      }
+      .sheet.top {
+        background: var(--orange);
+        top: 10vh;
+        color: var(--ink);
+        transform: rotate(-0.4deg);
+      }
 
-    
-    window.addEventListener('keydown', (e)=>{
-      if(e.code === 'Space'){ e.preventDefault(); togglePlay(); }
-      if(e.code === 'ArrowRight'){ next(); }
-      if(e.code === 'ArrowUp'){ changeBPM(4); }
-      if(e.code === 'ArrowDown'){ changeBPM(-4); }
-    });
+      .eyebrow {
+        font-weight: 600;
+        font-size: clamp(12px, 1.4vw, 14px);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.9;
+      }
+      .headline {
+        font-weight: 600;
+        font-size: clamp(36px, 6vw, 74px);
+        line-height: 1.05;
+        letter-spacing: 0.01em;
+      }
+      .deck {
+        font-size: clamp(16px, 1.6vw, 22px);
+        line-height: 1.45;
+        max-width: 40ch;
+      }
+      .label {
+        font-size: clamp(12px, 1.2vw, 14px);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .cta {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
 
-    
-    setProgram(0);
-  </script>
+      .beat {
+        transition:
+          transform 0.18s ease,
+          letter-spacing 0.18s ease,
+          opacity 0.18s ease;
+      }
+      .stretch {
+        transform: scaleY(1.26) scaleX(0.98);
+        letter-spacing: 0.08em;
+      }
+      .compress {
+        transform: scaleY(0.78) scaleX(1.08);
+        letter-spacing: -0.02em;
+      }
+      .pulse {
+        opacity: 0.65;
+      }
+      .shake {
+        animation: shake 0.28s linear infinite;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(1px);
+        }
+        50% {
+          transform: translateX(-1px);
+        }
+        75% {
+          transform: translateX(0.8px);
+        }
+      }
 
-</body></html>
+      .ticks span {
+        display: inline-block;
+        width: 8px;
+        height: 1px;
+        background: currentColor;
+        margin-right: 6px;
+        opacity: 0.35;
+      }
+      .ticks span.active {
+        height: 2px;
+        opacity: 0.9;
+      }
+
+      .scrollsafe {
+        overflow: auto;
+        max-height: 100%;
+      }
+
+      .control {
+        cursor: pointer;
+      }
+      .control:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .control:active {
+        opacity: 0.7;
+      }
+
+      .cap {
+        line-height: 1;
+      }
+    </style>
+  </head>
+  <body class="w-screen h-screen relative overflow-hidden text-[var(--ink)]" vid="8">
+    <div class="sheet" vid="9"></div>
+    <div class="sheet" vid="10"></div>
+    <div class="sheet" vid="11"></div>
+    <div class="sheet" vid="12"></div>
+
+    <section class="sheet top scrollsafe flex flex-col" id="scene" vid="13">
+      <header class="px-[calc(var(--rhythm)*2)] pt-[calc(var(--rhythm)*2)]" vid="14">
+        <div class="eyebrow" vid="15">Coach says… Controlled motion first</div>
+      </header>
+
+      <main
+        class="flex-1 px-[calc(var(--rhythm)*2)] pb-[calc(var(--rhythm)*2)] flex flex-col justify-center"
+        vid="16"
+      >
+        <h1 id="moveWord" class="headline cap beat select-none" vid="17">S Q U A T</h1>
+
+        <div class="mt-[calc(var(--rhythm)*2)] label" vid="18">Rhythm</div>
+        <div
+          class="ticks mt-[calc(var(--rhythm)*0.5)] flex flex-wrap gap-[6px]"
+          id="ticks"
+          vid="19"
+        ></div>
+
+        <p class="deck mt-[calc(var(--rhythm)*2)]" id="instruction" vid="20">
+          Sink back, knees open. On every beat, drop and rise with calm breath. Let the word stretch
+          with you.
+        </p>
+
+        <div
+          class="mt-[calc(var(--rhythm)*2.5)] flex flex-wrap gap-x-[calc(var(--rhythm)*2)] gap-y-[calc(var(--rhythm)*1.2)] label"
+          vid="21"
+        >
+          <span class="control" data-action="toggle" id="toggle" vid="22">Start</span>
+          <span aria-hidden="true" vid="23">•</span>
+          <span class="control" data-action="next" id="next" vid="24">Next move</span>
+          <span aria-hidden="true" vid="25">•</span>
+          <span class="control" data-action="slower" id="slower" vid="26">- BPM</span>
+          <span aria-hidden="true" vid="27">/</span>
+          <span class="control" data-action="faster" id="faster" vid="28">+ BPM</span>
+          <span class="ml-auto" id="bpmReadout" vid="29">84 BPM</span>
+        </div>
+
+        <footer class="mt-auto pt-[calc(var(--rhythm)*2)] label opacity-70" vid="30">
+          Keep it readable: if the word blurs, slow down.
+        </footer>
+      </main>
+    </section>
+
+    <script vid="31">
+      const program = [
+        {
+          word: 'S Q U A T',
+          mode: 'stretch',
+          bpm: 84,
+          copy: 'Sink back, knees open. On every beat, drop and rise with calm breath. Let the word stretch with you.',
+        },
+        {
+          word: 'L U N G E',
+          mode: 'compress',
+          bpm: 92,
+          copy: 'Long step. Hips stay narrow. Compress on the return, lengthen on the reach. Keep shoulders still.',
+        },
+        {
+          word: 'P L A N K',
+          mode: 'hold',
+          bpm: 60,
+          copy: 'Wrists under shoulders. Ribcage tucked. Hold through the count. A faint tremor keeps you honest.',
+        },
+        {
+          word: 'J U M P',
+          mode: 'stretch',
+          bpm: 108,
+          copy: 'Soft landing. Use ankles like springs. Stretch on the lift, reset on landing. Breathe out as you rise.',
+        },
+      ]
+
+      const moveWord = document.getElementById('moveWord')
+      const ticksEl = document.getElementById('ticks')
+      const instruction = document.getElementById('instruction')
+      const toggle = document.getElementById('toggle')
+      const nextBtn = document.getElementById('next')
+      const slower = document.getElementById('slower')
+      const faster = document.getElementById('faster')
+      const bpmReadout = document.getElementById('bpmReadout')
+
+      let index = 0
+      let playing = false
+      let interval = null
+      let beatIndex = 0
+      const BEATS_VISIBLE = 16
+
+      function buildTicks() {
+        ticksEl.innerHTML = ''
+        for (let i = 0; i < BEATS_VISIBLE; i++) {
+          const s = document.createElement('span')
+          ticksEl.appendChild(s)
+        }
+      }
+      buildTicks()
+
+      function setProgram(i) {
+        index = (i + program.length) % program.length
+        const step = program[index]
+        moveWord.textContent = step.word
+        instruction.textContent = step.copy
+        bpmReadout.textContent = `${step.bpm} BPM`
+        document.querySelectorAll('.ticks span').forEach(el => el.classList.remove('active'))
+        beatIndex = 0
+
+        const scene = document.getElementById('scene')
+        scene.style.background =
+          index % 2 === 0
+            ? getComputedStyle(document.documentElement).getPropertyValue('--orange')
+            : getComputedStyle(document.documentElement).getPropertyValue('--yellow')
+        scene.style.color = index % 2 === 0 ? 'var(--ink)' : '#1a1717'
+      }
+
+      function applyBeatMotion() {
+        const step = program[index]
+        moveWord.classList.remove('stretch', 'compress', 'pulse', 'shake')
+
+        moveWord.style.lineHeight = '1.05'
+
+        if (step.mode === 'stretch') {
+          moveWord.classList.add('stretch')
+          setTimeout(() => moveWord.classList.remove('stretch'), 130)
+        } else if (step.mode === 'compress') {
+          moveWord.classList.add('compress')
+          setTimeout(() => moveWord.classList.remove('compress'), 130)
+        } else if (step.mode === 'hold') {
+          moveWord.classList.add('pulse')
+          moveWord.classList.add('shake')
+          setTimeout(() => moveWord.classList.remove('pulse'), 160)
+        }
+
+        const ticks = document.querySelectorAll('.ticks span')
+        ticks.forEach(t => t.classList.remove('active'))
+        ticks[beatIndex % ticks.length].classList.add('active')
+        beatIndex++
+      }
+
+      function start() {
+        if (playing) return
+        playing = true
+        toggle.textContent = 'Pause'
+        const step = program[index]
+        const ms = 60000 / step.bpm
+        applyBeatMotion()
+        interval = setInterval(applyBeatMotion, ms)
+      }
+
+      function stop() {
+        playing = false
+        toggle.textContent = 'Start'
+        clearInterval(interval)
+        interval = null
+        moveWord.classList.remove('stretch', 'compress', 'pulse', 'shake')
+      }
+
+      function togglePlay() {
+        playing ? stop() : start()
+      }
+
+      function next() {
+        stop()
+        setProgram(index + 1)
+        start()
+      }
+
+      function changeBPM(delta) {
+        const step = program[index]
+        step.bpm = Math.max(40, Math.min(160, step.bpm + delta))
+        bpmReadout.textContent = `${step.bpm} BPM`
+        if (playing) {
+          stop()
+          start()
+        }
+      }
+
+      toggle.addEventListener('click', togglePlay)
+      nextBtn.addEventListener('click', next)
+      slower.addEventListener('click', () => changeBPM(-4))
+      faster.addEventListener('click', () => changeBPM(4))
+
+      window.addEventListener('keydown', e => {
+        if (e.code === 'Space') {
+          e.preventDefault()
+          togglePlay()
+        }
+        if (e.code === 'ArrowRight') {
+          next()
+        }
+        if (e.code === 'ArrowUp') {
+          changeBPM(4)
+        }
+        if (e.code === 'ArrowDown') {
+          changeBPM(-4)
+        }
+      })
+
+      setProgram(0)
+    </script>
+  </body>
+</html>

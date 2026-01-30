@@ -1,154 +1,352 @@
-<html lang="en" vid="0"><head vid="1">
-  <meta charset="UTF-8" vid="2">
-  <meta name="viewport" content="width=device-width, initial-scale=1" vid="3">
-  <title vid="4">Nova — Calm Productivity</title>
-  <script src="https://cdn.tailwindcss.com" vid="5"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&amp;display=swap" rel="stylesheet" vid="6">
-  <style vid="7">
-    :root{
-      /* Colors sampled from the reference's misty gradient and UI ink */
-      --mist-1:#cfe0d6;   /* light sage highlight seen top-right */
-      --mist-2:#a9c2b8;   /* cool green center wash */
-      --mist-3:#5a676b;   /* desaturated blue-grey vignette edge */
-      --ink:#ffffff;      /* primary text ink */
-      --ink-70:rgba(255,255,255,.70); /* secondary text */
-      --ink-55:rgba(255,255,255,.55); /* tertiary text */
-      --ink-35:rgba(255,255,255,.35); /* dividers/vignette overlay text */
-      --accent:#f1c75b;   /* warm yellow accent used on "Intro Session" */
-    }
-    html,body{height:100%;}
-    body{font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; background:#000;}
-    /* HERO BACKDROP: replicates soft lens-blur gradient and film grain from the reference.
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" vid="3" />
+    <title vid="4">Nova — Calm Productivity</title>
+    <script src="https://cdn.tailwindcss.com" vid="5"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&amp;display=swap"
+      rel="stylesheet"
+      vid="6"
+    />
+    <style vid="7">
+      :root {
+        /* Colors sampled from the reference's misty gradient and UI ink */
+        --mist-1: #cfe0d6; /* light sage highlight seen top-right */
+        --mist-2: #a9c2b8; /* cool green center wash */
+        --mist-3: #5a676b; /* desaturated blue-grey vignette edge */
+        --ink: #ffffff; /* primary text ink */
+        --ink-70: rgba(255, 255, 255, 0.7); /* secondary text */
+        --ink-55: rgba(255, 255, 255, 0.55); /* tertiary text */
+        --ink-35: rgba(255, 255, 255, 0.35); /* dividers/vignette overlay text */
+        --accent: #f1c75b; /* warm yellow accent used on "Intro Session" */
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family:
+          'Inter',
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          'Helvetica Neue',
+          Arial;
+        background: #000;
+      }
+      /* HERO BACKDROP: replicates soft lens-blur gradient and film grain from the reference.
        - Radial gradient positions and stops tuned to match the screenshot's top-right glow and darker bottom-left. */
-    .hero-gradient{
-      background:
-        radial-gradient(1000px 700px at 75% 15%, var(--mist-1) 0%, rgba(207,224,214,.65) 22%, rgba(207,224,214,0) 60%),
-        radial-gradient(900px 600px at 55% 40%, var(--mist-2) 0%, rgba(169,194,184,.55) 30%, rgba(169,194,184,0) 72%),
-        radial-gradient(1000px 800px at 20% 80%, rgba(90,103,107,.85) 0%, rgba(90,103,107,.35) 40%, rgba(90,103,107,0) 80%),
-        #0c0d0e;
-      filter:saturate(.95) brightness(.95);
-    }
-    /* Subtle film grain similar to the screenshot's noisy texture (opacity kept low so text remains crisp). */
-    .grain:before{
-      content:"";
-      position:absolute; inset:0;
-      background-image:url('https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=1200&auto=format&fit=crop');
-      mix-blend-mode:overlay;
-      opacity:.12;
-      filter:grayscale(1) contrast(1.2);
-      pointer-events:none;
-    }
-    /* Bottom vignette that darkens the hero ~65% similar to the reference fade into black content area. */
-    .vignette:after{
-      content:"";
-      position:absolute; left:0; right:0; bottom:0; height:45%;
-      background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.75) 85%, rgba(0,0,0,.88) 100%);
-      pointer-events:none;
-    }
-    /* Micro label: ALL CAPS, small, tracking wide; exact: 11px/16px and 0.12em letter-spacing from reference feel. */
-    .label{ font-size:11px; line-height:16px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-55); }
-    /* Display title: matches screenshot scale tightness: 44px with -0.5 tracking and 1.1 line-height. */
-    .display{ font-size:44px; line-height:1.1; letter-spacing:-.5px; color:var(--ink); font-weight:600; }
-    /* Subhead and body sizes measured against reference spacing rhythm (14/16). */
-    .subhead{ font-size:16px; line-height:22px; color:var(--ink-70); }
-    .body{ font-size:13px; line-height:18px; color:var(--ink-55); }
-    /* Divider exactly 1px hairline with 26% white, mirroring the subtle rule above "FOR YOU". */
-    .rule{ height:1px; background:rgba(255,255,255,.26);}
-    /* Play button: 56px circular, 1px semi-opaque ring, centered triangle; mirrors the screenshot. */
-    .play{ width:56px; height:56px; border-radius:9999px; border:1px solid rgba(255,255,255,.55); display:grid; place-items:center; backdrop-filter:saturate(110%) brightness(1.05); }
-    .play svg{ transform:translateX(1px); }
-    /* Thumbnail frames: 8px radius and 1px white border; kept square-ish as in the bottom tiles. */
-    .thumb{ border-radius:8px; border:1px solid rgba(255,255,255,.6); overflow:hidden; }
-    /* Tight gutters: 16px block spacing, 12px within rows; deduced from screenshot's compact layout. */
-    .g-16>*+*{ margin-top:16px; }
-    .g-row-12>*+*{ margin-left:12px; }
-  </style>
-</head>
-<body class="flex items-center justify-center" vid="8">
-  <main class="w-[1200px] h-[800px] rounded-[8px] overflow-hidden relative bg-black" vid="9">
-    <section class="hero-gradient relative h-[62%] px-[28px] pt-[24px] grain vignette" vid="10">
-      <div class="flex items-center gap-[8px]" vid="11">
-        <!-- Professional headshot avatar for productivity coach -->
-        <img alt="productivity coach" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&amp;w=96&amp;auto=format&amp;fit=crop" class="w-[28px] h-[28px] rounded-full object-cover" vid="12">
-        <div class="body text-[13px] leading-[16px]" vid="13">
-          <div class="text-[13px] text-[var(--ink-70)]" vid="14">Good morning,</div>
-          <div class="text-[13px] text-[var(--ink-70)]" vid="15">Driver</div>
-        </div>
-      </div>
-
-      <button class="absolute right-[24px] top-[22px] w-[32px] h-[32px] rounded-full border border-white/50 grid place-items-center" vid="16">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-opacity=".8" stroke-width="1.5" vid="17"><circle cx="11" cy="11" r="7" vid="18"></circle><path d="M20 20l-4.2-4.2" vid="19"></path></svg>
-      </button>
-
-      <div class="absolute left-[28px] bottom-[78px] g-16" vid="20">
-        <div class="label" vid="21">Today</div>
-        <div class="display" vid="22">Find your flow</div>
-
-        <div class="flex items-center mt-[10px]" vid="23">
-          <div vid="24">
-            <a class="subhead underline decoration-[var(--accent)] decoration-2 underline-offset-4 text-[var(--accent)]" href="#" vid="25">Intro Session</a>
-            <div class="body mt-[6px]" vid="26">With Nova coach · 5 min</div>
+      .hero-gradient {
+        background:
+          radial-gradient(
+            1000px 700px at 75% 15%,
+            var(--mist-1) 0%,
+            rgba(207, 224, 214, 0.65) 22%,
+            rgba(207, 224, 214, 0) 60%
+          ),
+          radial-gradient(
+            900px 600px at 55% 40%,
+            var(--mist-2) 0%,
+            rgba(169, 194, 184, 0.55) 30%,
+            rgba(169, 194, 184, 0) 72%
+          ),
+          radial-gradient(
+            1000px 800px at 20% 80%,
+            rgba(90, 103, 107, 0.85) 0%,
+            rgba(90, 103, 107, 0.35) 40%,
+            rgba(90, 103, 107, 0) 80%
+          ),
+          #0c0d0e;
+        filter: saturate(0.95) brightness(0.95);
+      }
+      /* Subtle film grain similar to the screenshot's noisy texture (opacity kept low so text remains crisp). */
+      .grain:before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url('https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=1200&auto=format&fit=crop');
+        mix-blend-mode: overlay;
+        opacity: 0.12;
+        filter: grayscale(1) contrast(1.2);
+        pointer-events: none;
+      }
+      /* Bottom vignette that darkens the hero ~65% similar to the reference fade into black content area. */
+      .vignette:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 45%;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 0.75) 85%,
+          rgba(0, 0, 0, 0.88) 100%
+        );
+        pointer-events: none;
+      }
+      /* Micro label: ALL CAPS, small, tracking wide; exact: 11px/16px and 0.12em letter-spacing from reference feel. */
+      .label {
+        font-size: 11px;
+        line-height: 16px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-55);
+      }
+      /* Display title: matches screenshot scale tightness: 44px with -0.5 tracking and 1.1 line-height. */
+      .display {
+        font-size: 44px;
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+        color: var(--ink);
+        font-weight: 600;
+      }
+      /* Subhead and body sizes measured against reference spacing rhythm (14/16). */
+      .subhead {
+        font-size: 16px;
+        line-height: 22px;
+        color: var(--ink-70);
+      }
+      .body {
+        font-size: 13px;
+        line-height: 18px;
+        color: var(--ink-55);
+      }
+      /* Divider exactly 1px hairline with 26% white, mirroring the subtle rule above "FOR YOU". */
+      .rule {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.26);
+      }
+      /* Play button: 56px circular, 1px semi-opaque ring, centered triangle; mirrors the screenshot. */
+      .play {
+        width: 56px;
+        height: 56px;
+        border-radius: 9999px;
+        border: 1px solid rgba(255, 255, 255, 0.55);
+        display: grid;
+        place-items: center;
+        backdrop-filter: saturate(110%) brightness(1.05);
+      }
+      .play svg {
+        transform: translateX(1px);
+      }
+      /* Thumbnail frames: 8px radius and 1px white border; kept square-ish as in the bottom tiles. */
+      .thumb {
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        overflow: hidden;
+      }
+      /* Tight gutters: 16px block spacing, 12px within rows; deduced from screenshot's compact layout. */
+      .g-16 > * + * {
+        margin-top: 16px;
+      }
+      .g-row-12 > * + * {
+        margin-left: 12px;
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center" vid="8">
+    <main class="w-[1200px] h-[800px] rounded-[8px] overflow-hidden relative bg-black" vid="9">
+      <section class="hero-gradient relative h-[62%] px-[28px] pt-[24px] grain vignette" vid="10">
+        <div class="flex items-center gap-[8px]" vid="11">
+          <!-- Professional headshot avatar for productivity coach -->
+          <img
+            alt="productivity coach"
+            src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&amp;w=96&amp;auto=format&amp;fit=crop"
+            class="w-[28px] h-[28px] rounded-full object-cover"
+            vid="12"
+          />
+          <div class="body text-[13px] leading-[16px]" vid="13">
+            <div class="text-[13px] text-[var(--ink-70)]" vid="14">Good morning,</div>
+            <div class="text-[13px] text-[var(--ink-70)]" vid="15">Driver</div>
           </div>
-          <div class="ml-[22px] play" vid="27">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="white" vid="28"><path d="M8 5l12 7-12 7z" vid="29"></path></svg>
+        </div>
+
+        <button
+          class="absolute right-[24px] top-[22px] w-[32px] h-[32px] rounded-full border border-white/50 grid place-items-center"
+          vid="16"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-opacity=".8"
+            stroke-width="1.5"
+            vid="17"
+          >
+            <circle cx="11" cy="11" r="7" vid="18"></circle>
+            <path d="M20 20l-4.2-4.2" vid="19"></path>
+          </svg>
+        </button>
+
+        <div class="absolute left-[28px] bottom-[78px] g-16" vid="20">
+          <div class="label" vid="21">Today</div>
+          <div class="display" vid="22">Find your flow</div>
+
+          <div class="flex items-center mt-[10px]" vid="23">
+            <div vid="24">
+              <a
+                class="subhead underline decoration-[var(--accent)] decoration-2 underline-offset-4 text-[var(--accent)]"
+                href="#"
+                vid="25"
+                >Intro Session</a
+              >
+              <div class="body mt-[6px]" vid="26">With Nova coach · 5 min</div>
+            </div>
+            <div class="ml-[22px] play" vid="27">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white" vid="28">
+                <path d="M8 5l12 7-12 7z" vid="29"></path>
+              </svg>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <div class="rule" vid="30"></div>
+      <div class="rule" vid="30"></div>
 
-    <section class="h-[38%] bg-black px-[24px] pt-[16px]" vid="31">
-      <div class="flex items-center justify-between" vid="32">
-        <div class="label" vid="33">For You</div>
-        <div class="flex items-center gap-[6px] body text-[12px] text-[var(--ink-55)]" vid="34">
-          <span vid="35">1/3</span>
-          <svg width="10" height="10" viewBox="0 0 24 24" stroke="white" stroke-opacity=".6" stroke-width="1.5" fill="none" vid="36"><path d="M9 6l6 6-6 6" vid="37"></path></svg>
-        </div>
-      </div>
-
-      <div class="mt-[10px]" vid="38">
-        <div class="text-[18px] leading-[22px] text-white font-semibold" vid="39">Start here: Build a gentle habit</div>
-        <p class="body mt-[6px] max-w-[62ch]" vid="40">
-          Discover a calm routine to unlock focused work. Subtle cues guide posture, pacing, and rest—no notifications, just presence.
-        </p>
-      </div>
-
-      <div class="mt-[14px] flex g-row-12" vid="41">
-        <!-- Tile 1: Focused work/concentration image -->
-        <figure class="thumb relative w-[38%] h-[120px]" vid="42">
-          <img alt="Person focusing at desk" class="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" vid="43">
-          <figcaption class="absolute inset-0 p-[10px] flex flex-col justify-end" style="background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.7) 100%);" vid="44">
-            <div class="text-[14px] text-white font-semibold leading-[18px]" vid="45">Why Focus Works</div>
-            <div class="body mt-[2px] text-[12px]" vid="46">Intro • 5 min</div>
-          </figcaption>
-          <div class="absolute right-[8px] top-[8px] w-[18px] h-[18px] rounded-full bg-white/10 grid place-items-center" vid="47">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" vid="48"><path d="M12 21s8-4.5 8-11a5 5 0 0 0-9-3 5 5 0 0 0-9 3c0 6.5 10 11 10 11z" vid="49"></path></svg>
+      <section class="h-[38%] bg-black px-[24px] pt-[16px]" vid="31">
+        <div class="flex items-center justify-between" vid="32">
+          <div class="label" vid="33">For You</div>
+          <div class="flex items-center gap-[6px] body text-[12px] text-[var(--ink-55)]" vid="34">
+            <span vid="35">1/3</span>
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 24 24"
+              stroke="white"
+              stroke-opacity=".6"
+              stroke-width="1.5"
+              fill="none"
+              vid="36"
+            >
+              <path d="M9 6l6 6-6 6" vid="37"></path>
+            </svg>
           </div>
-          <div class="absolute right-[10px] bottom-[8px]" style="color:var(--accent); font-size:12px;" vid="50">1/3</div>
-        </figure>
+        </div>
 
-        <!-- Tile 2: Deep work/intense focus image -->
-        <figure class="thumb relative w-[34%] h-[120px]" vid="51">
-          <img alt="Person in deep work session" class="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1571844307880-751c6d86f3f3?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" vid="52">
-          <figcaption class="absolute inset-0 p-[10px] flex flex-col justify-end" style="background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.7) 100%);" vid="53">
-            <div class="text-[14px] text-white font-semibold leading-[18px]" vid="54">Deep Work Sprint</div>
-            <div class="body mt-[2px] text-[12px]" vid="55">Session • 12 min</div>
-          </figcaption>
-          <div class="absolute right-[10px] bottom-[8px]" style="color:var(--accent); font-size:12px;" vid="56">2/3</div>
-        </figure>
+        <div class="mt-[10px]" vid="38">
+          <div class="text-[18px] leading-[22px] text-white font-semibold" vid="39">
+            Start here: Build a gentle habit
+          </div>
+          <p class="body mt-[6px] max-w-[62ch]" vid="40">
+            Discover a calm routine to unlock focused work. Subtle cues guide posture, pacing, and
+            rest—no notifications, just presence.
+          </p>
+        </div>
 
-        <!-- Tile 3: Calming meditation/breathing exercise image -->
-        <figure class="thumb relative w-[28%] h-[120px]" vid="57">
-          <img alt="Person meditating" class="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" vid="58">
-          <figcaption class="absolute inset-0 p-[10px] flex flex-col justify-end" style="background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.7) 100%);" vid="59">
-            <div class="text-[14px] text-white font-semibold leading-[18px]" vid="60">Reset &amp; Breathe</div>
-            <div class="body mt-[2px] text-[12px]" vid="61">Break • 4 min</div>
-          </figcaption>
-          <div class="absolute right-[10px] bottom-[8px]" style="color:var(--accent); font-size:12px;" vid="62">3/3</div>
-        </figure>
-      </div>
-    </section>
-  </main>
+        <div class="mt-[14px] flex g-row-12" vid="41">
+          <!-- Tile 1: Focused work/concentration image -->
+          <figure class="thumb relative w-[38%] h-[120px]" vid="42">
+            <img
+              alt="Person focusing at desk"
+              class="absolute inset-0 w-full h-full object-cover"
+              src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&amp;w=1200&amp;auto=format&amp;fit=crop"
+              vid="43"
+            />
+            <figcaption
+              class="absolute inset-0 p-[10px] flex flex-col justify-end"
+              style="
+                background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+              "
+              vid="44"
+            >
+              <div class="text-[14px] text-white font-semibold leading-[18px]" vid="45">
+                Why Focus Works
+              </div>
+              <div class="body mt-[2px] text-[12px]" vid="46">Intro • 5 min</div>
+            </figcaption>
+            <div
+              class="absolute right-[8px] top-[8px] w-[18px] h-[18px] rounded-full bg-white/10 grid place-items-center"
+              vid="47"
+            >
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                stroke-width="1.5"
+                vid="48"
+              >
+                <path
+                  d="M12 21s8-4.5 8-11a5 5 0 0 0-9-3 5 5 0 0 0-9 3c0 6.5 10 11 10 11z"
+                  vid="49"
+                ></path>
+              </svg>
+            </div>
+            <div
+              class="absolute right-[10px] bottom-[8px]"
+              style="color: var(--accent); font-size: 12px"
+              vid="50"
+            >
+              1/3
+            </div>
+          </figure>
 
-</body></html>
+          <!-- Tile 2: Deep work/intense focus image -->
+          <figure class="thumb relative w-[34%] h-[120px]" vid="51">
+            <img
+              alt="Person in deep work session"
+              class="absolute inset-0 w-full h-full object-cover"
+              src="https://images.unsplash.com/photo-1571844307880-751c6d86f3f3?q=80&amp;w=1200&amp;auto=format&amp;fit=crop"
+              vid="52"
+            />
+            <figcaption
+              class="absolute inset-0 p-[10px] flex flex-col justify-end"
+              style="
+                background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+              "
+              vid="53"
+            >
+              <div class="text-[14px] text-white font-semibold leading-[18px]" vid="54">
+                Deep Work Sprint
+              </div>
+              <div class="body mt-[2px] text-[12px]" vid="55">Session • 12 min</div>
+            </figcaption>
+            <div
+              class="absolute right-[10px] bottom-[8px]"
+              style="color: var(--accent); font-size: 12px"
+              vid="56"
+            >
+              2/3
+            </div>
+          </figure>
+
+          <!-- Tile 3: Calming meditation/breathing exercise image -->
+          <figure class="thumb relative w-[28%] h-[120px]" vid="57">
+            <img
+              alt="Person meditating"
+              class="absolute inset-0 w-full h-full object-cover"
+              src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&amp;w=1200&amp;auto=format&amp;fit=crop"
+              vid="58"
+            />
+            <figcaption
+              class="absolute inset-0 p-[10px] flex flex-col justify-end"
+              style="
+                background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+              "
+              vid="59"
+            >
+              <div class="text-[14px] text-white font-semibold leading-[18px]" vid="60">
+                Reset &amp; Breathe
+              </div>
+              <div class="body mt-[2px] text-[12px]" vid="61">Break • 4 min</div>
+            </figcaption>
+            <div
+              class="absolute right-[10px] bottom-[8px]"
+              style="color: var(--accent); font-size: 12px"
+              vid="62"
+            >
+              3/3
+            </div>
+          </figure>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

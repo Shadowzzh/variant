@@ -1,162 +1,204 @@
-<html vid="0"><head vid="1">
-    <meta charset="UTF-8" vid="2">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+<html vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
     <script src="https://cdn.tailwindcss.com" vid="4"></script>
     <style vid="5">
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
-        
-        body {
-            font-family: 'Roboto Mono', monospace;
-        }
-        
-        .e-ink-bg {
-            background-color: #e8eadd;
-        }
-        
-        .border-connector {
-            border-left: 8px solid #e8b460;
-            margin-left: -4px;
-        }
-        
-        .barcode {
-            height: 40px;
-            background-image: repeating-linear-gradient(90deg, #000, #000 2px, transparent 2px, transparent 4px);
-        }
-        
-        .qr-code {
-            display: inline-block;
-            background-image: url('https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=RAMENAPP12345');
-            background-size: contain;
-            width: 80px;
-            height: 80px;
-        }
-    </style>
-</head>
-<body class="e-ink-bg min-h-screen" vid="6">
-    <div class="max-w-md mx-auto px-2 py-4" vid="7">
-        <!-- Header -->
-        <div class="border-2 border-black mb-3" vid="8">
-            <h1 class="text-center text-xl font-bold tracking-wider py-2" vid="9">RAMEN VENDING</h1>
-        </div>
-        
-        <!-- Top Section -->
-        <div class="flex justify-between border-2 border-black p-2 mb-3" vid="10">
-            <div class="text-sm" vid="11">
-                <p vid="12">Order Number / Code</p>
-                <p class="font-bold" vid="13">RMN-TKYO</p>
-            </div>
-            <div class="text-sm text-right" vid="14">
-                <p vid="15">Broth / Style</p>
-                <p class="font-bold" vid="16">TONKOTSU</p>
-            </div>
-        </div>
-        
-        <!-- Product Info -->
-        <div class="border-2 border-black p-2 mb-3" vid="17">
-            <div class="flex justify-between mb-2" vid="18">
-                <p class="text-xs" vid="19">Order ID</p>
-                <p class="text-xs" vid="20">Version</p>
-            </div>
-            <div class="flex justify-between mb-2" vid="21">
-                <p class="font-bold" vid="22">0906928</p>
-                <p class="font-bold" vid="23">V1.2</p>
-            </div>
-            <div class="border-t border-black pt-2 mb-2" vid="24">
-                <p class="text-xs" vid="25">Ramen Type / Description</p>
-                <p class="font-bold" vid="26">Spicy Tonkotsu Deluxe 263 104 811</p>
-            </div>
-            <div class="flex justify-between text-xs" vid="27">
-                <p vid="28">Size / Portion</p>
-                <p vid="29">Price / Measurement</p>
-            </div>
-            <div class="flex justify-between font-bold mb-2" vid="30">
-                <p vid="31">LARGE</p>
-                <p vid="32">¥950</p>
-            </div>
-            <div class="flex justify-between" vid="33">
-                <div class="qr-code" vid="34"></div>
-                <div class="text-right" vid="35">
-                    <p class="text-xs" vid="36">Quantity</p>
-                    <p class="font-bold" vid="37">1 × |||||||||||</p>
-                    <p class="text-xs mt-2" vid="38">Toppings</p>
-                    <p class="font-bold" vid="39">3 × |||||||||||</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Japanese Section -->
-        <div class="flex border-2 border-black mb-3" vid="40">
-            <div class="w-1/3 p-2 border-r-2 border-black" vid="41">
-                <p class="text-lg font-bold mb-2" vid="42">注文票</p>
-                <p class="text-xs" vid="43">注文番号</p>
-                <p class="font-bold" vid="44">1234567</p>
-            </div>
-            <div class="w-2/3 p-2" vid="45">
-                <p class="text-right font-bold" vid="46">RAMEN EXPRESS</p>
-                <div class="grid grid-cols-2 gap-2 mt-2" vid="47">
-                    <div vid="48">
-                        <p class="text-xs" vid="49">注文日</p>
-                        <p class="font-bold" vid="50">MM/DD</p>
-                    </div>
-                    <div vid="51">
-                        <p class="text-xs" vid="52">注文時間</p>
-                        <p class="font-bold" vid="53">HH:MM</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Item Selection Section -->
-        <div class="border-2 border-black mb-3" vid="54">
-            <div class="border-b border-black p-2" vid="55">
-                <p class="text-xs" vid="56">Item Code</p>
-                <p class="font-bold" vid="57">123456789012345678</p>
-            </div>
-            <div class="border-b border-black p-2" vid="58">
-                <p class="text-xs" vid="59">Reference Number</p>
-                <p class="font-bold" vid="60">0906928C110022</p>
-            </div>
-            <div class="p-2" vid="61">
-                <div class="flex justify-between mb-2" vid="62">
-                    <p class="text-xs" vid="63">Pickup Time</p>
-                    <p class="text-xs" vid="64">Location</p>
-                </div>
-                <div class="flex justify-between" vid="65">
-                    <p class="font-bold" vid="66">12:30</p>
-                    <p class="font-bold" vid="67">GATE A3</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Bottom Section -->
-        <div class="border-2 border-black mb-3" vid="68">
-            <div class="barcode w-full" vid="69"></div>
-            <div class="flex justify-between p-2" vid="70">
-                <div vid="71">
-                    <p class="text-xs" vid="72">Receipt #</p>
-                    <p class="font-bold" vid="73">12345678</p>
-                </div>
-                <div class="text-right" vid="74">
-                    <p class="text-xs" vid="75">Total Amount</p>
-                    <p class="font-bold" vid="76">¥1,250</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Ramen Selection Buttons -->
-        <div class="grid grid-cols-2 gap-3 mt-6" vid="77">
-            <button class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition" vid="78">TONKOTSU</button>
-            <button class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition" vid="79">SHOYU</button>
-            <button class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition" vid="80">MISO</button>
-            <button class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition" vid="81">SHIO</button>
-            <button class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition" vid="82">SPICY</button>
-            <button class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition" vid="83">VEGAN</button>
-        </div>
-        
-        <!-- Confirm Button -->
-        <div class="mt-6" vid="84">
-            <button class="w-full border-2 border-black py-4 font-bold text-lg hover:bg-gray-200 active:bg-gray-300 transition" vid="85">CONFIRM ORDER</button>
-        </div>
-    </div>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
 
-</body></html>
+      body {
+        font-family: 'Roboto Mono', monospace;
+      }
+
+      .e-ink-bg {
+        background-color: #e8eadd;
+      }
+
+      .border-connector {
+        border-left: 8px solid #e8b460;
+        margin-left: -4px;
+      }
+
+      .barcode {
+        height: 40px;
+        background-image: repeating-linear-gradient(
+          90deg,
+          #000,
+          #000 2px,
+          transparent 2px,
+          transparent 4px
+        );
+      }
+
+      .qr-code {
+        display: inline-block;
+        background-image: url('https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=RAMENAPP12345');
+        background-size: contain;
+        width: 80px;
+        height: 80px;
+      }
+    </style>
+  </head>
+  <body class="e-ink-bg min-h-screen" vid="6">
+    <div class="max-w-md mx-auto px-2 py-4" vid="7">
+      <!-- Header -->
+      <div class="border-2 border-black mb-3" vid="8">
+        <h1 class="text-center text-xl font-bold tracking-wider py-2" vid="9">RAMEN VENDING</h1>
+      </div>
+
+      <!-- Top Section -->
+      <div class="flex justify-between border-2 border-black p-2 mb-3" vid="10">
+        <div class="text-sm" vid="11">
+          <p vid="12">Order Number / Code</p>
+          <p class="font-bold" vid="13">RMN-TKYO</p>
+        </div>
+        <div class="text-sm text-right" vid="14">
+          <p vid="15">Broth / Style</p>
+          <p class="font-bold" vid="16">TONKOTSU</p>
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="border-2 border-black p-2 mb-3" vid="17">
+        <div class="flex justify-between mb-2" vid="18">
+          <p class="text-xs" vid="19">Order ID</p>
+          <p class="text-xs" vid="20">Version</p>
+        </div>
+        <div class="flex justify-between mb-2" vid="21">
+          <p class="font-bold" vid="22">0906928</p>
+          <p class="font-bold" vid="23">V1.2</p>
+        </div>
+        <div class="border-t border-black pt-2 mb-2" vid="24">
+          <p class="text-xs" vid="25">Ramen Type / Description</p>
+          <p class="font-bold" vid="26">Spicy Tonkotsu Deluxe 263 104 811</p>
+        </div>
+        <div class="flex justify-between text-xs" vid="27">
+          <p vid="28">Size / Portion</p>
+          <p vid="29">Price / Measurement</p>
+        </div>
+        <div class="flex justify-between font-bold mb-2" vid="30">
+          <p vid="31">LARGE</p>
+          <p vid="32">¥950</p>
+        </div>
+        <div class="flex justify-between" vid="33">
+          <div class="qr-code" vid="34"></div>
+          <div class="text-right" vid="35">
+            <p class="text-xs" vid="36">Quantity</p>
+            <p class="font-bold" vid="37">1 × |||||||||||</p>
+            <p class="text-xs mt-2" vid="38">Toppings</p>
+            <p class="font-bold" vid="39">3 × |||||||||||</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Japanese Section -->
+      <div class="flex border-2 border-black mb-3" vid="40">
+        <div class="w-1/3 p-2 border-r-2 border-black" vid="41">
+          <p class="text-lg font-bold mb-2" vid="42">注文票</p>
+          <p class="text-xs" vid="43">注文番号</p>
+          <p class="font-bold" vid="44">1234567</p>
+        </div>
+        <div class="w-2/3 p-2" vid="45">
+          <p class="text-right font-bold" vid="46">RAMEN EXPRESS</p>
+          <div class="grid grid-cols-2 gap-2 mt-2" vid="47">
+            <div vid="48">
+              <p class="text-xs" vid="49">注文日</p>
+              <p class="font-bold" vid="50">MM/DD</p>
+            </div>
+            <div vid="51">
+              <p class="text-xs" vid="52">注文時間</p>
+              <p class="font-bold" vid="53">HH:MM</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item Selection Section -->
+      <div class="border-2 border-black mb-3" vid="54">
+        <div class="border-b border-black p-2" vid="55">
+          <p class="text-xs" vid="56">Item Code</p>
+          <p class="font-bold" vid="57">123456789012345678</p>
+        </div>
+        <div class="border-b border-black p-2" vid="58">
+          <p class="text-xs" vid="59">Reference Number</p>
+          <p class="font-bold" vid="60">0906928C110022</p>
+        </div>
+        <div class="p-2" vid="61">
+          <div class="flex justify-between mb-2" vid="62">
+            <p class="text-xs" vid="63">Pickup Time</p>
+            <p class="text-xs" vid="64">Location</p>
+          </div>
+          <div class="flex justify-between" vid="65">
+            <p class="font-bold" vid="66">12:30</p>
+            <p class="font-bold" vid="67">GATE A3</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Section -->
+      <div class="border-2 border-black mb-3" vid="68">
+        <div class="barcode w-full" vid="69"></div>
+        <div class="flex justify-between p-2" vid="70">
+          <div vid="71">
+            <p class="text-xs" vid="72">Receipt #</p>
+            <p class="font-bold" vid="73">12345678</p>
+          </div>
+          <div class="text-right" vid="74">
+            <p class="text-xs" vid="75">Total Amount</p>
+            <p class="font-bold" vid="76">¥1,250</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ramen Selection Buttons -->
+      <div class="grid grid-cols-2 gap-3 mt-6" vid="77">
+        <button
+          class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition"
+          vid="78"
+        >
+          TONKOTSU
+        </button>
+        <button
+          class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition"
+          vid="79"
+        >
+          SHOYU
+        </button>
+        <button
+          class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition"
+          vid="80"
+        >
+          MISO
+        </button>
+        <button
+          class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition"
+          vid="81"
+        >
+          SHIO
+        </button>
+        <button
+          class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition"
+          vid="82"
+        >
+          SPICY
+        </button>
+        <button
+          class="border-2 border-black py-3 font-bold hover:bg-gray-200 active:bg-gray-300 transition"
+          vid="83"
+        >
+          VEGAN
+        </button>
+      </div>
+
+      <!-- Confirm Button -->
+      <div class="mt-6" vid="84">
+        <button
+          class="w-full border-2 border-black py-4 font-bold text-lg hover:bg-gray-200 active:bg-gray-300 transition"
+          vid="85"
+        >
+          CONFIRM ORDER
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
