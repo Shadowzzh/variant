@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react'
 import AssetCard from '@/components/AssetCard'
 
-type ViewportSize = 'mobile' | 'tablet' | 'desktop' | 'full'
+type ViewportSize = 'mobile' | 'tablet' | 'desktop'
 
 export default function Home() {
   const [files, setFiles] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [globalViewport, setGlobalViewport] = useState<ViewportSize>('full')
+  const [globalViewport, setGlobalViewport] = useState<ViewportSize>('desktop')
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
@@ -30,9 +30,7 @@ export default function Home() {
       })
   }, [])
 
-  const filteredFiles = files.filter(file =>
-    file.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredFiles = files.filter(file => file.toLowerCase().includes(searchQuery.toLowerCase()))
 
   if (loading) {
     return (
@@ -63,9 +61,7 @@ export default function Home() {
           <div className="flex items-center justify-between gap-6">
             <div>
               <h1 className="text-2xl font-bold">Variant Gallery</h1>
-              <p className="text-sm text-gray-500 mt-1">
-                共 {filteredFiles.length} 个设计
-              </p>
+              <p className="text-sm text-gray-500 mt-1">共 {filteredFiles.length} 个设计</p>
             </div>
 
             {/* 搜索框 */}
@@ -74,14 +70,14 @@ export default function Home() {
                 type="text"
                 placeholder="搜索文件名..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
               />
             </div>
 
             {/* 全局响应式控制 */}
             <div className="flex gap-2">
-              {(['mobile', 'tablet', 'desktop', 'full'] as ViewportSize[]).map((size) => (
+              {(['mobile', 'tablet', 'desktop', 'full'] as ViewportSize[]).map(size => (
                 <button
                   key={size}
                   onClick={() => setGlobalViewport(size)}
@@ -94,7 +90,6 @@ export default function Home() {
                   {size === 'mobile' && '📱 手机'}
                   {size === 'tablet' && '📱 平板'}
                   {size === 'desktop' && '💻 桌面'}
-                  {size === 'full' && '🖥️ 全屏'}
                 </button>
               ))}
             </div>
@@ -103,14 +98,10 @@ export default function Home() {
       </header>
 
       {/* 主内容区 - CSS Grid 3 列布局 */}
-      <main className="container mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center">
-          {filteredFiles.map((file) => (
-            <AssetCard
-              key={file}
-              filename={file}
-              globalViewport={globalViewport}
-            />
+      <main className="w-full px-6 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {filteredFiles.map(file => (
+            <AssetCard key={file} filename={file} globalViewport={globalViewport} />
           ))}
         </div>
 
