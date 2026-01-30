@@ -1,0 +1,246 @@
+<html vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
+    <script src="https://cdn.tailwindcss.com" vid="4"></script>
+    <style vid="5">
+      @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+      body {
+        font-family: 'Space Mono', monospace;
+      }
+
+      .pixel-border {
+        image-rendering: pixelated;
+      }
+
+      .grid-texture {
+        background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1h8v8H1V1zm0 0h8v8H1V1zM0 0h10v10H0V0zm9 9H1V1h8v8z' fill='%23333' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+      }
+
+      .compass {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        border: 1px solid white;
+        border-radius: 50%;
+      }
+
+      .compass::before,
+      .compass::after {
+        content: '';
+        position: absolute;
+        background-color: white;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .compass::before {
+        width: 1px;
+        height: 30px;
+      }
+
+      .compass::after {
+        width: 30px;
+        height: 1px;
+      }
+
+      .n,
+      .e,
+      .s,
+      .w {
+        position: absolute;
+        font-size: 8px;
+      }
+
+      .n {
+        top: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .e {
+        right: 2px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .s {
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .w {
+        left: 2px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .progress-bar {
+        height: 4px;
+        background-color: rgba(255, 255, 255, 0.2);
+        position: relative;
+      }
+
+      .progress-value {
+        height: 100%;
+        background-color: white;
+      }
+
+      .barcode {
+        background-image: linear-gradient(
+          90deg,
+          #000 10%,
+          transparent 10%,
+          transparent 20%,
+          #000 20%,
+          #000 30%,
+          transparent 30%,
+          transparent 40%,
+          #000 40%,
+          #000 50%,
+          transparent 50%,
+          transparent 60%,
+          #000 60%,
+          #000 70%,
+          transparent 70%,
+          transparent 80%,
+          #000 80%,
+          #000 90%,
+          transparent 90%,
+          transparent
+        );
+        background-size: 20px 100%;
+        height: 40px;
+      }
+    </style>
+  </head>
+  <body class="bg-black text-white min-h-screen flex flex-col" vid="6">
+    <div class="max-w-md mx-auto w-full flex flex-col h-screen" vid="7">
+      <!-- Header with pixelated logo -->
+      <header class="pt-6 pb-2 px-4" vid="8">
+        <div class="flex flex-col" vid="9">
+          <div class="text-4xl tracking-tight font-bold pixel-border mb-1" vid="10">NOMAD</div>
+          <div class="flex items-center" vid="11">
+            <div class="h-1 w-16 bg-white mr-2" vid="12"></div>
+            <div class="text-lg" vid="13">777</div>
+          </div>
+        </div>
+
+        <!-- Spaced out text -->
+        <div class="mt-3 text-[10px] tracking-widest flex justify-between" vid="14">
+          <span vid="15">DISCOVER</span>
+          <span vid="16">NEW</span>
+          <span vid="17">PLACES</span>
+          <span vid="18">AROUND</span>
+          <span vid="19">THE</span>
+          <span vid="20">WORLD</span>
+        </div>
+        <div class="mt-1 text-[10px] tracking-widest flex justify-between" vid="21">
+          <span vid="22">EXPLORE</span>
+          <span vid="23">HIDDEN</span>
+          <span vid="24">GEMS</span>
+          <span vid="25">AND</span>
+          <span vid="26">CHART</span>
+          <span vid="27">YOUR</span>
+          <span vid="28">JOURNEY</span>
+        </div>
+      </header>
+
+      <!-- Main destination image with grid overlay -->
+      <div class="px-4 mt-2 relative" vid="29">
+        <div class="aspect-square relative overflow-hidden" vid="30">
+          <img
+            src="https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+            class="object-cover w-full h-full grayscale"
+            alt="Destination"
+            vid="31"
+          />
+          <div class="absolute inset-0 grid-texture" vid="32"></div>
+
+          <!-- Compass in corner -->
+          <div class="absolute top-2 right-2" vid="33">
+            <div class="compass" vid="34">
+              <div class="n" vid="35">N</div>
+              <div class="e" vid="36">E</div>
+              <div class="s" vid="37">S</div>
+              <div class="w" vid="38">W</div>
+            </div>
+          </div>
+
+          <!-- Coordinates -->
+          <div class="absolute bottom-2 right-2 flex flex-col items-end" vid="39">
+            <div class="flex items-center mb-1" vid="40">
+              <div class="h-4 w-1 bg-white mr-2" vid="41"></div>
+              <span vid="42">4</span>
+              <span class="ml-4" vid="43">•</span>
+            </div>
+            <div class="flex items-center mb-1" vid="44">
+              <div class="h-4 w-1 bg-white mr-2" vid="45"></div>
+              <span vid="46">1</span>
+              <span class="ml-4" vid="47">•</span>
+            </div>
+            <div class="flex items-center mb-1" vid="48">
+              <div class="h-4 w-1 bg-white mr-2" vid="49"></div>
+              <span vid="50">9</span>
+              <span class="ml-4" vid="51">•</span>
+            </div>
+            <div class="flex items-center" vid="52">
+              <div class="h-4 w-1 bg-white mr-2" vid="53"></div>
+              <span vid="54">2</span>
+              <span class="ml-4" vid="55">•</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Destination sections -->
+      <div class="px-4 mt-4" vid="56">
+        <div class="mb-4" vid="57">
+          <div class="flex items-center" vid="58">
+            <div class="text-sm uppercase tracking-widest" vid="59">TOKYO NIGHT TOUR</div>
+            <div class="ml-1" vid="60">• • •</div>
+          </div>
+          <div class="progress-bar mt-1" vid="61">
+            <div class="progress-value" style="width: 65%" vid="62"></div>
+          </div>
+          <div class="flex justify-between text-xs mt-1" vid="63">
+            <div vid="64">SHIBUYA CROSSING • SHINJUKU</div>
+            <div vid="65">4:45</div>
+          </div>
+        </div>
+
+        <div class="mb-4" vid="66">
+          <div class="flex items-center" vid="67">
+            <div class="text-sm uppercase tracking-widest" vid="68">KYOTO TEMPLE WALK</div>
+            <div class="ml-1" vid="69">• •</div>
+          </div>
+          <div class="progress-bar mt-1" vid="70">
+            <div class="progress-value" style="width: 40%" vid="71"></div>
+          </div>
+          <div class="flex justify-between text-xs mt-1" vid="72">
+            <div vid="73">FUSHIMI INARI • KIYOMIZU</div>
+            <div vid="74">2:30</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barcode footer -->
+      <div class="mt-auto px-4" vid="75">
+        <div class="barcode w-full" vid="76"></div>
+        <div class="text-[8px] tracking-[0.3em] text-center mt-1" vid="77">
+          SCAN TO ACCESS YOUR TRAVEL ITINERARY
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="mt-4 px-4 pb-8" vid="78">
+        <div class="flex justify-between items-center" vid="79">
+          <button class="text-xs uppercase tracking-widest" vid="80">Map</button>
+          <button class="text-xs uppercase tracking-widest" vid="81">Explore</button>
+          <button class="text-xs uppercase tracking-widest" vid="82">Saved</button>
+          <button class="text-xs uppercase tracking-widest" vid="83">Profile</button>
+        </div>
+      </nav>
+    </div>
+  </body>
+</html>

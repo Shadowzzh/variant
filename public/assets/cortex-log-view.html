@@ -1,0 +1,241 @@
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
+    <title vid="4">CORTEX // LOG_VIEW</title>
+    <style vid="5">
+      :root {
+        --bg-color: #030303;
+        --grid-line: #1a1a1a;
+        --text-main: #b0b0b0;
+        --text-dim: #444;
+        --text-high: #ffffff;
+        --accent: #ffffff;
+        --font-mono: 'Courier New', Courier, monospace;
+        --error: #ff4444;
+        --warn: #ffcc00;
+      }
+
+      * {
+        box-sizing: border-box;
+        user-select: none;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: var(--text-main);
+        font-family: var(--font-mono);
+        font-size: 10px;
+        overflow: hidden;
+      }
+
+      .widget-frame {
+        background-color: var(--bg-color);
+        border: 1px solid var(--grid-line);
+        width: 320px;
+        height: 320px;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .header {
+        display: flex;
+        border-bottom: 1px solid var(--grid-line);
+        height: 30px;
+        align-items: center;
+        padding: 0 12px;
+        justify-content: space-between;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .header-title {
+        color: var(--text-high);
+        font-weight: 400;
+      }
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--text-high);
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 6px;
+      }
+
+      .log-container {
+        flex-grow: 1;
+        overflow-y: hidden;
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        background: radial-gradient(circle at 50% 50%, #080808 0%, #030303 100%);
+      }
+
+      .log-entry {
+        display: flex;
+        gap: 8px;
+        line-height: 1.4;
+        border-left: 1px solid transparent;
+        padding-left: 4px;
+      }
+
+      .timestamp {
+        color: var(--text-dim);
+        flex-shrink: 0;
+        width: 55px;
+      }
+
+      .msg {
+        word-break: break-all;
+      }
+
+      .msg.info {
+        color: var(--text-main);
+      }
+      .msg.update {
+        color: var(--text-high);
+      }
+      .msg.error {
+        color: var(--error);
+      }
+      .msg.warn {
+        color: var(--warn);
+      }
+
+      .footer {
+        border-top: 1px solid var(--grid-line);
+        padding: 6px 12px;
+        display: flex;
+        justify-content: space-between;
+        color: var(--text-dim);
+        font-size: 9px;
+        background: #000;
+      }
+
+      .scanline {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.05);
+        pointer-events: none;
+        animation: scan 4s linear infinite;
+        z-index: 10;
+      }
+
+      @keyframes scan {
+        from {
+          top: 0;
+        }
+        to {
+          top: 100%;
+        }
+      }
+
+      .blink {
+        animation: blinker 1s linear infinite;
+      }
+
+      @keyframes blinker {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      ::-webkit-scrollbar {
+        width: 2px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--text-dim);
+      }
+    </style>
+  </head>
+  <body vid="6">
+    <div class="widget-frame" vid="7">
+      <div class="scanline" vid="8"></div>
+
+      <div class="header" vid="9">
+        <div class="header-title" vid="10">
+          <span class="status-dot blink" vid="11"></span>TRAINING_LOG
+        </div>
+        <div style="color: var(--text-dim)" vid="12">ID: 0x8FA2</div>
+      </div>
+
+      <div class="log-container" id="logContainer" vid="13">
+        <div class="log-entry" vid="14">
+          <span class="timestamp" vid="15">14:20:01</span>
+          <span class="msg info" vid="16">SYS_INIT: NEURAL CORE AWAKE</span>
+        </div>
+        <div class="log-entry" vid="17">
+          <span class="timestamp" vid="18">14:20:02</span>
+          <span class="msg info" vid="19">LOAD_WEIGHTS: 4.2M PARAMS</span>
+        </div>
+        <div class="log-entry" vid="20">
+          <span class="timestamp" vid="21">14:20:05</span>
+          <span class="msg update" vid="22">GRAD_STEP: EPOCH_01 | LOSS: 0.821</span>
+        </div>
+      </div>
+
+      <div class="footer" vid="23">
+        <div vid="24">UTF-8 // BUFFER: 1024KB</div>
+        <div vid="25">AUTO_SCROLL: ON</div>
+      </div>
+    </div>
+
+    <script vid="26">
+      const logContainer = document.getElementById('logContainer')
+      const MAX_LOGS = 14
+
+      function getTimestamp() {
+        const now = new Date()
+        return now.toTimeString().split(' ')[0]
+      }
+
+      const messages = [
+        { type: 'update', text: 'GRAD_SYNC: LAYER_04 | Δ: 0.0021' },
+        { type: 'update', text: 'OPTIMIZER: ADAM_REDUX [STEP: 0x4F]' },
+        { type: 'info', text: 'CHECKPOINT_SAVED: /tmp/chk_01.pt' },
+        { type: 'warn', text: 'VAL_SPIKE: LR ADJUSTED TO 0.038' },
+        { type: 'update', text: 'TENSOR_FLUSH: VRAM CLEARED' },
+        { type: 'error', text: 'NAN_DETECTED: OVERFLOW ON LAYER_02' },
+        { type: 'info', text: 'AUTORECTIFY: REVERTING TO CHK_01' },
+        { type: 'update', text: 'GRAD_STEP: EPOCH_02 | LOSS: 0.754' },
+      ]
+
+      function addLog() {
+        const entry = document.createElement('div')
+        entry.className = 'log-entry'
+
+        const msgObj = messages[Math.floor(Math.random() * messages.length)]
+
+        entry.innerHTML = `
+                <span class="timestamp">${getTimestamp()}</span>
+                <span class="msg ${msgObj.type}">${msgObj.text}</span>
+            `
+
+        logContainer.appendChild(entry)
+
+        if (logContainer.children.length > MAX_LOGS) {
+          logContainer.removeChild(logContainer.firstChild)
+        }
+      }
+
+      setInterval(addLog, 1800)
+    </script>
+  </body>
+</html>

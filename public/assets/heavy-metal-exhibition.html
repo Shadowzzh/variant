@@ -1,0 +1,308 @@
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
+    <title vid="4">HEAVY METAL EXHIBITION</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Inter:wght@400;700&amp;display=swap"
+      rel="stylesheet"
+      vid="7"
+    />
+    <style vid="8">
+      :root {
+        --c-bg: #050505;
+        --c-accent: #f27d26;
+        --f-display: 'Anton', sans-serif;
+        --f-body: 'Inter', sans-serif;
+        --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        cursor: none;
+      }
+
+      body {
+        background-color: var(--c-bg);
+        color: var(--c-accent);
+        font-family: var(--f-display);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 2vh 2vw;
+        text-transform: uppercase;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        background-color: var(--c-accent);
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: difference;
+        border-radius: 50%;
+        transition:
+          width 0.2s,
+          height 0.2s;
+      }
+
+      body:active #cursor {
+        width: 15px;
+        height: 15px;
+      }
+
+      header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 5vh;
+        font-family: var(--f-body);
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+        position: relative;
+        z-index: 10;
+      }
+
+      .header-meta {
+        position: absolute;
+        left: 0;
+        opacity: 0.7;
+      }
+
+      .header-presenter {
+        text-align: center;
+      }
+
+      .header-date {
+        position: absolute;
+        right: 0;
+        opacity: 0.7;
+      }
+
+      main {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        perspective: 1000px;
+        z-index: 5;
+        position: relative;
+      }
+
+      .title-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        line-height: 0.82;
+        transform: skewX(-10deg);
+        transform-style: preserve-3d;
+      }
+
+      h1 {
+        font-size: 24vw;
+        white-space: nowrap;
+        margin: 0;
+        padding: 0;
+        letter-spacing: -0.02em;
+        transition: transform 0.1s linear;
+        will-change: transform;
+      }
+
+      .word-1 {
+        position: relative;
+        z-index: 2;
+      }
+
+      .word-2 {
+        position: relative;
+        z-index: 1;
+
+        margin-top: -1vw;
+      }
+
+      .cta-trigger {
+        display: inline-block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) skewX(10deg);
+        opacity: 0;
+        pointer-events: auto;
+        background: var(--c-accent);
+        color: var(--c-bg);
+        padding: 1rem 2rem;
+        font-family: var(--f-body);
+        font-weight: 900;
+        font-size: 1.5rem;
+        border: 2px solid var(--c-accent);
+        transition: opacity 0.3s var(--ease-out);
+        z-index: 10;
+      }
+
+      .title-wrapper:hover .cta-trigger {
+        opacity: 1;
+      }
+
+      .title-wrapper:hover h1 {
+        color: transparent;
+        -webkit-text-stroke: 2px var(--c-accent);
+      }
+
+      footer {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        width: 100%;
+        padding-top: 2rem;
+        font-family: var(--f-body);
+        font-weight: 900;
+        font-size: 1.1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        align-items: center;
+      }
+
+      .artist {
+        position: relative;
+        display: inline-block;
+        padding: 0 0.5rem;
+        transition: all 0.2s ease;
+        cursor: none;
+      }
+
+      .artist:hover {
+        background-color: var(--c-accent);
+        color: var(--c-bg);
+        transform: skewX(-10deg);
+      }
+
+      .curator {
+        grid-column: 1 / -1;
+        text-align: center;
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+        opacity: 0.8;
+        font-weight: 700;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 28vw;
+        }
+        footer {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+        .header-meta,
+        .header-date {
+          display: none;
+        }
+      }
+
+      @keyframes slamIn {
+        0% {
+          transform: scale(2) translateY(-100px) skewX(-10deg);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1) translateY(0) skewX(-10deg);
+          opacity: 1;
+        }
+      }
+
+      h1 {
+        animation: slamIn 0.8s var(--ease-out) forwards;
+      }
+      .word-2 {
+        animation-delay: 0.1s;
+      }
+    </style>
+  </head>
+  <body vid="9">
+    <div id="cursor" vid="10"></div>
+
+    <header vid="11">
+      <span class="header-meta" vid="12">FIG. 001</span>
+      <span class="header-presenter" vid="13">INDUSTRIAL DESIGN WEEK PRESENTS</span>
+      <span class="header-date" vid="14">OCT 24—27</span>
+    </header>
+
+    <main vid="15">
+      <div class="title-wrapper" id="titleBlock" vid="16">
+        <h1 class="word-1" vid="17">HEAVY</h1>
+        <h1 class="word-2" vid="18">METAL</h1>
+
+        <a href="#" class="cta-trigger" vid="19">ACQUIRE TICKETS</a>
+      </div>
+    </main>
+
+    <footer vid="20">
+      <div class="col left-col" vid="21">
+        <span class="artist" vid="22">RAW STEEL AGGREGATE</span>
+        <span class="artist" vid="23">OXIDIZED COPPER MESH</span>
+        <span class="artist" vid="24">BRUSHED ALUMINUM</span>
+      </div>
+      <div class="col right-col" vid="25">
+        <span class="artist" vid="26">REINFORCED CONCRETE</span>
+        <span class="artist" vid="27">TITANIUM PLATING</span>
+        <span class="artist" vid="28">CARBON FIBER WEAVE</span>
+      </div>
+      <div class="curator" vid="29">CURATED BY THE MATERIAL ARCHIVE</div>
+    </footer>
+
+    <script vid="30">
+      const cursor = document.getElementById('cursor')
+      const titleBlock = document.getElementById('titleBlock')
+      const h1s = document.querySelectorAll('h1')
+
+      document.addEventListener('mousemove', e => {
+        cursor.style.top = e.clientY + 'px'
+        cursor.style.left = e.clientX + 'px'
+
+        const x = (window.innerWidth - e.pageX * 2) / 50
+        const y = (window.innerHeight - e.pageY * 2) / 50
+
+        const rotateY = (window.innerWidth / 2 - e.pageX) / 100
+        const rotateX = (window.innerHeight / 2 - e.pageY) / 100
+
+        titleBlock.style.transform = `skewX(-10deg) translateX(${x}px) translateY(${y}px) rotateY(${rotateY}deg) rotateX(${rotateX}deg)`
+      })
+
+      document.querySelectorAll('.artist').forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          cursor.style.transform = 'translate(-50%, -50%) scale(2)'
+        })
+        item.addEventListener('mouseleave', () => {
+          cursor.style.transform = 'translate(-50%, -50%) scale(1)'
+        })
+      })
+
+      document.querySelector('.cta-trigger').addEventListener('mouseenter', () => {
+        cursor.style.opacity = '0'
+      })
+      document.querySelector('.cta-trigger').addEventListener('mouseleave', () => {
+        cursor.style.opacity = '1'
+      })
+    </script>
+  </body>
+</html>

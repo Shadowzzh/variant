@@ -1,0 +1,317 @@
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=1280" vid="3" />
+    <title vid="4">Pax — Automate tariff refunds with AI</title>
+    <script src="https://cdn.tailwindcss.com" vid="5"></script>
+    <style vid="6">
+      @import url('https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/400.css');
+      @import url('https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/500.css');
+      @import url('https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/600.css');
+
+      :root {
+        --color-canvas: #0d0e10;
+        --color-ink: #f1f1f1;
+        --color-ink-2: #b6b6b6;
+        --color-ink-3: #7a7a7a;
+        --color-accent: #c9f269;
+        --rule: rgba(255, 255, 255, 0.08);
+        --card-bg: #16171a;
+        --radius: 4px;
+        --gutter: 40px;
+        --font-ui: 'Inter', ui-sans-serif, system-ui, -apple-system;
+        --size-h1: 44px;
+        --lh-h1: 1.1;
+        --size-h2: 20px;
+        --lh-h2: 1.2;
+      }
+
+      html,
+      body {
+        background: var(--color-canvas);
+        color: var(--color-ink);
+        font-family: var(--font-ui);
+        margin: 0;
+        padding: 0;
+      }
+
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 24px;
+        padding: var(--gutter);
+        max-width: 1440px;
+        margin: 0 auto;
+      }
+
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--rule);
+        border-radius: var(--radius);
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: var(--size-h1);
+        line-height: var(--lh-h1);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      h2 {
+        font-size: var(--size-h2);
+        font-weight: 600;
+        margin-bottom: 24px;
+      }
+
+      .label {
+        font-size: 11px;
+        letter-spacing: 0.05em;
+        color: var(--color-ink-3);
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+      .sub {
+        font-size: 16px;
+        line-height: 1.5;
+        color: var(--color-ink-2);
+      }
+      .stat-val {
+        font-size: 32px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+      }
+      .stat-unit {
+        font-size: 16px;
+        color: var(--color-ink-2);
+        font-weight: 400;
+      }
+
+      .list-item {
+        border-bottom: 1px solid var(--rule);
+        padding: 16px 0;
+      }
+      .list-item:last-child {
+        border-bottom: none;
+      }
+
+      .ghost-link {
+        color: var(--color-ink);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.2s ease;
+      }
+      .ghost-link:hover {
+        color: var(--color-accent);
+      }
+      .arrow {
+        width: 14px;
+        height: 14px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 1.5;
+      }
+
+      .span-8 {
+        grid-column: span 8;
+      }
+      .span-4 {
+        grid-column: span 4;
+      }
+      .span-6 {
+        grid-column: span 6;
+      }
+      .span-12 {
+        grid-column: span 12;
+      }
+    </style>
+  </head>
+  <body vid="7">
+    <header class="flex items-center justify-between px-[var(--gutter)] py-8" vid="8">
+      <div class="text-sm font-semibold tracking-widest uppercase" vid="9">Pax</div>
+      <nav class="flex items-center gap-8" vid="10">
+        <a
+          class="text-xs text-zinc-500 hover:text-white transition uppercase tracking-widest"
+          href="#"
+          vid="11"
+          >Docs</a
+        >
+        <a
+          class="text-xs text-zinc-500 hover:text-white transition uppercase tracking-widest"
+          href="#"
+          vid="12"
+          >Security</a
+        >
+        <a
+          class="text-xs text-[color:var(--color-accent)] uppercase tracking-widest font-bold"
+          href="#"
+          vid="13"
+          >Talk to us</a
+        >
+      </nav>
+    </header>
+
+    <main class="grid-container" vid="14">
+      <section class="card span-8" vid="15">
+        <div class="label mb-6" vid="16">AI-Powered Brokerage</div>
+        <h1 vid="17">Automate tariff refunds. Turn unclaimed duties into cash flow.</h1>
+        <p class="sub mt-6 max-w-xl" vid="18">
+          Pax reclaims 3–5% of revenue for brands under $50M, producing 15% more refunds than manual
+          workflows while cutting processing time by 99%.
+        </p>
+      </section>
+
+      <section class="card span-4 justify-between" vid="19">
+        <div vid="20">
+          <div class="label mb-2" vid="21">Growth</div>
+          <div class="stat-val" vid="22">
+            $200K <span class="stat-unit" vid="23">contracts</span>
+          </div>
+          <p class="text-xs text-zinc-500 mt-1" vid="24">Launched 4 weeks ago</p>
+        </div>
+        <div class="pt-8 border-t border-[color:var(--rule)] mt-8" vid="25">
+          <div class="label mb-2" vid="26">Market Opportunity</div>
+          <div class="stat-val" vid="27">
+            $15B <span class="stat-unit" vid="28">unclaimed</span>
+          </div>
+          <p class="text-xs text-zinc-500 mt-1" vid="29">80% of eligible drawback goes unclaimed</p>
+        </div>
+      </section>
+
+      <section class="card span-12" vid="30">
+        <div class="flex justify-between items-end mb-8" vid="31">
+          <h2 class="mb-0" vid="32">Automated Pipelines</h2>
+          <div class="label pb-1" vid="33">End-to-end processing</div>
+        </div>
+
+        <div
+          class="grid grid-cols-12 gap-4 label pb-2 border-b border-[color:var(--rule)]"
+          vid="34"
+        >
+          <div class="col-span-4" vid="35">Scenario</div>
+          <div class="col-span-2" vid="36">Mode</div>
+          <div class="col-span-6" vid="37">Outcome</div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 list-item items-center" vid="38">
+          <div class="col-span-4" vid="39">
+            <a href="#" class="ghost-link" vid="40"
+              >Import → export within 5 years
+              <svg class="arrow" viewBox="0 0 16 16" vid="41">
+                <path d="M3 8h10M9 4l4 4-4 4" vid="42"></path></svg
+            ></a>
+          </div>
+          <div class="col-span-2 label" vid="43">AI Match</div>
+          <div class="col-span-6 text-sm text-zinc-400" vid="44">
+            Pairs entries and shipments automatically; increases match rate by 15%.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 list-item items-center" vid="45">
+          <div class="col-span-4" vid="46">
+            <a href="#" class="ghost-link" vid="47"
+              >Component substitution
+              <svg class="arrow" viewBox="0 0 16 16" vid="48">
+                <path d="M3 8h10M9 4l4 4-4 4" vid="49"></path></svg
+            ></a>
+          </div>
+          <div class="col-span-2 label" vid="50">Classifier</div>
+          <div class="col-span-6 text-sm text-zinc-400" vid="51">
+            Maps inputs to finished goods using ML bill‑of‑materials parsing.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 list-item items-center" vid="52">
+          <div class="col-span-4" vid="53">
+            <a href="#" class="ghost-link" vid="54"
+              >Prior-export drawback
+              <svg class="arrow" viewBox="0 0 16 16" vid="55">
+                <path d="M3 8h10M9 4l4 4-4 4" vid="56"></path></svg
+            ></a>
+          </div>
+          <div class="col-span-2 label" vid="57">RPA</div>
+          <div class="col-span-6 text-sm text-zinc-400" vid="58">
+            Collects proofs of export and compiles schedules; 99% cycle‑time reduction.
+          </div>
+        </div>
+      </section>
+
+      <section class="card span-6" vid="59">
+        <h2 vid="60">Compliance Workflow</h2>
+        <div class="space-y-6" vid="61">
+          <div class="flex gap-4" vid="62">
+            <div class="label w-16 pt-1" vid="63">01</div>
+            <div vid="64">
+              <div class="font-medium text-white mb-1" vid="65">Ingest</div>
+              <div class="text-sm text-zinc-400" vid="66">
+                Secure connectors pull entries. Normalization keeps ERP untouched.
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-4" vid="67">
+            <div class="label w-16 pt-1" vid="68">02</div>
+            <div vid="69">
+              <div class="font-medium text-white mb-1" vid="70">Link</div>
+              <div class="text-sm text-zinc-400" vid="71">
+                Models align entries to exports with confidence scoring.
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-4" vid="72">
+            <div class="label w-16 pt-1" vid="73">03</div>
+            <div vid="74">
+              <div class="font-medium text-white mb-1" vid="75">File</div>
+              <div class="text-sm text-zinc-400" vid="76">
+                Automated preparation of filings sent via broker rails.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card span-6 justify-center bg-[color:var(--color-accent)]" vid="77">
+        <div class="text-zinc-900" vid="78">
+          <h2 class="text-zinc-900 mb-6" vid="79">Ready to recover?</h2>
+          <div class="space-y-4" vid="80">
+            <a
+              href="#"
+              class="flex items-center justify-between p-4 border border-zinc-900/10 bg-white/10 hover:bg-white/20 transition rounded"
+              vid="81"
+            >
+              <span class="font-semibold" vid="82">Request recovery estimate</span>
+              <svg class="arrow stroke-zinc-900" viewBox="0 0 16 16" vid="83">
+                <path d="M3 8h10M9 4l4 4-4 4" vid="84"></path>
+              </svg>
+            </a>
+            <a
+              href="#"
+              class="flex items-center justify-between p-4 border border-zinc-900/10 bg-white/10 hover:bg-white/20 transition rounded"
+              vid="85"
+            >
+              <span class="font-semibold" vid="86">See a sample claim</span>
+              <svg class="arrow stroke-zinc-900" viewBox="0 0 16 16" vid="87">
+                <path d="M3 8h10M9 4l4 4-4 4" vid="88"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="px-[var(--gutter)] py-12 mt-12 border-t border-[color:var(--rule)]" vid="89">
+      <div class="flex justify-between items-center" vid="90">
+        <div class="text-xs text-zinc-500 uppercase tracking-widest" vid="91">
+          Pax © 2024 · AI Brokerage
+        </div>
+        <div class="flex gap-6 text-xs text-zinc-500 uppercase tracking-widest" vid="92">
+          <a href="#" class="hover:text-white" vid="93">Privacy</a>
+          <a href="#" class="hover:text-white" vid="94">Terms</a>
+          <a href="#" class="hover:text-white" vid="95">Security</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

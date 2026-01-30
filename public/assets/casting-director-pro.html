@@ -1,0 +1,435 @@
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
+    <title vid="4">Casting Director Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Rock+Salt&amp;display=swap"
+      rel="stylesheet"
+      vid="7"
+    />
+    <style vid="8">
+      :root {
+        --bg: #ffffff;
+        --text-main: #000000;
+        --text-sec: #666666;
+        --accent: #e63939;
+        --border: #f0f0f0;
+        --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-script: 'Rock Salt', cursive;
+        --space-unit: 8px;
+        --nav-height: 64px;
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg);
+        color: var(--text-main);
+        font-family: var(--font-main);
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .uppercase {
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+      }
+      .b-and-w {
+        filter: grayscale(100%) contrast(110%);
+        transition: filter 0.3s ease;
+      }
+      .active-img {
+        filter: grayscale(0%) contrast(100%);
+      }
+
+      header {
+        padding: 24px 20px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        background: var(--bg);
+        z-index: 10;
+      }
+
+      .meta-info {
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+
+      .circle-c {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 14px;
+        height: 14px;
+        border: 1px solid var(--text-main);
+        border-radius: 50%;
+        font-size: 9px;
+        margin-left: 4px;
+        vertical-align: middle;
+      }
+
+      .actions {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-main);
+        text-decoration: none;
+      }
+
+      .page-title {
+        padding: 10px 20px 30px;
+      }
+
+      h1 {
+        font-family: var(--font-script);
+        font-size: 2.2rem;
+        margin: 0;
+        line-height: 1.1;
+        transform: rotate(-2deg);
+        transform-origin: left center;
+      }
+
+      .subtitle {
+        font-size: 13px;
+        margin-top: 12px;
+        font-weight: 600;
+        display: block;
+      }
+
+      main {
+        flex: 1;
+        overflow-y: auto;
+        padding-bottom: 80px;
+      }
+
+      .candidate-list {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .candidate-card {
+        display: grid;
+        grid-template-columns: 80px 1fr auto;
+        gap: 16px;
+        padding: 16px 20px;
+        align-items: center;
+        border-bottom: 1px solid transparent;
+        position: relative;
+        background: var(--bg);
+        transition: background 0.2s;
+      }
+
+      .candidate-card:active {
+        background: #fafafa;
+      }
+
+      .avatar {
+        width: 80px;
+        height: 100px;
+        object-fit: cover;
+
+        border-radius: 0;
+        background-color: #eee;
+      }
+
+      .info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .name {
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.03em;
+      }
+
+      .role {
+        font-size: 12px;
+        color: var(--text-sec);
+      }
+
+      .stats {
+        display: flex;
+        gap: 12px;
+        font-size: 11px;
+        margin-top: 4px;
+        color: var(--text-main);
+        font-family: monospace;
+      }
+
+      .status-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #eee;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .status-dot.selected {
+        background-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      .highlight-section {
+        margin: 20px 0;
+        padding: 0 20px;
+      }
+
+      .split-image-container {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-bottom: 12px;
+        position: relative;
+      }
+
+      .split-half {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        object-position: center 20%;
+      }
+      .split-half.bottom {
+        object-position: center 60%;
+      }
+
+      .highlight-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--accent);
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(230, 57, 57, 0.4);
+      }
+
+      nav.bottom-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--nav-height);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-top: 1px solid #f5f5f5;
+      }
+
+      .nav-item {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-sec);
+        text-decoration: none;
+        padding: 10px;
+        position: relative;
+      }
+
+      .nav-item.active {
+        color: var(--text-main);
+        font-weight: 700;
+      }
+
+      .nav-item.active::after {
+        content: '';
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: var(--accent);
+        border-radius: 50%;
+      }
+
+      .fab {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        background: var(--text-main);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        font-family: var(--font-script);
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 100;
+        transition: transform 0.2s;
+      }
+
+      .fab:active {
+        transform: scale(0.95);
+      }
+    </style>
+  </head>
+  <body vid="9">
+    <header vid="10">
+      <div class="meta-info uppercase" vid="11">
+        Project: Tbilisi<br vid="12" />
+        Fall 2024 <span class="circle-c" vid="13">C</span>
+      </div>
+      <a href="#" class="actions uppercase" vid="14">Filter</a>
+    </header>
+
+    <div class="page-title" vid="15">
+      <h1 vid="16">Shortlist</h1>
+      <span class="subtitle uppercase" vid="17">Casting Call • 12 Candidates</span>
+    </div>
+
+    <main vid="18">
+      <div class="highlight-section" vid="19">
+        <div class="split-image-container" vid="20">
+          <img
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80"
+            class="split-half b-and-w"
+            alt="Model Top"
+            vid="21"
+          />
+          <img
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80"
+            class="split-half bottom b-and-w"
+            alt="Model Bottom"
+            vid="22"
+          />
+          <div class="highlight-badge uppercase" vid="23">Top Pick</div>
+        </div>
+        <div class="info" style="margin-top: 8px" vid="24">
+          <div class="name uppercase" vid="25">Nika L.</div>
+          <div class="role uppercase" vid="26">Lead Role • Confirmed</div>
+        </div>
+      </div>
+
+      <div class="candidate-list" vid="27">
+        <div class="candidate-card" vid="28">
+          <img
+            src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80"
+            class="avatar b-and-w"
+            alt="Candidate"
+            vid="29"
+          />
+          <div class="info" vid="30">
+            <div class="name uppercase" vid="31">Sophie G.</div>
+            <div class="role uppercase" vid="32">Support / Extra</div>
+            <div class="stats" vid="33">175CM / 5'9" • BLK HAIR</div>
+          </div>
+          <div class="status-dot selected" vid="34"></div>
+        </div>
+
+        <div class="candidate-card" vid="35">
+          <img
+            src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80"
+            class="avatar b-and-w"
+            alt="Candidate"
+            vid="36"
+          />
+          <div class="info" vid="37">
+            <div class="name uppercase" vid="38">David K.</div>
+            <div class="role uppercase" vid="39">Lead Role</div>
+            <div class="stats" vid="40">182CM / 6'0" • BRN EYES</div>
+          </div>
+          <div class="status-dot" vid="41"></div>
+        </div>
+
+        <div class="candidate-card" vid="42">
+          <img
+            src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80"
+            class="avatar b-and-w"
+            alt="Candidate"
+            vid="43"
+          />
+          <div class="info" vid="44">
+            <div class="name uppercase" vid="45">Elena M.</div>
+            <div class="role uppercase" vid="46">Support</div>
+            <div class="stats" vid="47">168CM / 5'6" • GRN EYES</div>
+          </div>
+          <div class="status-dot" vid="48"></div>
+        </div>
+
+        <div class="candidate-card" vid="49">
+          <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80"
+            class="avatar b-and-w"
+            alt="Candidate"
+            vid="50"
+          />
+          <div class="info" vid="51">
+            <div class="name uppercase" vid="52">Lucas R.</div>
+            <div class="role uppercase" vid="53">Stunt Double</div>
+            <div class="stats" vid="54">180CM / 5'11" • ATHLETIC</div>
+          </div>
+          <div class="status-dot" vid="55"></div>
+        </div>
+
+        <div class="candidate-card" vid="56">
+          <img
+            src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80"
+            class="avatar b-and-w"
+            alt="Candidate"
+            vid="57"
+          />
+          <div class="info" vid="58">
+            <div class="name uppercase" vid="59">Maria S.</div>
+            <div class="role uppercase" vid="60">Background</div>
+            <div class="stats" vid="61">170CM / 5'7" • BLK HAIR</div>
+          </div>
+          <div class="status-dot selected" vid="62"></div>
+        </div>
+      </div>
+    </main>
+
+    <div class="fab" vid="63">+</div>
+
+    <nav class="bottom-bar" vid="64">
+      <a href="#" class="nav-item active" vid="65">List</a>
+      <a href="#" class="nav-item" vid="66">Map</a>
+      <a href="#" class="nav-item" vid="67">Saved</a>
+      <a href="#" class="nav-item" vid="68">Menu</a>
+    </nav>
+
+    <script vid="69">
+      document.querySelectorAll('.candidate-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const dot = card.querySelector('.status-dot')
+          dot.classList.toggle('selected')
+
+          const img = card.querySelector('.avatar')
+          if (dot.classList.contains('selected')) {
+            img.classList.remove('b-and-w')
+          } else {
+            img.classList.add('b-and-w')
+          }
+        })
+      })
+    </script>
+  </body>
+</html>

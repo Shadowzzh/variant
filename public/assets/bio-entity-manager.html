@@ -1,0 +1,564 @@
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+      vid="3"
+    />
+    <title vid="4">Bio-Entity Manager</title>
+    <style vid="5">
+      :root {
+        --bg-color: #e8e8e8;
+        --surface-color: #f4f4f4;
+        --text-primary: #111111;
+        --text-secondary: #555555;
+        --border-color: #cfcfcf;
+        --accent-alert: #ff3b30;
+
+        --font-stack: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+        --spacing-unit: 1rem;
+        --border-width: 1px;
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        font-family: var(--font-stack);
+        color: var(--text-primary);
+        height: 100dvh;
+        width: 100vw;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-weight: 400;
+        letter-spacing: -0.02em;
+      }
+
+      .meta-label {
+        font-size: 0.7rem;
+        text-transform: capitalize;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      .section-header {
+        font-size: 1.5rem;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        color: var(--text-primary);
+      }
+
+      .app-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        background: var(--surface-color);
+        border-left: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
+        position: relative;
+      }
+
+      header {
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: var(--border-width) solid var(--border-color);
+      }
+
+      .brand {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .toggle-group {
+        display: flex;
+        gap: 2px;
+      }
+
+      .toggle-btn {
+        background: none;
+        border: none;
+        font-size: 0.7rem;
+        padding: 4px 8px;
+        background: #e0e0e0;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .toggle-btn.active {
+        background: var(--text-primary);
+        color: white;
+      }
+
+      .viewport-container {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background: #d9d9d9;
+        overflow: hidden;
+        border-bottom: var(--border-width) solid var(--border-color);
+      }
+
+      canvas#pet-canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+
+        filter: contrast(120%);
+      }
+
+      .viewport-overlay {
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        pointer-events: none;
+      }
+
+      .status-badge {
+        font-size: 0.7rem;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 4px 6px;
+        margin-bottom: 4px;
+        display: inline-block;
+      }
+
+      .diagnostics-section {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0;
+      }
+
+      .list-item {
+        padding: 1.25rem 1rem;
+        border-bottom: var(--border-width) solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.25rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .list-item:active {
+        background: #eaeaea;
+      }
+
+      .list-label {
+        font-weight: 400;
+      }
+
+      .list-value {
+        font-family: monospace;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .arrow-icon {
+        font-size: 1rem;
+        transform: rotate(-45deg);
+      }
+
+      .actions-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-top: var(--border-width) solid var(--border-color);
+      }
+
+      .action-card {
+        padding: 1rem;
+        border-right: var(--border-width) solid var(--border-color);
+        border-bottom: var(--border-width) solid var(--border-color);
+        position: relative;
+        cursor: pointer;
+        background: var(--surface-color);
+        transition: all 0.2s;
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .action-card:active {
+        background: #e0e0e0;
+      }
+
+      .action-card:nth-child(2n) {
+        border-right: none;
+      }
+
+      .action-img-placeholder {
+        width: 100%;
+        height: 60px;
+        background: #ccc;
+        margin-bottom: 0.5rem;
+        opacity: 0.5;
+        mix-blend-mode: multiply;
+      }
+
+      .action-label {
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      .plus-icon {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        font-size: 1.2rem;
+        font-weight: 300;
+      }
+
+      #toast {
+        position: fixed;
+        top: 1rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(-150%);
+        background: var(--text-primary);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.8rem;
+        transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        z-index: 100;
+        width: 90%;
+        max-width: 580px;
+        display: flex;
+        justify-content: space-between;
+      }
+      #toast.visible {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .low-stat {
+        color: var(--accent-alert);
+        animation: pulse 2s infinite;
+      }
+    </style>
+  </head>
+  <body vid="6">
+    <div class="app-container" vid="7">
+      <div id="toast" vid="8">
+        <span id="toast-msg" vid="9">System Updated</span>
+        <span vid="10">ERROR 0</span>
+      </div>
+
+      <header vid="11">
+        <div class="toggle-group" vid="12">
+          <button class="toggle-btn active" vid="13">≡</button>
+          <button class="toggle-btn" vid="14">*</button>
+        </div>
+        <div class="brand" vid="15">ENTITY_01</div>
+      </header>
+
+      <div style="padding: 2rem 1rem 1rem 1rem" vid="16">
+        <span class="meta-label" vid="17">Subject Status</span>
+        <h2 class="section-header" vid="18">
+          Biological asset requires<br vid="19" />sustained interaction.
+        </h2>
+      </div>
+
+      <div class="viewport-container" vid="20">
+        <canvas id="pet-canvas" vid="21"></canvas>
+        <div class="viewport-overlay" vid="22">
+          <div class="status-badge" id="age-badge" vid="23">AGE: 0 CYCLES</div>
+          <div class="status-badge" id="mood-badge" vid="24">STATE: DORMANT</div>
+        </div>
+      </div>
+
+      <div class="diagnostics-section" vid="25">
+        <div class="list-item" id="stat-hunger" vid="26">
+          <span class="list-label" vid="27">Nutritional intake</span>
+          <div class="list-value" vid="28">
+            <span id="val-hunger" vid="29">100%</span>
+            <span class="arrow-icon" vid="30">→</span>
+          </div>
+        </div>
+        <div class="list-item" id="stat-energy" vid="31">
+          <span class="list-label" vid="32">Energy reserves</span>
+          <div class="list-value" vid="33">
+            <span id="val-energy" vid="34">100%</span>
+            <span class="arrow-icon" vid="35">→</span>
+          </div>
+        </div>
+        <div class="list-item" id="stat-hygiene" vid="36">
+          <span class="list-label" vid="37">Environmental hygiene</span>
+          <div class="list-value" vid="38">
+            <span id="val-hygiene" vid="39">100%</span>
+            <span class="arrow-icon" vid="40">→</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions-grid" vid="41">
+        <div class="action-card" onclick="interact('feed')" vid="42">
+          <div
+            style="
+              width: 100%;
+              height: 40px;
+              background: linear-gradient(
+                45deg,
+                #ddd 25%,
+                #ccc 25%,
+                #ccc 50%,
+                #ddd 50%,
+                #ddd 75%,
+                #ccc 75%,
+                #ccc 100%
+              );
+              background-size: 10px 10px;
+            "
+            vid="43"
+          ></div>
+          <span class="action-label" vid="44">Administer nutrients</span>
+          <span class="plus-icon" vid="45">+</span>
+        </div>
+        <div class="action-card" onclick="interact('sleep')" vid="46">
+          <div style="width: 100%; height: 40px; background: #333" vid="47"></div>
+          <span class="action-label" vid="48">Initiate stasis</span>
+          <span class="plus-icon" vid="49">+</span>
+        </div>
+        <div class="action-card" onclick="interact('clean')" vid="50">
+          <div style="width: 100%; height: 40px; background: #bbb" vid="51"></div>
+          <span class="action-label" vid="52">Sanitize sector</span>
+          <span class="plus-icon" vid="53">+</span>
+        </div>
+        <div class="action-card" onclick="interact('play')" vid="54">
+          <div
+            style="
+              width: 100%;
+              height: 40px;
+              background: repeating-linear-gradient(90deg, #ccc, #ccc 2px, #fff 2px, #fff 4px);
+            "
+            vid="55"
+          ></div>
+          <span class="action-label" vid="56">Stimulation protocol</span>
+          <span class="plus-icon" vid="57">+</span>
+        </div>
+      </div>
+    </div>
+
+    <script vid="58">
+      const canvas = document.getElementById('pet-canvas')
+      const ctx = canvas.getContext('2d')
+
+      function resizeCanvas() {
+        const parent = canvas.parentElement
+        canvas.width = parent.clientWidth * 2
+        canvas.height = parent.clientHeight * 2
+        canvas.style.width = parent.clientWidth + 'px'
+        canvas.style.height = parent.clientHeight + 'px'
+        ctx.scale(2, 2)
+      }
+      window.addEventListener('resize', resizeCanvas)
+      resizeCanvas()
+
+      const state = {
+        hunger: 100,
+        energy: 100,
+        hygiene: 100,
+        age: 0,
+        isSleeping: false,
+        lastTick: Date.now(),
+      }
+
+      let time = 0
+      let particles = []
+
+      for (let i = 0; i < 40; i++) {
+        particles.push({
+          x: 0,
+          y: 0,
+          r: Math.random() * 50 + 20,
+          speed: Math.random() * 0.02 + 0.005,
+          offset: Math.random() * Math.PI * 2,
+        })
+      }
+
+      function drawEntity() {
+        ctx.clearRect(0, 0, canvas.width / 2, canvas.height / 2)
+
+        ctx.strokeStyle = '#E0E0E0'
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        for (let x = 0; x < canvas.width / 2; x += 40) {
+          ctx.moveTo(x, 0)
+          ctx.lineTo(x, canvas.height / 2)
+        }
+        for (let y = 0; y < canvas.height / 2; y += 40) {
+          ctx.moveTo(0, y)
+          ctx.lineTo(canvas.width / 2, y)
+        }
+        ctx.stroke()
+
+        const centerX = canvas.width / 2 / 2
+        const centerY = canvas.height / 2 / 2
+
+        ctx.save()
+        ctx.translate(centerX, centerY)
+
+        let healthColor = '#111111'
+        if (state.hunger < 30 || state.hygiene < 30) healthColor = '#A05555'
+        if (state.isSleeping) healthColor = '#555555'
+
+        ctx.fillStyle = healthColor
+        ctx.strokeStyle = healthColor
+
+        ctx.beginPath()
+        if (state.isSleeping) {
+          ctx.arc(0, 0, 40 + Math.sin(time) * 5, 0, Math.PI * 2)
+          ctx.fill()
+        } else {
+          particles.forEach((p, index) => {
+            let rot = time * (index % 2 === 0 ? 1 : -1) + p.offset
+            let radius = p.r + (state.energy < 50 ? 0 : Math.sin(time * 3 + index) * 10)
+
+            let px = Math.cos(rot) * radius * 0.8
+            let py = Math.sin(rot * 0.5) * radius * 0.8
+
+            particles.forEach((p2, i2) => {
+              if (index !== i2 && Math.abs(index - i2) < 4) {
+                ctx.beginPath()
+                ctx.moveTo(px, py)
+                let p2x = Math.cos(time * (i2 % 2 === 0 ? 1 : -1) + p2.offset) * p2.r * 0.8
+                let p2y = Math.sin(time * (i2 % 2 === 0 ? 1 : -1) * 0.5 + p2.offset) * p2.r * 0.8
+                ctx.lineTo(p2x, p2y)
+                ctx.lineWidth = 0.5
+                ctx.stroke()
+              }
+            })
+
+            ctx.beginPath()
+            ctx.arc(px, py, 3, 0, Math.PI * 2)
+            ctx.fill()
+          })
+        }
+        ctx.restore()
+
+        time += 0.02
+        requestAnimationFrame(drawEntity)
+      }
+      drawEntity()
+
+      setInterval(() => {
+        if (!state.isSleeping) {
+          state.hunger = Math.max(0, state.hunger - 0.5)
+          state.energy = Math.max(0, state.energy - 0.2)
+          state.hygiene = Math.max(0, state.hygiene - 0.3)
+        } else {
+          state.energy = Math.min(100, state.energy + 1.5)
+          state.hunger = Math.max(0, state.hunger - 0.2)
+        }
+
+        state.age += 0.01
+
+        updateUI()
+      }, 1000)
+
+      function updateUI() {
+        document.getElementById('val-hunger').innerText = Math.floor(state.hunger) + '%'
+        document.getElementById('val-energy').innerText = Math.floor(state.energy) + '%'
+        document.getElementById('val-hygiene').innerText = Math.floor(state.hygiene) + '%'
+
+        document.getElementById('age-badge').innerText = `CYCLES: ${Math.floor(state.age)}`
+
+        let mood = 'STABLE'
+        if (state.isSleeping) mood = 'STASIS'
+        else if (state.hunger < 30) mood = 'CRITICAL (NUTRIENT)'
+        else if (state.hygiene < 30) mood = 'CRITICAL (TOXICITY)'
+        else if (state.energy < 20) mood = 'FATIGUE'
+
+        document.getElementById('mood-badge').innerText = `STATE: ${mood}`
+
+        toggleAlert('stat-hunger', state.hunger < 30)
+        toggleAlert('stat-hygiene', state.hygiene < 30)
+        toggleAlert('stat-energy', state.energy < 20)
+      }
+
+      function toggleAlert(id, isActive) {
+        const el = document.getElementById(id)
+        if (isActive) el.classList.add('low-stat')
+        else el.classList.remove('low-stat')
+      }
+
+      window.interact = function (type) {
+        let msg = ''
+
+        if (type === 'feed') {
+          if (state.isSleeping) {
+            showToast('Cannot feed during stasis.')
+            return
+          }
+          state.hunger = Math.min(100, state.hunger + 30)
+          msg = 'Nutrients administered.'
+
+          time += 5
+        } else if (type === 'sleep') {
+          state.isSleeping = !state.isSleeping
+          msg = state.isSleeping ? 'Stasis mode initiated.' : 'Subject awakened.'
+        } else if (type === 'clean') {
+          state.hygiene = 100
+          msg = 'Environment sanitized.'
+        } else if (type === 'play') {
+          if (state.isSleeping) {
+            showToast('Subject is in stasis.')
+            return
+          }
+          if (state.energy < 20) {
+            showToast('Energy too low for stimulation.')
+            return
+          }
+          state.energy -= 10
+          state.hunger -= 5
+          msg = 'Stimulation complete.'
+
+          time += 10
+        }
+
+        updateUI()
+        showToast(msg)
+      }
+
+      function showToast(text) {
+        const toast = document.getElementById('toast')
+        const msg = document.getElementById('toast-msg')
+        msg.innerText = text
+        toast.classList.add('visible')
+        setTimeout(() => {
+          toast.classList.remove('visible')
+        }, 2000)
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,457 @@
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
+    <title vid="4">Mars Exploration</title>
+    <style vid="5">
+      :root {
+        --c-brand: #ff4d3b;
+        --c-brand-dark: #e03e2e;
+        --c-white: #ffffff;
+        --c-ink: #111111;
+        --c-ink-light: #555555;
+        --c-meta: #999999;
+
+        --border-on-brand: rgba(0, 0, 0, 0.08);
+        --border-on-white: #eaeaea;
+
+        --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        --font-serif: 'Georgia', Times, serif;
+
+        --space-xs: 8px;
+        --space-sm: 16px;
+        --space-md: 24px;
+        --space-lg: 40px;
+        --space-xl: 80px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--c-white);
+        color: var(--c-ink);
+        height: 100vh;
+        display: flex;
+        overflow: hidden;
+        font-size: 14px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .layout {
+        display: flex;
+        width: 100%;
+        height: 100%;
+      }
+
+      .panel-brand {
+        width: 45%;
+        background-color: var(--c-brand);
+        color: var(--c-ink);
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--border-on-brand);
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .panel-content {
+        width: 55%;
+        background-color: var(--c-white);
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        padding: var(--space-lg) var(--space-xl);
+      }
+
+      .brand-header {
+        padding: var(--space-lg);
+        padding-bottom: var(--space-md);
+        border-bottom: 1px solid var(--border-on-brand);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .logo {
+        font-weight: 700;
+        font-size: 24px;
+        letter-spacing: -0.5px;
+        text-transform: uppercase;
+      }
+
+      .logo span {
+        font-weight: 400;
+        opacity: 0.6;
+      }
+
+      .data-grid {
+        display: flex;
+        flex: 1;
+        position: relative;
+        z-index: 10;
+      }
+
+      .grid-col {
+        flex: 1;
+        border-right: 1px solid var(--border-on-brand);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .grid-col:last-child {
+        border-right: none;
+      }
+
+      .col-header {
+        font-size: 11px;
+        opacity: 0.5;
+        padding: var(--space-sm) var(--space-md);
+        border-bottom: 1px solid var(--border-on-brand);
+        font-family: var(--font-serif);
+        font-style: italic;
+      }
+
+      .nav-list {
+        list-style: none;
+      }
+
+      .nav-item {
+        display: block;
+        padding: var(--space-sm) var(--space-md);
+        border-bottom: 1px solid var(--border-on-brand);
+        text-decoration: none;
+        color: var(--c-ink);
+        font-size: 13px;
+        transition: background-color 0.2s;
+        cursor: pointer;
+        line-height: 1.3;
+      }
+
+      .nav-item:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .nav-item span {
+        display: block;
+        font-size: 11px;
+        opacity: 0.6;
+        margin-top: 2px;
+      }
+
+      .mars-container {
+        position: absolute;
+        bottom: -10%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        height: 60%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.9;
+      }
+
+      .mars-orb {
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+
+        background: radial-gradient(circle at 30% 30%, #ff8a7a 0%, #ff4d3b 50%, #d43221 100%);
+        box-shadow: inset -40px -40px 100px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+
+      .mars-texture {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 70% 20%, rgba(0, 0, 0, 0.1) 0%, transparent 10%),
+          radial-gradient(circle at 20% 60%, rgba(0, 0, 0, 0.1) 0%, transparent 20%);
+        mix-blend-mode: multiply;
+      }
+
+      .brand-footer {
+        padding: var(--space-md);
+        border-top: 1px solid var(--border-on-brand);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+        background-color: var(--c-brand);
+        position: relative;
+        z-index: 20;
+      }
+
+      .meta-label {
+        font-family: var(--font-sans);
+        font-size: 12px;
+        color: var(--c-meta);
+        margin-bottom: var(--space-lg);
+        display: block;
+        border-bottom: 1px solid var(--border-on-white);
+        padding-bottom: var(--space-sm);
+        width: 100px;
+      }
+
+      h1 {
+        font-family: var(--font-sans);
+        font-weight: 400;
+        font-size: 32px;
+        margin-bottom: var(--space-md);
+        letter-spacing: -0.5px;
+        color: var(--c-ink);
+      }
+
+      .intro-text {
+        font-family: var(--font-serif);
+        font-size: 18px;
+        line-height: 1.6;
+        color: var(--c-ink);
+        max-width: 600px;
+        margin-bottom: var(--space-xl);
+      }
+
+      .content-section {
+        margin-top: auto;
+      }
+
+      .section-header {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: var(--space-md);
+        color: var(--c-meta);
+      }
+
+      .link-row {
+        display: flex;
+        align-items: baseline;
+        padding: var(--space-sm) 0;
+        border-bottom: 1px solid var(--border-on-white);
+        color: var(--c-ink);
+        text-decoration: none;
+        transition: padding-left 0.2s ease;
+      }
+
+      .link-row:hover {
+        padding-left: 8px;
+        color: var(--c-brand);
+      }
+
+      .link-arrow {
+        margin-right: var(--space-sm);
+        font-size: 10px;
+      }
+
+      .link-title {
+        font-family: var(--font-sans);
+        font-weight: 500;
+        margin-right: var(--space-sm);
+      }
+
+      .link-desc {
+        font-family: var(--font-serif);
+        font-style: italic;
+        color: var(--c-meta);
+        font-size: 13px;
+      }
+
+      .search-icon {
+        width: 12px;
+        height: 12px;
+        border: 1px solid var(--c-ink);
+        border-radius: 50%;
+        position: relative;
+      }
+      .search-icon::after {
+        content: '';
+        position: absolute;
+        width: 4px;
+        height: 1px;
+        background: var(--c-ink);
+        bottom: -1px;
+        right: -2px;
+        transform: rotate(45deg);
+      }
+
+      @media (max-width: 900px) {
+        .layout {
+          flex-direction: column;
+          overflow-y: auto;
+        }
+        .panel-brand,
+        .panel-content {
+          width: 100%;
+          overflow: visible;
+        }
+        .panel-brand {
+          height: auto;
+          min-height: 400px;
+        }
+        .mars-container {
+          position: relative;
+          bottom: auto;
+          height: 300px;
+          margin: 40px 0;
+        }
+        .mars-orb {
+          width: 200px;
+          height: 200px;
+        }
+        body {
+          overflow: auto;
+        }
+      }
+    </style>
+  </head>
+  <body vid="6">
+    <div class="layout" vid="7">
+      <aside class="panel-brand" vid="8">
+        <header class="brand-header" vid="9">
+          <div class="logo" vid="10">M &gt; 04 <span vid="11">(MARS)</span></div>
+          <div style="font-size: 11px" vid="12">Sol System</div>
+        </header>
+
+        <div class="data-grid" vid="13">
+          <div class="grid-col" vid="14">
+            <div class="col-header" vid="15">I — Physical</div>
+            <a class="nav-item" vid="16">
+              Diameter
+              <span vid="17">6,779 km</span>
+            </a>
+            <a class="nav-item" vid="18">
+              Mass
+              <span vid="19">6.39 × 10^23 kg</span>
+            </a>
+            <a class="nav-item" vid="20">
+              Gravity
+              <span vid="21">3.721 m/s²</span>
+            </a>
+            <a class="nav-item" vid="22">
+              Density
+              <span vid="23">3.93 g/cm³</span>
+            </a>
+            <a class="nav-item" vid="24">
+              Axial Tilt
+              <span vid="25">25.19°</span>
+            </a>
+          </div>
+
+          <div class="grid-col" vid="26">
+            <div class="col-header" vid="27">II — Orbital</div>
+            <a class="nav-item" vid="28">
+              Aphelion
+              <span vid="29">249.2 million km</span>
+            </a>
+            <a class="nav-item" vid="30">
+              Perihelion
+              <span vid="31">206.7 million km</span>
+            </a>
+            <a class="nav-item" vid="32">
+              Orbital Period
+              <span vid="33">687 days</span>
+            </a>
+            <a class="nav-item" vid="34">
+              Avg. Speed
+              <span vid="35">24.00 km/s</span>
+            </a>
+          </div>
+
+          <div class="grid-col" vid="36">
+            <div class="col-header" vid="37">III — Comp</div>
+            <a class="nav-item" vid="38">
+              Carbon Dioxide
+              <span vid="39">95.32%</span>
+            </a>
+            <a class="nav-item" vid="40">
+              Nitrogen
+              <span vid="41">2.7%</span>
+            </a>
+            <a class="nav-item" vid="42">
+              Argon
+              <span vid="43">1.6%</span>
+            </a>
+            <a class="nav-item" vid="44">
+              Oxygen
+              <span vid="45">0.13%</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="mars-container" vid="46">
+          <div class="mars-orb" vid="47">
+            <div class="mars-texture" vid="48"></div>
+          </div>
+        </div>
+
+        <footer class="brand-footer" vid="49">
+          <span vid="50">Database Search</span>
+          <div class="search-icon" vid="51"></div>
+        </footer>
+      </aside>
+
+      <main class="panel-content" vid="52">
+        <span class="meta-label" vid="53">Nr. 4 / 2024</span>
+
+        <h1 vid="54">Focus. The Red Planet</h1>
+
+        <p class="intro-text" vid="55">
+          Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System,
+          being larger than only Mercury. In English, Mars carries the name of the Roman god of war.
+          Mars is a terrestrial planet with a thin atmosphere, and has a crust primarily composed of
+          elements similar to Earth's crust, as well as a core made of iron and nickel.
+          <br vid="56" /><br vid="57" />
+          The days and seasons are comparable to those of Earth, because the rotation period as well
+          as the tilt of the rotational axis relative to the ecliptic plane are similar.
+        </p>
+
+        <div class="content-section" vid="58">
+          <div class="section-header" vid="59">Exploration Modules</div>
+
+          <a href="#" class="link-row" vid="60">
+            <span class="link-arrow" vid="61">↓</span>
+            <span class="link-title" vid="62">Perseverance Rover</span>
+            <span class="link-desc" vid="63">Surface Operations / Jezero Crater</span>
+          </a>
+
+          <a href="#" class="link-row" vid="64">
+            <span class="link-arrow" vid="65">↓</span>
+            <span class="link-title" vid="66">Ingenuity Helicopter</span>
+            <span class="link-desc" vid="67">Aerial Reconnaissance</span>
+          </a>
+
+          <a href="#" class="link-row" vid="68">
+            <span class="link-arrow" vid="69">↓</span>
+            <span class="link-title" vid="70">Curiosity</span>
+            <span class="link-desc" vid="71">Gale Crater / Mount Sharp</span>
+          </a>
+
+          <a href="#" class="link-row" vid="72">
+            <span class="link-arrow" vid="73">↓</span>
+            <span class="link-title" vid="74">Viking 1 &amp; 2</span>
+            <span class="link-desc" vid="75">Legacy Missions (1976)</span>
+          </a>
+
+          <a href="#" class="link-row" vid="76">
+            <span class="link-arrow" vid="77">↓</span>
+            <span class="link-title" vid="78">Pathfinder</span>
+            <span class="link-desc" vid="79">Ares Vallis</span>
+          </a>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

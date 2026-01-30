@@ -1,0 +1,651 @@
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
+    <title vid="4">Orbital Trajectory Command</title>
+    <style vid="5">
+      :root {
+        --bg: #030303;
+        --panel-bg: #050505;
+        --border: #2a2a2a;
+        --border-highlight: #555;
+        --text-main: #e0e0e0;
+        --text-muted: #555555;
+        --text-label: #888888;
+        --accent: #ffffff;
+        --font-mono: 'Courier New', Courier, monospace;
+        --spacing-unit: 8px;
+        --row-height: 28px;
+      }
+
+      * {
+        box-sizing: border-box;
+        scrollbar-width: none;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg);
+        color: var(--text-main);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        -webkit-font-smoothing: none;
+      }
+
+      .u-upper {
+        text-transform: uppercase;
+      }
+      .u-flex {
+        display: flex;
+      }
+      .u-flex-col {
+        display: flex;
+        flex-direction: column;
+      }
+      .u-j-btwn {
+        justify-content: space-between;
+      }
+      .u-a-center {
+        align-items: center;
+      }
+      .u-muted {
+        color: var(--text-muted);
+      }
+      .u-label {
+        color: var(--text-label);
+        font-size: 10px;
+        letter-spacing: 0.5px;
+      }
+      .u-pad {
+        padding: var(--spacing-unit);
+      }
+      .u-border-r {
+        border-right: 1px solid var(--border);
+      }
+      .u-border-b {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .app-container {
+        display: grid;
+        grid-template-columns: 280px 1fr 320px;
+        grid-template-rows: 40px 1fr 120px;
+        height: 100vh;
+        width: 100vw;
+      }
+
+      .header {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        padding: 0 16px;
+        background: var(--bg);
+        z-index: 10;
+      }
+
+      .header-item {
+        margin-right: 32px;
+        display: flex;
+        gap: 12px;
+      }
+
+      .play-btn {
+        width: 0;
+        height: 0;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-left: 8px solid var(--text-main);
+        cursor: pointer;
+      }
+
+      .sidebar {
+        grid-row: 2 / 3;
+        grid-column: 1 / 2;
+        border-right: 1px solid var(--border);
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .data-grid-row {
+        display: grid;
+        grid-template-columns: 32px 1fr 40px;
+        height: var(--row-height);
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition: background 0.1s;
+      }
+
+      .data-grid-row:hover {
+        background: #111;
+      }
+
+      .data-grid-row.active {
+        background: #1a1a1a;
+      }
+
+      .data-grid-row .idx {
+        color: var(--text-muted);
+        text-align: center;
+        border-right: 1px solid var(--border);
+        height: 100%;
+        line-height: var(--row-height);
+      }
+
+      .data-grid-row .name {
+        padding-left: 12px;
+        color: var(--text-label);
+      }
+
+      .data-grid-row.active .name {
+        color: var(--text-main);
+      }
+
+      .data-grid-row .status {
+        text-align: center;
+        color: var(--text-muted);
+        border-left: 1px solid var(--border);
+        height: 100%;
+        line-height: var(--row-height);
+      }
+
+      .main-view {
+        grid-row: 2 / 3;
+        grid-column: 2 / 3;
+        position: relative;
+        background-image:
+          linear-gradient(var(--border) 1px, transparent 1px),
+          linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: -1px -1px;
+        overflow: hidden;
+      }
+
+      .grid-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 100% 10px;
+        pointer-events: none;
+      }
+
+      .inspector {
+        grid-row: 2 / 3;
+        grid-column: 3 / 4;
+        border-left: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+
+      .panel-section {
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        color: var(--text-label);
+      }
+
+      .param-row {
+        display: grid;
+        grid-template-columns: 30px 40px 1fr;
+        align-items: center;
+        height: 24px;
+        margin-bottom: 4px;
+        gap: 8px;
+      }
+
+      .param-label {
+        color: var(--text-label);
+        text-transform: uppercase;
+      }
+
+      .param-val {
+        color: var(--accent);
+        text-align: right;
+      }
+
+      .slider-container {
+        position: relative;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        cursor: ew-resize;
+      }
+
+      .slider-track {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 1px;
+        background: #333;
+      }
+
+      .slider-track.dashed {
+        background: none;
+        border-top: 1px dashed #333;
+      }
+
+      .slider-thumb {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border: 1px solid var(--text-main);
+        border-radius: 50%;
+        background: var(--bg);
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+      }
+
+      .slider-thumb:hover {
+        background: var(--text-main);
+      }
+
+      .slider-thumb::after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 2px;
+        height: 2px;
+        background: var(--text-main);
+        border-radius: 50%;
+      }
+
+      .slider-thumb:hover::after {
+        background: var(--bg);
+      }
+
+      .toggle-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 24px;
+        margin-bottom: 4px;
+      }
+
+      .toggle-label {
+        color: var(--text-label);
+        text-transform: uppercase;
+      }
+
+      .toggle-indicator {
+        width: 10px;
+        height: 10px;
+        border: 1px solid var(--text-muted);
+        border-radius: 50%;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .toggle-indicator.active {
+        border-color: var(--text-main);
+      }
+
+      .toggle-indicator.active::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 4px;
+        height: 4px;
+        background: var(--text-main);
+        border-radius: 50%;
+      }
+
+      .footer {
+        grid-row: 3 / 4;
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--border);
+        padding: 12px;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--text-muted);
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+
+      .log-entry {
+        margin-bottom: 4px;
+      }
+      .log-entry span {
+        color: var(--text-label);
+        margin-right: 8px;
+      }
+      .log-success {
+        color: var(--text-main);
+      }
+      .log-warn {
+        color: #d4d4d4;
+      }
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .orbit-path {
+        fill: none;
+        stroke: var(--text-muted);
+        stroke-width: 1;
+        stroke-dasharray: 4 4;
+        opacity: 0.5;
+      }
+
+      .orbit-active {
+        fill: none;
+        stroke: var(--text-main);
+        stroke-width: 1;
+      }
+
+      .sat-point {
+        fill: var(--bg);
+        stroke: var(--text-main);
+        stroke-width: 1;
+      }
+    </style>
+  </head>
+  <body vid="6">
+    <div class="app-container" vid="7">
+      <header class="header" vid="8">
+        <div class="header-item" vid="9">
+          <span class="u-label" vid="10">SYS</span>
+          <span vid="11">ORBITAL_CMD</span>
+        </div>
+        <div class="header-item" vid="12">
+          <span class="play-btn" vid="13"></span>
+          <span class="u-label" vid="14">RUNNING</span>
+        </div>
+        <div class="header-item" style="margin-left: auto" vid="15">
+          <span class="u-label" vid="16">T-MINUS</span>
+          <span vid="17">00:14:59</span>
+        </div>
+        <div class="header-item" vid="18">
+          <span class="u-label" vid="19">CONN</span>
+          <span vid="20">SECURE</span>
+        </div>
+      </header>
+
+      <aside class="sidebar" vid="21">
+        <div
+          class="data-grid-row"
+          style="height: 32px; border-bottom: 1px solid var(--border)"
+          vid="22"
+        >
+          <div class="idx u-label" vid="23">ID</div>
+          <div class="name u-label" style="color: var(--text-muted)" vid="24">DESIGNATOR</div>
+          <div class="status u-label" vid="25">:</div>
+        </div>
+
+        <div class="data-grid-row active" vid="26">
+          <div class="idx" vid="27">01</div>
+          <div class="name" vid="28">SAT-ALPHA</div>
+          <div class="status" vid="29">●</div>
+        </div>
+        <div class="data-grid-row" vid="30">
+          <div class="idx" vid="31">02</div>
+          <div class="name" vid="32">SAT-BETA-X</div>
+          <div class="status" vid="33">○</div>
+        </div>
+        <div class="data-grid-row" vid="34">
+          <div class="idx" vid="35">03</div>
+          <div class="name" vid="36">DEBRIS-09</div>
+          <div class="status" vid="37">○</div>
+        </div>
+        <div class="data-grid-row" vid="38">
+          <div class="idx" vid="39">04</div>
+          <div class="name" vid="40">RELAY-V2</div>
+          <div class="status" vid="41">○</div>
+        </div>
+        <div class="data-grid-row" vid="42">
+          <div class="idx" vid="43">05</div>
+          <div class="name" vid="44">OBS-PLAT-1</div>
+          <div class="status" vid="45">○</div>
+        </div>
+        <div class="data-grid-row" vid="46">
+          <div class="idx" vid="47">06</div>
+          <div class="name" vid="48">SAT-GAMMA</div>
+          <div class="status" vid="49">○</div>
+        </div>
+        <div class="data-grid-row" vid="50">
+          <div class="idx" vid="51">07</div>
+          <div class="name" vid="52">CMD-MOD-A</div>
+          <div class="status" vid="53">●</div>
+        </div>
+        <div class="data-grid-row" vid="54">
+          <div class="idx" vid="55">08</div>
+          <div class="name" vid="56">FUEL-POD-4</div>
+          <div class="status" vid="57">○</div>
+        </div>
+        <div class="data-grid-row" vid="58">
+          <div class="idx" vid="59">09</div>
+          <div class="name" vid="60">SAT-DELTA</div>
+          <div class="status" vid="61">○</div>
+        </div>
+        <div class="data-grid-row" vid="62">
+          <div class="idx" vid="63">10</div>
+          <div class="name" vid="64">GEO-STAT-9</div>
+          <div class="status" vid="65">○</div>
+        </div>
+        <div class="data-grid-row" vid="66">
+          <div class="idx" vid="67">11</div>
+          <div class="name" vid="68">UNK-OBJ-X</div>
+          <div class="status" vid="69">:</div>
+        </div>
+      </aside>
+
+      <main class="main-view" vid="70">
+        <div class="grid-overlay" vid="71"></div>
+        <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" vid="72">
+          <line x1="0" y1="300" x2="800" y2="300" stroke="#222" stroke-width="1" vid="73"></line>
+          <line x1="400" y1="0" x2="400" y2="600" stroke="#222" stroke-width="1" vid="74"></line>
+
+          <path class="orbit-path" d="M 100 300 Q 400 100 700 300 T 1300 300" vid="75"></path>
+          <path class="orbit-active" d="M 50 350 Q 400 550 750 350" vid="76"></path>
+
+          <path
+            d="M 0 500 L 50 500 L 60 480 L 70 500 L 800 500"
+            stroke="#333"
+            fill="none"
+            vid="77"
+          ></path>
+
+          <circle class="sat-point" cx="225" cy="450" r="4" vid="78"></circle>
+          <circle class="sat-point" cx="575" cy="450" r="4" vid="79"></circle>
+
+          <g transform="translate(400, 450)" vid="80">
+            <circle cx="0" cy="0" r="6" stroke="white" fill="#000" vid="81"></circle>
+            <line
+              x1="-100"
+              y1="0"
+              x2="100"
+              y2="0"
+              stroke="white"
+              stroke-width="1"
+              stroke-dasharray="2 2"
+              vid="82"
+            ></line>
+            <line
+              x1="0"
+              y1="-100"
+              x2="0"
+              y2="100"
+              stroke="white"
+              stroke-width="1"
+              stroke-dasharray="2 2"
+              vid="83"
+            ></line>
+            <text x="10" y="-10" fill="white" font-size="10" font-family="monospace" vid="84">
+              SAT-ALPHA
+            </text>
+          </g>
+        </svg>
+      </main>
+
+      <aside class="inspector" vid="85">
+        <div class="panel-section" vid="86">
+          <div class="panel-header" vid="87">
+            <span vid="88">TRAJECTORY</span>
+            <span vid="89">--o--</span>
+          </div>
+
+          <div class="param-row" vid="90">
+            <span class="param-label" vid="91">ALT</span>
+            <span class="param-val" vid="92">420</span>
+            <div class="slider-container" vid="93">
+              <div class="slider-track dashed" vid="94"></div>
+              <div class="slider-thumb" style="left: 60%" vid="95"></div>
+            </div>
+          </div>
+
+          <div class="param-row" vid="96">
+            <span class="param-label" vid="97">VEL</span>
+            <span class="param-val" vid="98">7.8</span>
+            <div class="slider-container" vid="99">
+              <div class="slider-track dashed" vid="100"></div>
+              <div class="slider-thumb" style="left: 82%" vid="101"></div>
+            </div>
+          </div>
+
+          <div class="param-row" vid="102">
+            <span class="param-label" vid="103">INC</span>
+            <span class="param-val" vid="104">51.6</span>
+            <div class="slider-container" vid="105">
+              <div class="slider-track dashed" vid="106"></div>
+              <div class="slider-thumb" style="left: 30%" vid="107"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-section" vid="108">
+          <div class="panel-header" vid="109">
+            <span vid="110">PROPULSION</span>
+            <span vid="111">~^~_</span>
+          </div>
+
+          <div class="toggle-row" vid="112">
+            <span class="toggle-label" vid="113">MN_ENG</span>
+            <div class="toggle-indicator active" vid="114"></div>
+          </div>
+
+          <div class="param-row" vid="115">
+            <span class="param-label" vid="116">THR</span>
+            <span class="param-val" vid="117">085</span>
+            <div class="slider-container" vid="118">
+              <div class="slider-track" vid="119"></div>
+              <div class="slider-thumb" style="left: 85%" vid="120"></div>
+            </div>
+          </div>
+
+          <div class="toggle-row" vid="121">
+            <span class="toggle-label" vid="122">RCS_A</span>
+            <div class="toggle-indicator active" vid="123"></div>
+          </div>
+
+          <div class="toggle-row" vid="124">
+            <span class="toggle-label" vid="125">RCS_B</span>
+            <div class="toggle-indicator" vid="126"></div>
+          </div>
+        </div>
+
+        <div class="panel-section" vid="127">
+          <div class="panel-header" vid="128">
+            <span vid="129">SIGNAL</span>
+            <span vid="130">....</span>
+          </div>
+
+          <div class="param-row" vid="131">
+            <span class="param-label" vid="132">STR</span>
+            <span class="param-val" vid="133">-89</span>
+            <div class="slider-container" vid="134">
+              <div class="slider-track dashed" vid="135"></div>
+              <div class="slider-thumb" style="left: 75%" vid="136"></div>
+            </div>
+          </div>
+
+          <div class="param-row" vid="137">
+            <span class="param-label" vid="138">BW</span>
+            <span class="param-val" vid="139">512</span>
+            <div class="slider-container" vid="140">
+              <div class="slider-track dashed" vid="141"></div>
+              <div class="slider-thumb" style="left: 45%" vid="142"></div>
+            </div>
+          </div>
+
+          <div class="param-row" vid="143">
+            <span class="param-label" vid="144">ERR</span>
+            <span class="param-val" vid="145">0.0</span>
+            <div class="slider-container" vid="146">
+              <div class="slider-track dashed" vid="147"></div>
+              <div class="slider-thumb" style="left: 0%" vid="148"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-section" style="border-bottom: none" vid="149">
+          <div class="panel-header" vid="150">
+            <span vid="151">PWR_DIST</span>
+            <span vid="152">⚡</span>
+          </div>
+
+          <div class="param-row" vid="153">
+            <span class="param-label" vid="154">BAT</span>
+            <span class="param-val" vid="155">98%</span>
+            <div class="slider-container" vid="156">
+              <div class="slider-track" vid="157"></div>
+              <div class="slider-thumb" style="left: 98%" vid="158"></div>
+            </div>
+          </div>
+
+          <div class="param-row" vid="159">
+            <span class="param-label" vid="160">SOL</span>
+            <span class="param-val" vid="161">120</span>
+            <div class="slider-container" vid="162">
+              <div class="slider-track" vid="163"></div>
+              <div class="slider-thumb" style="left: 60%" vid="164"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <footer class="footer" vid="165">
+        <div class="log-entry" vid="166">
+          <span vid="167">14:02:11</span>
+          <span class="log-success" vid="168">Telemetry link established with SAT-ALPHA</span>
+        </div>
+        <div class="log-entry" vid="169">
+          <span vid="170">14:02:15</span>
+          <span class="log-warn" vid="171">Minor fluctuation in thermal regulation unit B</span>
+        </div>
+        <div class="log-entry" vid="172">
+          <span vid="173">14:02:22</span>
+          <span class="log-success" vid="174"
+            >Trajectory correction calculated. Delta-V: 12.4 m/s</span
+          >
+        </div>
+        <div class="log-entry" vid="175">
+          <span vid="176">14:03:00</span>
+          <span class="u-muted" vid="177">LOG Wrote 147 bytes in BUFF 0,6</span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

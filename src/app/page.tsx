@@ -1,64 +1,124 @@
-import Image from 'next/image'
+'use client'
+
+import { useEffect, useState } from 'react'
+import AssetCard from '@/components/AssetCard'
+
+type ViewportSize = 'mobile' | 'tablet' | 'desktop' | 'full'
 
 export default function Home() {
+  const [files, setFiles] = useState<string[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [globalViewport, setGlobalViewport] = useState<ViewportSize>('full')
+  const [searchQuery, setSearchQuery] = useState('')
+
+  useEffect(() => {
+    fetch('/api/assets')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setFiles(data.files)
+        } else {
+          setError(data.error)
+        }
+      })
+      .catch(err => {
+        setError('加载失败: ' + err.message)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [])
+
+  const filteredFiles = files.filter(file =>
+    file.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
+          <p className="text-gray-600">加载中...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{' '}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{' '}
-            or the{' '}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{' '}
-            center.
-          </p>
+    <div className="min-h-screen bg-gray-50">
+      {/* 顶部工具栏 */}
+      <header className="sticky top-0 z-50 bg-white border-b shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between gap-6">
+            <div>
+              <h1 className="text-2xl font-bold">Variant Gallery</h1>
+              <p className="text-sm text-gray-500 mt-1">
+                共 {filteredFiles.length} 个设计
+              </p>
+            </div>
+
+            {/* 搜索框 */}
+            <div className="flex-1 max-w-md">
+              <input
+                type="text"
+                placeholder="搜索文件名..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              />
+            </div>
+
+            {/* 全局响应式控制 */}
+            <div className="flex gap-2">
+              {(['mobile', 'tablet', 'desktop', 'full'] as ViewportSize[]).map((size) => (
+                <button
+                  key={size}
+                  onClick={() => setGlobalViewport(size)}
+                  className={`px-4 py-2 text-sm rounded transition-colors ${
+                    globalViewport === size
+                      ? 'bg-black text-white'
+                      : 'bg-gray-100 hover:bg-gray-200'
+                  }`}
+                >
+                  {size === 'mobile' && '📱 手机'}
+                  {size === 'tablet' && '📱 平板'}
+                  {size === 'desktop' && '💻 桌面'}
+                  {size === 'full' && '🖥️ 全屏'}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      </header>
+
+      {/* 主内容区 - CSS Grid 3 列布局 */}
+      <main className="container mx-auto px-6 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center">
+          {filteredFiles.map((file) => (
+            <AssetCard
+              key={file}
+              filename={file}
+              globalViewport={globalViewport}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          ))}
         </div>
+
+        {filteredFiles.length === 0 && (
+          <div className="text-center py-20">
+            <p className="text-gray-500">没有找到匹配的文件</p>
+          </div>
+        )}
       </main>
     </div>
   )

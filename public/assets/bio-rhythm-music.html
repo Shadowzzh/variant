@@ -1,0 +1,622 @@
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
+    <title vid="4">Bio-Rhythm Music</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <style vid="6">
+      :root {
+        --bg-body: #ffffff;
+        --text-main: #1a1a1a;
+        --text-sub: #8e8e93;
+        --accent-green-start: #4ade80;
+        --accent-green-end: #22c55e;
+        --accent-blue-start: #60a5fa;
+        --accent-blue-end: #3b82f6;
+        --accent-pink-start: #f472b6;
+        --accent-pink-end: #db2777;
+        --blob-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+        --surface-hover: #f3f4f6;
+        --font-main:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg-body);
+        font-family: var(--font-main);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .noise-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.25;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        mix-blend-mode: overlay;
+        border-radius: inherit;
+      }
+      .app-container {
+        width: 100%;
+        height: 100%;
+        background: white;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .header {
+        padding: 24px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
+      }
+      .icon-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .icon-btn svg {
+        width: 24px;
+        height: 24px;
+        stroke: var(--text-main);
+        stroke-width: 2;
+      }
+
+      .stage {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding-bottom: 40px;
+      }
+
+      .bio-blob {
+        width: 280px;
+        height: 280px;
+        background: linear-gradient(135deg, var(--accent-green-start), var(--accent-green-end));
+        border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+        position: relative;
+        animation: blob-morph 8s ease-in-out infinite;
+        box-shadow:
+          0 30px 60px -12px rgba(74, 222, 128, 0.4),
+          inset 0 -10px 20px rgba(0, 0, 0, 0.1),
+          inset 0 10px 20px rgba(255, 255, 255, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .bio-blob:active {
+        transform: scale(0.95);
+      }
+
+      .blob-face {
+        display: flex;
+        gap: 14px;
+        z-index: 2;
+      }
+      .eye {
+        width: 12px;
+        height: 36px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(8px);
+        opacity: 0.6;
+        z-index: 0;
+      }
+      .p-1 {
+        width: 80px;
+        height: 80px;
+        background: var(--accent-blue-start);
+        top: 10%;
+        right: 10%;
+        animation: float 6s ease-in-out infinite;
+      }
+      .p-2 {
+        width: 60px;
+        height: 60px;
+        background: var(--accent-pink-start);
+        bottom: 20%;
+        left: 10%;
+        animation: float 5s ease-in-out infinite reverse;
+      }
+
+      .track-info {
+        text-align: center;
+        margin-top: 40px;
+        z-index: 10;
+      }
+      .track-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0 0 8px 0;
+        letter-spacing: -0.03em;
+      }
+      .track-artist {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--accent-green-end);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      .live-indicator {
+        width: 6px;
+        height: 6px;
+        background-color: var(--accent-green-end);
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      .controls-cluster {
+        display: flex;
+        gap: 16px;
+        margin-top: 32px;
+        background: #f7f7f7;
+        padding: 8px;
+        border-radius: 24px;
+      }
+      .control-btn {
+        width: 64px;
+        height: 64px;
+        border-radius: 20px;
+        border: none;
+        background: white;
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .control-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      }
+
+      .control-btn svg {
+        width: 20px;
+        height: 20px;
+        margin-bottom: 4px;
+        stroke-width: 2;
+      }
+
+      .queue-sheet {
+        background: white;
+        border-radius: 32px 32px 0 0;
+        padding: 32px;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.03);
+        z-index: 10;
+        max-height: 35%;
+      }
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 20px;
+      }
+      .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-main);
+        letter-spacing: -0.02em;
+      }
+      .section-link {
+        font-size: 14px;
+        color: var(--text-sub);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .queue-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .queue-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 4px 0;
+      }
+      .item-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .mini-blob {
+        width: 48px;
+        height: 48px;
+        border-radius: 16px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .mb-blue {
+        background: linear-gradient(135deg, var(--accent-blue-start), var(--accent-blue-end));
+      }
+      .mb-pink {
+        background: linear-gradient(135deg, var(--accent-pink-start), var(--accent-pink-end));
+      }
+      .mb-green {
+        background: linear-gradient(135deg, var(--accent-green-start), var(--accent-green-end));
+      }
+      .mini-blob svg {
+        color: white;
+        width: 20px;
+        height: 20px;
+        z-index: 2;
+      }
+      .item-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .item-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+      .item-sub {
+        font-size: 13px;
+        color: var(--text-sub);
+      }
+      .item-right {
+        text-align: right;
+      }
+      .item-time {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+      .item-status {
+        font-size: 12px;
+        color: var(--accent-green-end);
+      }
+
+      .floating-nav {
+        position: absolute;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        padding: 8px 12px;
+        border-radius: 24px;
+        display: flex;
+        gap: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        z-index: 100;
+      }
+      .nav-item {
+        width: 44px;
+        height: 44px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-sub);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .nav-item.active {
+        background: #f7f7f7;
+        color: var(--text-main);
+      }
+      .nav-item svg {
+        width: 22px;
+        height: 22px;
+        stroke-width: 2;
+      }
+
+      @keyframes blob-morph {
+        0% {
+          border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+        }
+        33% {
+          border-radius: 58% 42% 30% 70% / 55% 55% 45% 45%;
+        }
+        66% {
+          border-radius: 35% 65% 60% 40% / 50% 40% 60% 50%;
+        }
+        100% {
+          border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+        }
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(10px, -15px);
+        }
+      }
+    </style>
+  </head>
+  <body vid="7">
+    <div class="app-container" vid="8">
+      <header class="header" vid="9">
+        <button class="icon-btn" vid="10">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            vid="11"
+          >
+            <line x1="3" y1="12" x2="21" y2="12" vid="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6" vid="13"></line>
+            <line x1="3" y1="18" x2="21" y2="18" vid="14"></line>
+          </svg>
+        </button>
+        <button class="icon-btn" vid="15">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            vid="16"
+          >
+            <circle cx="12" cy="12" r="1" vid="17"></circle>
+            <circle cx="19" cy="12" r="1" vid="18"></circle>
+            <circle cx="5" cy="12" r="1" vid="19"></circle>
+          </svg>
+        </button>
+      </header>
+
+      <div class="stage" vid="20">
+        <div class="particle p-1" vid="21">
+          <div class="noise-overlay" vid="22"></div>
+        </div>
+        <div class="particle p-2" vid="23">
+          <div class="noise-overlay" vid="24"></div>
+        </div>
+
+        <div class="bio-blob" vid="25">
+          <div class="noise-overlay" vid="26"></div>
+          <div class="blob-face" vid="27">
+            <div class="eye" vid="28"></div>
+            <div class="eye" vid="29"></div>
+          </div>
+        </div>
+
+        <div class="track-info" vid="30">
+          <h1 class="track-title" vid="31">Solar Drifting</h1>
+          <div class="track-artist" vid="32">
+            <span class="live-indicator" vid="33"></span>
+            Generative Flow #8
+          </div>
+        </div>
+
+        <div class="controls-cluster" vid="34">
+          <button class="control-btn" vid="35">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              vid="36"
+            >
+              <path d="M19 14l-7 7-7-7" vid="37"></path>
+              <path d="M12 19V5" vid="38"></path>
+            </svg>
+            Save
+          </button>
+          <button class="control-btn" vid="39">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              vid="40"
+            >
+              <path d="M23 4v6h-6" vid="41"></path>
+              <path d="M1 20v-6h6" vid="42"></path>
+              <path
+                d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+                vid="43"
+              ></path>
+            </svg>
+            Remix
+          </button>
+          <button class="control-btn" vid="44">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              vid="45"
+            >
+              <line x1="22" y1="2" x2="11" y2="13" vid="46"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2" vid="47"></polygon>
+            </svg>
+            Share
+          </button>
+        </div>
+      </div>
+
+      <div class="queue-sheet" vid="48">
+        <div class="section-header" vid="49">
+          <div class="section-title" vid="50">Up Next</div>
+          <a href="#" class="section-link" vid="51">Queue</a>
+        </div>
+        <div class="queue-list" vid="52">
+          <div class="queue-item" vid="53">
+            <div class="item-left" vid="54">
+              <div class="mini-blob mb-pink" vid="55">
+                <div class="noise-overlay" vid="56"></div>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  vid="57"
+                >
+                  <polygon points="5 3 19 12 5 21 5 3" vid="58"></polygon>
+                </svg>
+              </div>
+              <div class="item-info" vid="59">
+                <div class="item-title" vid="60">Neon Haze</div>
+                <div class="item-sub" vid="61">Synthwave • 120 BPM</div>
+              </div>
+            </div>
+            <div class="item-right" vid="62">
+              <div class="item-time" vid="63">3:45</div>
+              <div class="item-status" vid="64">~Playing soon</div>
+            </div>
+          </div>
+
+          <div class="queue-item" vid="65">
+            <div class="item-left" vid="66">
+              <div class="mini-blob mb-blue" vid="67">
+                <div class="noise-overlay" vid="68"></div>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  vid="69"
+                >
+                  <path d="M9 18V5l12-2v13" vid="70"></path>
+                  <circle cx="6" cy="18" r="3" vid="71"></circle>
+                  <circle cx="18" cy="16" r="3" vid="72"></circle>
+                </svg>
+              </div>
+              <div class="item-info" vid="73">
+                <div class="item-title" vid="74">Deep Ocean</div>
+                <div class="item-sub" vid="75">Ambient • 80 BPM</div>
+              </div>
+            </div>
+            <div class="item-right" vid="76">
+              <div class="item-time" vid="77">5:12</div>
+            </div>
+          </div>
+
+          <div class="queue-item" vid="78">
+            <div class="item-left" vid="79">
+              <div class="mini-blob mb-green" vid="80">
+                <div class="noise-overlay" vid="81"></div>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  vid="82"
+                >
+                  <circle cx="12" cy="12" r="10" vid="83"></circle>
+                  <polygon points="10 8 16 12 10 16 10 8" vid="84"></polygon>
+                </svg>
+              </div>
+              <div class="item-info" vid="85">
+                <div class="item-title" vid="86">Forest Rain</div>
+                <div class="item-sub" vid="87">Nature • 60 BPM</div>
+              </div>
+            </div>
+            <div class="item-right" vid="88">
+              <div class="item-time" vid="89">2:30</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="floating-nav" vid="90">
+        <div class="nav-item" vid="91">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            vid="92"
+          >
+            <circle cx="12" cy="12" r="10" vid="93"></circle>
+            <polyline points="12 6 12 12 16 14" vid="94"></polyline>
+          </svg>
+        </div>
+        <div class="nav-item active" vid="95">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            vid="96"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" vid="97"></path>
+            <polyline points="9 22 9 12 15 12 15 22" vid="98"></polyline>
+          </svg>
+        </div>
+        <div class="nav-item" vid="99">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            vid="100"
+          >
+            <circle cx="12" cy="12" r="10" vid="101"></circle>
+            <polygon
+              points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
+              vid="102"
+            ></polygon>
+          </svg>
+        </div>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,132 @@
+<html vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
+    <script src="https://cdn.tailwindcss.com" vid="4"></script>
+    <style vid="5">
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500&display=swap');
+
+      body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #f5f2ed;
+        color: #1a1a1a;
+      }
+
+      .serif {
+        font-family: 'Cormorant Garamond', serif;
+      }
+
+      .oval-mask {
+        mask-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' viewBox='0 0 200 280' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='100' cy='140' rx='100' ry='140' fill='black'/%3E%3C/svg%3E");
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' viewBox='0 0 200 280' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='100' cy='140' rx='100' ry='140' fill='black'/%3E%3C/svg%3E");
+        mask-size: contain;
+        -webkit-mask-size: contain;
+        mask-repeat: no-repeat;
+        -webkit-mask-repeat: no-repeat;
+        mask-position: center;
+        -webkit-mask-position: center;
+      }
+
+      .vertical-text {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        transform: rotate(180deg);
+      }
+    </style>
+  </head>
+  <body class="w-full h-full" vid="6">
+    <div class="w-full h-full flex flex-col" vid="7">
+      <!-- Top Navigation -->
+      <div class="grid grid-cols-2 border-b border-[#1a1a1a] border-opacity-20" vid="8">
+        <div
+          class="py-4 px-6 text-xs uppercase tracking-widest border-r border-[#1a1a1a] border-opacity-20 flex items-center justify-center"
+          vid="9"
+        >
+          Exclusive Assets
+        </div>
+        <div
+          class="py-4 px-6 text-xs uppercase tracking-widest flex items-center justify-center"
+          vid="10"
+        >
+          Private Ventures
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 flex flex-col p-6" vid="11">
+        <!-- Logo -->
+        <div class="mb-8 mt-2" vid="12">
+          <div
+            class="w-16 h-16 border border-[#1a1a1a] rounded-full flex items-center justify-center relative"
+            vid="13"
+          >
+            <div
+              class="absolute w-1.5 h-1.5 bg-[#1a1a1a] rounded-full bottom-2 right-[45%]"
+              vid="14"
+            ></div>
+            <span class="serif text-2xl font-light" vid="15">PV</span>
+          </div>
+        </div>
+
+        <!-- Main Image -->
+        <div class="relative w-full aspect-[3/4] mb-8" vid="16">
+          <img
+            src="https://images.unsplash.com/photo-1606768666853-403c90a981ad?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=2071&amp;q=80"
+            alt="Luxury yacht"
+            class="w-full h-full object-cover oval-mask"
+            vid="17"
+          />
+
+          <!-- Vertical Text -->
+          <div class="absolute top-0 right-0 h-full flex items-center" vid="18">
+            <div
+              class="vertical-text text-xs uppercase tracking-widest flex space-x-4 -mr-1"
+              vid="19"
+            >
+              <span vid="20">Elite Ventures</span>
+              <span vid="21">Private Fleet</span>
+              <span vid="22">Curated &amp; Personalized</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tagline -->
+        <div class="mb-10" vid="23">
+          <h2 class="serif text-3xl font-light leading-tight" vid="24">
+            ELEVATE your<br vid="25" />
+            <span class="text-lg italic" vid="26">legacy to create its</span><br vid="27" />
+            <span class="text-3xl" vid="28">PROMINENCE</span>
+          </h2>
+        </div>
+      </div>
+
+      <!-- Bottom Navigation -->
+      <div class="grid grid-cols-2 border-t border-[#1a1a1a] border-opacity-20" vid="29">
+        <div
+          class="py-4 px-6 text-xs uppercase tracking-widest border-r border-[#1a1a1a] border-opacity-20 flex items-center justify-center"
+          vid="30"
+        >
+          Acquisitions
+        </div>
+        <div
+          class="py-4 px-6 text-xs uppercase tracking-widest flex items-center justify-center"
+          vid="31"
+        >
+          Luxury Assets
+        </div>
+      </div>
+    </div>
+
+    <script vid="32">
+      // Interactive elements for the billionaire app
+      document.addEventListener('DOMContentLoaded', function () {
+        const navItems = document.querySelectorAll('.grid > div')
+        navItems.forEach(item => {
+          item.addEventListener('click', function () {
+            console.log('Navigating to:', this.innerText)
+          })
+        })
+      })
+    </script>
+  </body>
+</html>
