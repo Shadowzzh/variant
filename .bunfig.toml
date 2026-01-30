@@ -1,0 +1,7 @@
+[install]
+# 配置淘宝镜像源
+registry = "https://registry.npmmirror.com"
+
+[install.cache]
+# 禁用缓存验证以提高速度
+disable = false
