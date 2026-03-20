@@ -1,0 +1,776 @@
+<html lang="en" vid="0"><head vid="1">
+<meta charset="UTF-8" vid="2">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+<title vid="4">Mobile Engineering Interface</title>
+<style vid="5">
+    :root {
+        --bg: #000000;
+        --fg-bright: #ffffff;
+        --fg-base: #a0a0a0;
+        --fg-dim: #555555;
+        --fg-dark: #333333;
+        --font-mono: ui-monospace, 'SF Mono', 'Roboto Mono', Menlo, Consolas, Courier, monospace;
+        --text-xs: 9px;
+        --text-sm: 10px;
+        --text-md: 11px;
+        --line-height: 1.2;
+        --space-1: 4px;
+        --space-2: 8px;
+        --space-3: 12px;
+        --space-4: 16px;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: var(--bg);
+        color: var(--fg-base);
+        font-family: var(--font-mono);
+        font-size: var(--text-md);
+        line-height: var(--line-height);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    
+    .mobile-frame {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--bg);
+        padding: var(--space-3);
+    }
+
+    
+    .text-bright { color: var(--fg-bright); }
+    .text-dim { color: var(--fg-dim); }
+    .text-right { text-align: right; }
+    .fw-bold { font-weight: bold; }
+
+    
+    .sys-header {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+        padding-bottom: var(--space-2);
+        border-bottom: 1px dashed var(--fg-dark);
+        margin-bottom: var(--space-3);
+        flex-shrink: 0;
+    }
+
+    .header-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: var(--text-sm);
+    }
+
+    .header-item {
+        display: flex;
+        gap: 6px;
+    }
+
+    .header-item span:first-child {
+        color: var(--fg-dim);
+    }
+
+    .header-item span:last-child {
+        color: var(--fg-bright);
+    }
+
+    
+    .sys-main {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+        padding-right: 4px; 
+    }
+
+    
+    .sys-main::-webkit-scrollbar { width: 2px; }
+    .sys-main::-webkit-scrollbar-track { background: var(--bg); }
+    .sys-main::-webkit-scrollbar-thumb { background: var(--fg-dim); }
+
+    
+    .section {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+
+    .section-title {
+        color: var(--fg-bright);
+        text-transform: lowercase; 
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding-bottom: var(--space-1);
+        border-bottom: 1px solid var(--fg-dark);
+        font-size: var(--text-sm);
+    }
+    
+    .section-title::before {
+        content: "■ ";
+        color: var(--fg-dim);
+        font-size: var(--text-xs);
+    }
+
+    .title-left { display: flex; align-items: baseline; gap: 4px; }
+    .title-right { color: var(--fg-dim); font-size: var(--text-xs); }
+
+    
+    .bar-wrapper {
+        position: relative;
+        flex-grow: 1;
+        overflow: hidden;
+        font-size: var(--text-sm);
+        letter-spacing: -0.5px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+    
+    .bar-track {
+        color: var(--fg-dark);
+        white-space: nowrap;
+        user-select: none;
+    }
+
+    .bar-fill {
+        color: var(--fg-bright);
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        user-select: none;
+    }
+
+    
+    .waveform-container {
+        width: 100%;
+        overflow: hidden;
+        margin-bottom: var(--space-2);
+    }
+
+    .waveform {
+        display: inline-flex;
+        align-items: flex-end;
+        height: 24px;
+        font-size: var(--text-xs);
+        line-height: 1;
+        letter-spacing: 0;
+        white-space: nowrap;
+    }
+    .wave-high { color: var(--fg-bright); }
+    .wave-low { color: var(--fg-dim); }
+
+    .core-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-1) var(--space-3);
+    }
+
+    .core-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-1);
+    }
+    
+    .core-id { width: 2ch; color: var(--fg-dim); font-size: var(--text-xs); }
+    .core-val { width: 3ch; text-align: right; color: var(--fg-bright); font-size: var(--text-xs); }
+
+    
+    .data-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+    }
+
+    .data-label {
+        width: 5ch;
+        color: var(--fg-base);
+    }
+
+    .data-val {
+        color: var(--fg-bright);
+        text-align: right;
+        width: 4ch;
+    }
+
+    .data-unit {
+        color: var(--fg-dim);
+        width: 3ch;
+        text-align: left;
+    }
+
+    
+    .io-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+    }
+
+    .io-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-2);
+    }
+
+    .io-target { 
+        width: 8ch; 
+        color: var(--fg-bright); 
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .io-sub { 
+        color: var(--fg-dim); 
+        font-size: var(--text-xs);
+        flex: 1;
+    }
+
+    .io-val {
+        text-align: right;
+        min-width: 6ch;
+    }
+
+    
+    .log-container {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        font-size: var(--text-xs);
+    }
+    .log-line {
+        display: flex;
+        gap: var(--space-2);
+        word-wrap: break-word;
+    }
+    .log-time { flex-shrink: 0; color: var(--fg-dim); }
+    .log-msg { flex-grow: 1; }
+
+    
+    .table-container {
+        display: flex;
+        flex-direction: column;
+        font-size: var(--text-xs);
+    }
+
+    .t-row {
+        display: grid;
+        grid-template-columns: 5ch 1fr 4ch 5ch 4ch;
+        gap: var(--space-1);
+        padding: 3px 2px;
+        align-items: center;
+        cursor: crosshair;
+        transition: none;
+    }
+
+    .t-header {
+        color: var(--fg-dim);
+        border-bottom: 1px dotted var(--fg-dark);
+        margin-bottom: var(--space-1);
+        padding-bottom: var(--space-1);
+    }
+
+    .t-row:hover {
+        background-color: var(--fg-bright);
+        color: var(--bg);
+    }
+
+    .t-row:hover .text-dim,
+    .t-row:hover .tree-indent::before,
+    .t-row:hover .tree-indent-end::before {
+        color: var(--bg);
+        opacity: 0.6;
+    }
+
+    .t-row:hover .text-bright {
+        color: var(--bg);
+        font-weight: bold;
+    }
+
+    .t-col { 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+        white-space: nowrap; 
+    }
+    
+    .sort-active { color: var(--fg-bright); }
+    .sort-active::after { content: " v"; }
+
+    .tree-indent::before { content: "├─ "; color: var(--fg-dim); }
+    .tree-indent-end::before { content: "└─ "; color: var(--fg-dim); }
+
+    
+    .sys-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-3);
+        color: var(--fg-dim);
+        padding-top: var(--space-2);
+        margin-top: var(--space-2);
+        border-top: 1px dashed var(--fg-dark);
+        font-size: var(--text-xs);
+        flex-shrink: 0;
+        justify-content: space-between;
+    }
+
+    .cmd-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .cmd-key {
+        color: var(--bg);
+        background-color: var(--fg-base);
+        padding: 0 4px;
+        font-weight: bold;
+        border-radius: 1px;
+    }
+
+</style>
+</head>
+<body vid="6">
+
+<div class="mobile-frame" vid="7">
+    
+    <div class="sys-header" vid="8">
+        <div class="header-row" vid="9">
+            <div class="header-item" vid="10"><span vid="11">host</span><span vid="12">node-prod-zeus</span></div>
+            <div class="header-item" vid="13"><span vid="14">env</span><span vid="15">production</span></div>
+        </div>
+        <div class="header-row" vid="16">
+            <div class="header-item" vid="17"><span vid="18">up</span><span vid="19">42d 16:32</span></div>
+            <div class="header-item" vid="20"><span vid="21">bat</span><span class="text-bright" vid="22">100%</span></div>
+        </div>
+        <div class="header-row" vid="23">
+            <div class="header-item" vid="24"><span vid="25">load</span><span vid="26">2.14 2.10 2.05</span></div>
+            <div class="header-item" vid="27"><span vid="28">tasks</span><span vid="29">1842</span></div>
+        </div>
+    </div>
+
+    
+    <div class="sys-main" vid="30">
+        
+        
+        <div class="section" vid="31">
+            <div class="section-title" vid="32">
+                <div class="title-left" vid="33"><span vid="34">cpu</span></div>
+                <div class="title-right text-bright" vid="35">18.4%</div>
+            </div>
+            
+            <div class="waveform-container" vid="36">
+                <div class="waveform" vid="37">
+                    <span class="wave-low" vid="38">▃▄▂ ▂▃▄▅▆▇█▆▅▄▃▂ ▂▃▄▅▆▇█▇▆▅▄▃▂ </span>
+                    <span class="wave-high" vid="39">▇█▇▆▅▄▃▂ ▂▃▄▅▆▇█▆▅▄▃▂ </span>
+                    <span class="wave-low" vid="40">▂▃▄▅▆▇█▇▆▅▄▃▂ ▂▃▄▅▆▇█</span>
+                </div>
+            </div>
+
+            <div class="core-grid" vid="41">
+                <div class="core-item" vid="42">
+                    <span class="core-id" vid="43">c0</span>
+                    <div class="bar-wrapper" vid="44">
+                        <span class="bar-track" vid="45">||||||||||||||||||||||||||||||</span>
+                        <span class="bar-fill" style="width: 30%;" vid="46">||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="core-val" vid="47">30%</span>
+                </div>
+                <div class="core-item" vid="48">
+                    <span class="core-id" vid="49">c6</span>
+                    <div class="bar-wrapper" vid="50">
+                        <span class="bar-track" vid="51">||||||||||||||||||||||||||||||</span>
+                        <span class="bar-fill" style="width: 0%;" vid="52">||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="core-val" vid="53">0%</span>
+                </div>
+                <div class="core-item" vid="54">
+                    <span class="core-id" vid="55">c1</span>
+                    <div class="bar-wrapper" vid="56">
+                        <span class="bar-track" vid="57">||||||||||||||||||||||||||||||</span>
+                        <span class="bar-fill" style="width: 45%;" vid="58">||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="core-val" vid="59">45%</span>
+                </div>
+                <div class="core-item" vid="60">
+                    <span class="core-id" vid="61">c7</span>
+                    <div class="bar-wrapper" vid="62">
+                        <span class="bar-track" vid="63">||||||||||||||||||||||||||||||</span>
+                        <span class="bar-fill" style="width: 12%;" vid="64">||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="core-val" vid="65">12%</span>
+                </div>
+                <div class="core-item" vid="66">
+                    <span class="core-id" vid="67">c2</span>
+                    <div class="bar-wrapper" vid="68">
+                        <span class="bar-track" vid="69">||||||||||||||||||||||||||||||</span>
+                        <span class="bar-fill" style="width: 88%;" vid="70">||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="core-val" vid="71">88%</span>
+                </div>
+                <div class="core-item" vid="72">
+                    <span class="core-id" vid="73">c8</span>
+                    <div class="bar-wrapper" vid="74">
+                        <span class="bar-track" vid="75">||||||||||||||||||||||||||||||</span>
+                        <span class="bar-fill" style="width: 4%;" vid="76">||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="core-val" vid="77">4%</span>
+                </div>
+                <div class="core-item" vid="78">
+                    <span class="core-id" vid="79">c3</span>
+                    <div class="bar-wrapper" vid="80">
+                        <span class="bar-track" vid="81">||||||||||||||||||||||||||||||</span>
+                        <span class="bar-fill" style="width: 25%;" vid="82">||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="core-val" vid="83">25%</span>
+                </div>
+                <div class="core-item" vid="84">
+                    <span class="core-id" vid="85">c9</span>
+                    <div class="bar-wrapper" vid="86">
+                        <span class="bar-track" vid="87">||||||||||||||||||||||||||||||</span>
+                        <span class="bar-fill" style="width: 0%;" vid="88">||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="core-val" vid="89">0%</span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="section" vid="90">
+            <div class="section-title" vid="91">
+                <div class="title-left" vid="92"><span vid="93">memory</span></div>
+                <div class="title-right text-bright" vid="94">64.0 GiB</div>
+            </div>
+            
+            <div class="data-row" vid="95">
+                <span class="data-label" vid="96">Used</span>
+                <div class="bar-wrapper" vid="97">
+                    <span class="bar-track" vid="98">||||||||||||||||||||||||||||||||||||||||||||||||||</span>
+                    <span class="bar-fill" style="width: 88%;" vid="99">||||||||||||||||||||||||||||||||||||||||||||||||||</span>
+                </div>
+                <span class="data-val" vid="100">56.5</span>
+                <span class="data-unit" vid="101">GiB</span>
+            </div>
+            
+            <div class="data-row text-dim" vid="102">
+                <span class="data-label" vid="103">Avail</span>
+                <div class="bar-wrapper" vid="104">
+                    <span class="bar-track" vid="105">||||||||||||||||||||||||||||||||||||||||||||||||||</span>
+                    <span class="bar-fill text-dim" style="width: 12%;" vid="106">||||||||||||||||||||||||||||||||||||||||||||||||||</span>
+                </div>
+                <span class="data-val" vid="107">7.49</span>
+                <span class="data-unit" vid="108">GiB</span>
+            </div>
+
+            <div class="data-row text-dim" vid="109">
+                <span class="data-label" vid="110">Cache</span>
+                <div class="bar-wrapper" vid="111">
+                    <span class="bar-track" vid="112">||||||||||||||||||||||||||||||||||||||||||||||||||</span>
+                    <span class="bar-fill text-dim" style="width: 30%;" vid="113">||||||||||||||||||||||||||||||||||||||||||||||||||</span>
+                </div>
+                <span class="data-val" vid="114">19.2</span>
+                <span class="data-unit" vid="115">GiB</span>
+            </div>
+        </div>
+
+        
+        <div class="section" vid="116">
+            <div class="section-title" vid="117">
+                <div class="title-left" vid="118"><span vid="119">network</span></div>
+                <div class="title-right text-bright" vid="120">en0</div>
+            </div>
+            <div class="io-list" vid="121">
+                <div class="io-item" vid="122">
+                    <span class="io-target" vid="123">dl</span>
+                    <span class="io-sub" vid="124">▼ 41.3 Kib/s</span>
+                    <span class="io-val text-bright" vid="125">3.98 GiB</span>
+                </div>
+                <div class="io-item text-dim" style="margin-top: -4px;" vid="126">
+                    <span class="io-target" vid="127"></span>
+                    <span class="io-sub" vid="128">top: 119 Mibp</span>
+                    <span class="io-val" vid="129"></span>
+                </div>
+                <div class="io-item" vid="130">
+                    <span class="io-target" vid="131">up</span>
+                    <span class="io-sub" vid="132">▲ 49.5 Kib/s</span>
+                    <span class="io-val text-bright" vid="133">1.96 GiB</span>
+                </div>
+                <div class="io-item text-dim" style="margin-top: -4px;" vid="134">
+                    <span class="io-target" vid="135"></span>
+                    <span class="io-sub" vid="136">top: 175 Mibp</span>
+                    <span class="io-val" vid="137"></span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="section" vid="138">
+            <div class="section-title" vid="139">
+                <div class="title-left" vid="140"><span vid="141">disks</span></div>
+                <div class="title-right text-bright" vid="142">i/o</div>
+            </div>
+            
+            <div class="io-list" vid="143">
+                <div class="io-item" vid="144">
+                    <span class="io-target" vid="145">root</span>
+                    <div class="bar-wrapper text-dim" vid="146">
+                        <span class="bar-track" vid="147">........................................</span>
+                        <span class="bar-fill" style="width: 40%;" vid="148">||||||||||||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="io-val text-bright" vid="149">1.8T</span>
+                </div>
+                <div class="io-item text-dim" style="margin-top: -4px;" vid="150">
+                    <span class="io-target" vid="151"></span>
+                    <span class="io-sub" vid="152">U</span>
+                    <span class="io-val" vid="153">754G</span>
+                </div>
+
+                <div class="io-item" vid="154">
+                    <span class="io-target" vid="155">VM</span>
+                    <div class="bar-wrapper text-dim" vid="156">
+                        <span class="bar-track" vid="157">........................................</span>
+                        <span class="bar-fill" style="width: 15%;" vid="158">||||||||||||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="io-val text-bright" vid="159">1.8T</span>
+                </div>
+                <div class="io-item text-dim" style="margin-top: -4px;" vid="160">
+                    <span class="io-target" vid="161"></span>
+                    <span class="io-sub" vid="162">U</span>
+                    <span class="io-val" vid="163">754G</span>
+                </div>
+
+                <div class="io-item" vid="164">
+                    <span class="io-target" vid="165">Preboot</span>
+                    <div class="bar-wrapper text-dim" vid="166">
+                        <span class="bar-track" vid="167">........................................</span>
+                        <span class="bar-fill" style="width: 10%;" vid="168">||||||||||||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="io-val text-bright" vid="169">1.8T</span>
+                </div>
+                <div class="io-item text-dim" style="margin-top: -4px;" vid="170">
+                    <span class="io-target" vid="171"></span>
+                    <span class="io-sub" vid="172">U</span>
+                    <span class="io-val" vid="173">754G</span>
+                </div>
+
+                <div class="io-item" vid="174">
+                    <span class="io-target text-dim" vid="175">xarts</span>
+                    <div class="bar-wrapper text-dim" vid="176">
+                        <span class="bar-track" vid="177">........................................</span>
+                        <span class="bar-fill text-dim" style="width: 5%;" vid="178">||||||||||||||||||||||||||||||||||||||||</span>
+                    </div>
+                    <span class="io-val text-dim" vid="179">500M</span>
+                </div>
+                <div class="io-item text-dim" style="margin-top: -4px;" vid="180">
+                    <span class="io-target" vid="181"></span>
+                    <span class="io-sub" vid="182">U</span>
+                    <span class="io-val" vid="183">20M</span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="section" vid="184">
+            <div class="section-title" vid="185">
+                <div class="title-left" vid="186"><span vid="187">event log</span></div>
+            </div>
+            <div class="log-container" vid="188">
+                <div class="log-line text-dim" vid="189"><span class="log-time" vid="190">14:02:01</span><span class="log-msg" vid="191">sys.kernel: TCP conn limit reached</span></div>
+                <div class="log-line text-base" vid="192"><span class="log-time" vid="193">14:02:05</span><span class="log-msg" vid="194">auth.daemon: User root logged out</span></div>
+                <div class="log-line text-dim" vid="195"><span class="log-time" vid="196">14:03:12</span><span class="log-msg" vid="197">docker.d: container pruned</span></div>
+                <div class="log-line text-dim" vid="198"><span class="log-time" vid="199">14:03:15</span><span class="log-msg" vid="200">vpn.client: handshake ok</span></div>
+                <div class="log-line text-bright fw-bold" vid="201"><span class="log-time" vid="202">14:05:22</span><span class="log-msg" vid="203">sys.monitor: high I/O wait</span></div>
+                <div class="log-line text-dim" vid="204"><span class="log-time" vid="205">14:05:23</span><span class="log-msg" vid="206">crond: running daily backup</span></div>
+                <div class="log-line text-dim" vid="207"><span class="log-time" vid="208">14:05:40</span><span class="log-msg" vid="209">sshd: Accepted publickey neil</span></div>
+                <div class="log-line text-dim" vid="210"><span class="log-time" vid="211">14:06:01</span><span class="log-msg" vid="212">kernel: pciehp 0000:00:1c.0</span></div>
+            </div>
+        </div>
+
+        
+        <div class="section" vid="213">
+            <div class="section-title" vid="214">
+                <div class="title-left" vid="215"><span vid="216">processes</span></div>
+                <div class="title-right" vid="217">filter: <span class="text-bright" vid="218">none</span></div>
+            </div>
+            
+            <div class="table-container" vid="219">
+                <div class="t-row t-header" vid="220">
+                    <span class="t-col" vid="221">pid</span>
+                    <span class="t-col" vid="222">program</span>
+                    <span class="t-col" vid="223">usr</span>
+                    <span class="t-col text-right" vid="224">mem</span>
+                    <span class="t-col text-right sort-active" vid="225">cpu%</span>
+                </div>
+
+                <div class="t-row" vid="226">
+                    <span class="t-col text-dim" vid="227">29781</span>
+                    <span class="t-col text-bright" vid="228">helpd</span>
+                    <span class="t-col text-dim" vid="229">neil</span>
+                    <span class="t-col text-right" vid="230">5.6M</span>
+                    <span class="t-col text-right text-bright" vid="231">12.4</span>
+                </div>
+                <div class="t-row" vid="232">
+                    <span class="t-col text-dim" vid="233">29776</span>
+                    <span class="t-col" vid="234">karabiner_gr</span>
+                    <span class="t-col text-dim" vid="235">root</span>
+                    <span class="t-col text-right text-dim" vid="236">0B</span>
+                    <span class="t-col text-right" vid="237">0.0</span>
+                </div>
+                <div class="t-row" vid="238">
+                    <span class="t-col text-dim" vid="239">29764</span>
+                    <span class="t-col" vid="240">mdworker_sha</span>
+                    <span class="t-col text-dim" vid="241">neil</span>
+                    <span class="t-col text-right" vid="242">13M</span>
+                    <span class="t-col text-right" vid="243">0.0</span>
+                </div>
+                <div class="t-row" vid="244">
+                    <span class="t-col text-dim" vid="245">29753</span>
+                    <span class="t-col text-bright" vid="246">LinkedNotesU</span>
+                    <span class="t-col text-dim" vid="247">neil</span>
+                    <span class="t-col text-right" vid="248">32M</span>
+                    <span class="t-col text-right text-bright" vid="249">1.2</span>
+                </div>
+                <div class="t-row" vid="250">
+                    <span class="t-col text-dim" vid="251">29752</span>
+                    <span class="t-col text-dim tree-indent" vid="252">mdworker</span>
+                    <span class="t-col text-dim" vid="253">_spo</span>
+                    <span class="t-col text-right text-dim" vid="254">0B</span>
+                    <span class="t-col text-right" vid="255">0.0</span>
+                </div>
+                <div class="t-row" vid="256">
+                    <span class="t-col text-dim" vid="257">29751</span>
+                    <span class="t-col text-dim tree-indent-end" vid="258">mdworker</span>
+                    <span class="t-col text-dim" vid="259">_spo</span>
+                    <span class="t-col text-right text-dim" vid="260">0B</span>
+                    <span class="t-col text-right" vid="261">0.0</span>
+                </div>
+                <div class="t-row" vid="262">
+                    <span class="t-col text-dim" vid="263">29712</span>
+                    <span class="t-col" vid="264">trustevaluat</span>
+                    <span class="t-col text-dim" vid="265">neil</span>
+                    <span class="t-col text-right" vid="266">5.4M</span>
+                    <span class="t-col text-right" vid="267">0.0</span>
+                </div>
+                <div class="t-row" vid="268">
+                    <span class="t-col text-dim" vid="269">29709</span>
+                    <span class="t-col" vid="270">mdworker_sha</span>
+                    <span class="t-col text-dim" vid="271">neil</span>
+                    <span class="t-col text-right" vid="272">19M</span>
+                    <span class="t-col text-right" vid="273">0.0</span>
+                </div>
+                <div class="t-row" vid="274">
+                    <span class="t-col text-dim" vid="275">29679</span>
+                    <span class="t-col text-bright" vid="276">plugin-conta</span>
+                    <span class="t-col text-dim" vid="277">neil</span>
+                    <span class="t-col text-right" vid="278">69M</span>
+                    <span class="t-col text-right text-bright" vid="279">2.4</span>
+                </div>
+                <div class="t-row" vid="280">
+                    <span class="t-col text-dim" vid="281">29675</span>
+                    <span class="t-col text-dim tree-indent" vid="282">mdworker</span>
+                    <span class="t-col text-dim" vid="283">neil</span>
+                    <span class="t-col text-right" vid="284">19M</span>
+                    <span class="t-col text-right" vid="285">0.0</span>
+                </div>
+                <div class="t-row" vid="286">
+                    <span class="t-col text-dim" vid="287">29674</span>
+                    <span class="t-col text-dim tree-indent" vid="288">VTEncoder</span>
+                    <span class="t-col text-dim" vid="289">neil</span>
+                    <span class="t-col text-right" vid="290">17M</span>
+                    <span class="t-col text-right" vid="291">0.0</span>
+                </div>
+                <div class="t-row" vid="292">
+                    <span class="t-col text-dim" vid="293">29654</span>
+                    <span class="t-col text-dim tree-indent-end" vid="294">VTDecoder</span>
+                    <span class="t-col text-dim" vid="295">neil</span>
+                    <span class="t-col text-right" vid="296">16M</span>
+                    <span class="t-col text-right" vid="297">0.0</span>
+                </div>
+                <div class="t-row" vid="298">
+                    <span class="t-col text-dim" vid="299">29606</span>
+                    <span class="t-col" vid="300">mediaanalysi</span>
+                    <span class="t-col text-dim" vid="301">neil</span>
+                    <span class="t-col text-right" vid="302">91M</span>
+                    <span class="t-col text-right" vid="303">0.0</span>
+                </div>
+                <div class="t-row" vid="304">
+                    <span class="t-col text-dim" vid="305">29605</span>
+                    <span class="t-col" vid="306">MTLCompilerS</span>
+                    <span class="t-col text-dim" vid="307">neil</span>
+                    <span class="t-col text-right" vid="308">14M</span>
+                    <span class="t-col text-right" vid="309">0.0</span>
+                </div>
+                <div class="t-row" vid="310">
+                    <span class="t-col text-dim" vid="311">29594</span>
+                    <span class="t-col" vid="312">QuickLookUIS</span>
+                    <span class="t-col text-dim" vid="313">neil</span>
+                    <span class="t-col text-right" vid="314">57M</span>
+                    <span class="t-col text-right" vid="315">0.0</span>
+                </div>
+                <div class="t-row" vid="316">
+                    <span class="t-col text-dim" vid="317">29581</span>
+                    <span class="t-col text-bright" vid="318">CleanShot X</span>
+                    <span class="t-col text-dim" vid="319">neil</span>
+                    <span class="t-col text-right" vid="320">156M</span>
+                    <span class="t-col text-right text-bright" vid="321">0.6</span>
+                </div>
+                <div class="t-row" vid="322">
+                    <span class="t-col text-dim" vid="323">29431</span>
+                    <span class="t-col" vid="324">plugin-conta</span>
+                    <span class="t-col text-dim" vid="325">neil</span>
+                    <span class="t-col text-right" vid="326">415M</span>
+                    <span class="t-col text-right" vid="327">0.1</span>
+                </div>
+                <div class="t-row" vid="328">
+                    <span class="t-col text-dim" vid="329">29428</span>
+                    <span class="t-col text-dim tree-indent" vid="330">plugin-co</span>
+                    <span class="t-col text-dim" vid="331">neil</span>
+                    <span class="t-col text-right" vid="332">120M</span>
+                    <span class="t-col text-right" vid="333">0.0</span>
+                </div>
+                <div class="t-row" vid="334">
+                    <span class="t-col text-dim" vid="335">29427</span>
+                    <span class="t-col text-dim tree-indent-end" vid="336">plugin-co</span>
+                    <span class="t-col text-dim" vid="337">neil</span>
+                    <span class="t-col text-right" vid="338">543M</span>
+                    <span class="t-col text-right" vid="339">0.0</span>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div style="height: 16px;" vid="340"></div>
+
+    </div>
+
+    
+    <div class="sys-footer" vid="341">
+        <div class="cmd-item" vid="342"><span class="cmd-key" vid="343">f</span> filter</div>
+        <div class="cmd-item" vid="344"><span class="cmd-key" vid="345">s</span> sort</div>
+        <div class="cmd-item" vid="346"><span class="cmd-key" vid="347">k</span> kill</div>
+        <div class="cmd-item" vid="348"><span class="cmd-key" vid="349">↵</span> info</div>
+        <div class="cmd-item" vid="350"><span class="cmd-key" vid="351">q</span> quit</div>
+    </div>
+
+</div>
+
+
+</body></html>

@@ -1,0 +1,406 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">System Architecture &amp; Visual Displacement</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet" vid="7">
+    
+    <style vid="8">
+        :root {
+            --paper: #c8c4bc;
+            --ink: #8b3a2a;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            
+            overflow: hidden; 
+            font-family: var(--font-sans);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .poster-wrapper {
+            position: relative;
+            
+            height: 94vh;
+            
+            aspect-ratio: 7 / 10; 
+            max-width: 96vw;
+        }
+
+        .poster {
+            width: 100%;
+            height: 100%;
+            background-color: var(--paper);
+            color: var(--ink);
+            padding: 2.5%; 
+            box-sizing: border-box;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            border-radius: 20px;
+            container-type: size;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        
+        .reg {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border: 1px solid var(--ink);
+            opacity: 0.5;
+        }
+        .reg-tl { top: 1%; left: 1%; border-right: none; border-bottom: none; }
+        .reg-tr { top: 1%; right: 1%; border-left: none; border-bottom: none; }
+        .reg-bl { bottom: 1%; left: 1%; border-right: none; border-top: none; }
+        .reg-br { bottom: 1%; right: 1%; border-left: none; border-top: none; }
+
+        
+        .frame {
+            border: 1px solid var(--ink);
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        
+        .header-row {
+            display: flex;
+            height: 22%;
+            border-bottom: 1px solid var(--ink);
+            box-sizing: border-box;
+        }
+
+        
+        .data-cell {
+            width: 28%;
+            border-right: 1px solid var(--ink);
+            padding: 1cqw;
+            box-sizing: border-box;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            background: var(--paper);
+        }
+
+        .raw-data {
+            font-family: var(--font-mono);
+            font-size: 1.1cqw;
+            line-height: 0.95;
+            word-break: break-all;
+            text-align: justify;
+            opacity: 0.7;
+            margin: 0;
+            user-select: none;
+        }
+
+        
+        .info-cell {
+            flex-grow: 1;
+            position: relative;
+            padding: 2cqw 3cqw;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        
+        .corner-label {
+            position: absolute;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 3cqw;
+            top: 1.5cqw;
+            opacity: 0.9;
+        }
+        .label-left { left: 3cqw; }
+        .label-right { right: 3cqw; }
+
+        
+        .title-group {
+            margin-top: auto;
+        }
+
+        h1 {
+            font-size: 7cqw;
+            font-weight: 500;
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 2.2cqw;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            margin: 0.5cqw 0 0 0;
+            opacity: 0.85;
+        }
+
+        .meta-strip {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 1.5cqw;
+            border-top: 1px solid var(--ink);
+            padding-top: 1cqw;
+            margin-top: 2cqw;
+            text-transform: uppercase;
+            opacity: 1;
+        }
+
+        
+        .canvas-cell {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+            background: var(--paper);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        
+        .footer-row {
+            height: 5%;
+            min-height: 24px;
+            border-top: 1px solid var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2cqw;
+            box-sizing: border-box;
+            font-family: var(--font-mono);
+            font-size: 1.3cqw;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+    </style>
+</head>
+<body vid="9">
+
+    <div class="poster-wrapper" vid="10">
+        <div class="poster" vid="11">
+            
+            <div class="reg reg-tl" vid="12"></div>
+            <div class="reg reg-tr" vid="13"></div>
+            <div class="reg reg-bl" vid="14"></div>
+            <div class="reg reg-br" vid="15"></div>
+
+            <div class="frame" vid="16">
+                
+                <div class="header-row" vid="17">
+                    <div class="data-cell" vid="18">
+                        <pre class="raw-data" id="data-block" vid="19"></pre>
+                    </div>
+                    
+                    <div class="info-cell" vid="20">
+                        <div class="corner-label label-left" vid="21">(0)</div>
+                        <div class="corner-label label-right" vid="22">(6)</div>
+                        
+                        <div class="title-group" vid="23">
+                            <h1 vid="24">Phase // Shift</h1>
+                            <h2 vid="25">Experimental Frequency &amp; Topographic Sound</h2>
+                        </div>
+                        
+                        <div class="meta-strip" vid="26">
+                            <span vid="27">21:00 UTC+4</span>
+                            <span vid="28">WAREHOUSE 04</span>
+                            <span vid="29">A/V SYSTEM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="canvas-cell" vid="30">
+                    <canvas id="glcanvas" vid="31"></canvas>
+                </div>
+
+                <div class="footer-row" vid="32">
+                    <span vid="33">SYS.ARCH / 2025</span>
+                    <span vid="34">[ GENERATIVE VISUAL DISPLACEMENT ]</span>
+                    <span vid="35">RENDER: 5.7ms</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script vid="36">
+        
+        const dataBlock = document.getElementById('data-block');
+        const chars = '0123456789ABCDEF<>+=-_';
+        let txt = '';
+        for(let i=0; i<650; i++) {
+            txt += chars[Math.floor(Math.random() * chars.length)];
+            if(i % 24 === 23) txt += '\n';
+            else if(i % 4 === 3) txt += ' ';
+        }
+        dataBlock.textContent = txt;
+
+        
+        const canvas = document.getElementById('glcanvas');
+        const gl = canvas.getContext('webgl');
+
+        if (!gl) {
+            console.error('WebGL not supported');
+        }
+
+        const vsSource = `
+            attribute vec4 aVertexPosition;
+            void main() {
+                gl_Position = aVertexPosition;
+            }
+        `;
+
+        const fsSource = `
+            precision highp float;
+            uniform vec2 u_resolution;
+            uniform float u_time;
+
+            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+
+            float snoise(vec2 v) {
+                const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                vec2 i  = floor(v + dot(v, C.yy) );
+                vec2 x0 = v -   i + dot(i, C.xx);
+                vec2 i1;
+                i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                vec4 x12 = x0.xyxy + C.xxzz;
+                x12.xy -= i1;
+                i = mod289(i);
+                vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+                vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                m = m*m ;
+                m = m*m ;
+                vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                vec3 h = abs(x) - 0.5;
+                vec3 ox = floor(x + 0.5);
+                vec3 a0 = x - ox;
+                m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+                vec3 g;
+                g.x  = a0.x  * x0.x  + h.x  * x0.y;
+                g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                return 130.0 * dot(m, g);
+            }
+
+            void main() {
+                vec2 st = gl_FragCoord.xy / u_resolution.xy;
+                st.x *= u_resolution.x / u_resolution.y;
+
+                vec2 p = st * 75.0;
+                float t = u_time * 0.25;
+                float driftX = snoise(st * 1.5 + vec2(t, 0.0)) * 2.5;
+                float driftY = snoise(st * 1.5 + vec2(0.0, t * 0.8)) * 2.5;
+                
+                vec2 dp = p + vec2(driftX, driftY);
+                float field = sin(dp.x) * sin(dp.y);
+                
+                float clusterNoise = snoise(st * 1.8 - t * 0.4);
+                float thickness = mix(-0.35, 0.55, clusterNoise);
+                
+                float aa = 0.05;
+                float shape = smoothstep(thickness + aa, thickness - aa, field);
+
+                // Industrial Earth Palette
+                vec3 paper = vec3(200.0/255.0, 196.0/255.0, 188.0/255.0); // #c8c4bc
+                vec3 ink = vec3(139.0/255.0, 58.0/255.0, 42.0/255.0);     // #8b3a2a
+
+                vec3 finalColor = mix(paper, ink, shape);
+
+                gl_FragColor = vec4(finalColor, 1.0);
+            }
+        `;
+
+        function createShader(gl, type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.error(gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+            }
+            return shader;
+        }
+
+        const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+        const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+        const program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
+        gl.useProgram(program);
+
+        const positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        const positions = [
+            -1.0,  1.0,
+             1.0,  1.0,
+            -1.0, -1.0,
+             1.0, -1.0,
+        ];
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+        const positionLocation = gl.getAttribLocation(program, "aVertexPosition");
+        gl.enableVertexAttribArray(positionLocation);
+        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+        const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+        const timeLocation = gl.getUniformLocation(program, "u_time");
+
+        function resizeCanvasToDisplaySize(canvas) {
+            const rect = canvas.getBoundingClientRect();
+            const width = rect.width * window.devicePixelRatio;
+            const height = rect.height * window.devicePixelRatio;
+            if (canvas.width !== width || canvas.height !== height) {
+                canvas.width = width;
+                canvas.height = height;
+                gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+            }
+        }
+
+        function render(time) {
+            time *= 0.001; 
+            resizeCanvasToDisplaySize(gl.canvas);
+            gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
+            gl.uniform1f(timeLocation, time);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            requestAnimationFrame(render);
+        }
+
+        requestAnimationFrame(render);
+
+        setInterval(() => {
+            const text = dataBlock.textContent;
+            const pos = Math.floor(Math.random() * text.length);
+            if(text[pos] !== ' ' && text[pos] !== '\n') {
+                const newChar = chars[Math.floor(Math.random() * chars.length)];
+                dataBlock.textContent = text.substring(0, pos) + newChar + text.substring(pos + 1);
+            }
+        }, 100);
+
+    </script>
+
+</body></html>

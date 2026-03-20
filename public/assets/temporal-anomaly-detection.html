@@ -1,0 +1,491 @@
+<html lang="en" vid="0"><head vid="1">
+<meta charset="UTF-8" vid="2">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+<title vid="4">Temporal Anomaly Detection</title>
+<style vid="5">
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #050205; 
+        overflow: hidden;
+        user-select: none;
+        font-family: Arial, Helvetica, sans-serif; 
+    }
+    #canvas-container {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" vid="6"></script>
+</head>
+<body vid="7">
+<div id="canvas-container" vid="8"></div>
+
+<script vid="9">
+
+
+const PALETTE = {
+    bg: 0x050205,
+    grid: 0x6A1B9A,       
+    core: 0xFF1744,       
+    energy: 0xCCFF00,     
+    uiBg: 'rgba(5, 2, 5, 0.85)',
+    uiRed: '#FF1744',
+    uiGreen: '#CCFF00',
+    uiPurple: '#6A1B9A'
+};
+
+
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(PALETTE.bg);
+
+
+const aspect = window.innerWidth / window.innerHeight;
+const frustumSize = 45;
+const camera = new THREE.OrthographicCamera(
+    frustumSize * aspect / -2, 
+    frustumSize * aspect / 2, 
+    frustumSize / 2, 
+    frustumSize / -2, 
+    1, 
+    1000
+);
+
+
+camera.position.set(50, 50, 50);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
+container.appendChild(renderer.domElement);
+
+
+const sceneGroup = new THREE.Group();
+scene.add(sceneGroup);
+
+
+const gridSize = 40;
+const gridDivisions = 20;
+const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, PALETTE.grid, PALETTE.grid);
+gridHelper.material.transparent = true;
+gridHelper.material.opacity = 0.5;
+gridHelper.material.blending = THREE.AdditiveBlending;
+sceneGroup.add(gridHelper);
+
+
+const perimGeo = new THREE.BufferGeometry();
+const perimSize = gridSize / 2;
+const perimVerts = new Float32Array([
+    -perimSize, 0, -perimSize,
+    perimSize, 0, -perimSize,
+    perimSize, 0, -perimSize,
+    perimSize, 0, perimSize,
+    perimSize, 0, perimSize,
+    -perimSize, 0, perimSize,
+    -perimSize, 0, perimSize,
+    -perimSize, 0, -perimSize
+]);
+perimGeo.setAttribute('position', new THREE.BufferAttribute(perimVerts, 3));
+const perimMat = new THREE.LineBasicMaterial({ color: PALETTE.core, linewidth: 2 });
+const perimeter = new THREE.LineSegments(perimGeo, perimMat);
+sceneGroup.add(perimeter);
+
+
+
+const coreGeo = new THREE.IcosahedronGeometry(2.5, 1);
+const coreMat = new THREE.MeshBasicMaterial({ 
+    color: PALETTE.core, 
+    wireframe: true, 
+    transparent: true,
+    opacity: 0.9,
+    blending: THREE.AdditiveBlending 
+});
+const core = new THREE.Mesh(coreGeo, coreMat);
+core.position.set(-2, 14, -2); 
+sceneGroup.add(core);
+
+
+const innerCoreGeo = new THREE.IcosahedronGeometry(1.5, 0);
+const innerCoreMat = new THREE.MeshBasicMaterial({ color: PALETTE.core, wireframe: false, opacity: 0.2, transparent: true });
+const innerCore = new THREE.Mesh(innerCoreGeo, innerCoreMat);
+core.add(innerCore);
+
+
+const branches = [];
+const branchCount = 24;
+
+for(let i=0; i<branchCount; i++) {
+    const points = [];
+    const startY = core.position.y;
+    
+    const targetX = (Math.random() - 0.5) * (gridSize * 0.8);
+    const targetZ = (Math.random() - 0.5) * (gridSize * 0.8);
+    
+    let currentPt = new THREE.Vector3(core.position.x, startY, core.position.z);
+    points.push(currentPt.clone());
+    
+    const segments = Math.floor(Math.random() * 5) + 6; 
+    
+    for(let j=1; j<=segments; j++) {
+        const progress = j / segments;
+        
+        const easeProg = progress * progress; 
+        
+        let nx = THREE.MathUtils.lerp(core.position.x, targetX, easeProg);
+        let nz = THREE.MathUtils.lerp(core.position.z, targetZ, easeProg);
+        let ny = THREE.MathUtils.lerp(startY, 0, progress);
+        
+        
+        if (j < segments) {
+            nx += (Math.random() - 0.5) * 2.5;
+            nz += (Math.random() - 0.5) * 2.5;
+            ny += (Math.random() - 0.5) * 1.5;
+        }
+        
+        const pt = new THREE.Vector3(nx, ny, nz);
+        points.push(pt);
+    }
+    
+    const branchGeo = new THREE.BufferGeometry().setFromPoints(points);
+    const branchMat = new THREE.LineBasicMaterial({ 
+        color: PALETTE.energy, 
+        transparent: true, 
+        opacity: 0.7 + (Math.random() * 0.3),
+        blending: THREE.AdditiveBlending
+    });
+    
+    const branchMesh = new THREE.Line(branchGeo, branchMat);
+    branches.push({ mesh: branchMesh, points: points, originalPoints: points.map(p => p.clone()) });
+    sceneGroup.add(branchMesh);
+    
+    
+    const impactGeo = new THREE.CircleGeometry(0.3, 8);
+    const impactMat = new THREE.MeshBasicMaterial({ color: PALETTE.energy, wireframe: true, side: THREE.DoubleSide });
+    const impact = new THREE.Mesh(impactGeo, impactMat);
+    impact.position.set(targetX, 0.05, targetZ);
+    impact.rotation.x = -Math.PI / 2;
+    sceneGroup.add(impact);
+}
+
+
+
+function createUITexture(width, height, renderCallback) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    
+    
+    ctx.textBaseline = 'top';
+    
+    renderCallback(ctx, width, height);
+    
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    
+    texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    return texture;
+}
+
+function drawCrosshairs(ctx, x, y, size, color) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x - size, y); ctx.lineTo(x + size, y);
+    ctx.moveTo(x, y - size); ctx.lineTo(x, y + size);
+    ctx.stroke();
+}
+
+function createPanelMesh(width, height, texture, alignAxis = 'z') {
+    
+    const geo = new THREE.PlaneGeometry(width, height);
+    const mat = new THREE.MeshBasicMaterial({ 
+        map: texture, 
+        transparent: true, 
+        side: THREE.DoubleSide,
+        depthWrite: false 
+    });
+    const plane = new THREE.Mesh(geo, mat);
+    
+    
+    const boxGeo = new THREE.BoxGeometry(width, height, 0.5);
+    const boxMat = new THREE.MeshBasicMaterial({ color: PALETTE.core, wireframe: true, transparent: true, opacity: 0.3 });
+    const box = new THREE.Mesh(boxGeo, boxMat);
+    
+    plane.position.z = 0.26; 
+    box.add(plane);
+    
+    return box;
+}
+
+
+const titleTex = createUITexture(1024, 256, (ctx, w, h) => {
+    ctx.fillStyle = PALETTE.uiBg;
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.strokeStyle = PALETTE.uiRed;
+    ctx.lineWidth = 4;
+    ctx.strokeRect(2, 2, w-4, h-4);
+    
+    
+    ctx.strokeStyle = PALETTE.uiPurple;
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.3;
+    for(let x=0; x<w; x+=32) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+    for(let y=0; y<h; y+=32) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    ctx.globalAlpha = 1.0;
+    
+    
+    ctx.fillStyle = PALETTE.uiRed;
+    ctx.font = 'bold 48px Arial, Helvetica, sans-serif';
+    ctx.letterSpacing = '4px'; 
+    ctx.fillText('TEMPORAL ANOMALY DETECTION', 32, 32);
+    
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 24px Arial, Helvetica, sans-serif';
+    ctx.letterSpacing = '2px';
+    ctx.fillText('TIME STREAM MONITOR - PHASE 4 LINK A', 32, 90);
+    
+    
+    ctx.font = '14px Arial, Helvetica, sans-serif';
+    ctx.letterSpacing = '1px';
+    for(let i=0; i<4; i++) {
+        ctx.fillText(`CHRONO-FLD [${1000 + i*142}] : NOMINAL`, 32, 140 + (i*20));
+        ctx.fillText(`CAUSALITY IDX: ${Math.random().toFixed(4)}`, 300, 140 + (i*20));
+    }
+    
+    drawCrosshairs(ctx, w - 40, 40, 15, PALETTE.uiRed);
+    drawCrosshairs(ctx, w - 40, h - 40, 15, PALETTE.uiRed);
+});
+const titlePanel = createPanelMesh(18, 4.5, titleTex);
+titlePanel.position.set(-6, 22, -10); 
+sceneGroup.add(titlePanel);
+
+
+
+const paradoxTex = createUITexture(512, 1024, (ctx, w, h) => {
+    ctx.fillStyle = PALETTE.uiBg;
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.strokeStyle = PALETTE.uiRed;
+    ctx.lineWidth = 3;
+    ctx.strokeRect(2, 2, w-4, h-4);
+    
+    ctx.fillStyle = PALETTE.uiRed;
+    ctx.font = 'bold 36px Arial, Helvetica, sans-serif';
+    ctx.fillText('PARADOX DEGRADATION', 24, 24);
+    ctx.fillStyle = '#FFF';
+    ctx.font = '16px Arial, Helvetica, sans-serif';
+    ctx.fillText('SYSTEM WARNING: EVENT HORIZON FRACTURE', 24, 68);
+    
+    
+    ctx.strokeStyle = PALETTE.uiGreen;
+    ctx.lineWidth = 1.5;
+    ctx.translate(w/2, 300);
+    for(let r=10; r<200; r+=12) {
+        ctx.beginPath();
+        for(let angle=0; angle<=Math.PI*2; angle+=0.1) {
+            
+            const distort = Math.sin(angle * 5) * 15 * (r/200);
+            const x = Math.cos(angle) * (r + distort);
+            const y = Math.sin(angle) * (r * 0.5 + distort); 
+            if(angle === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+    }
+    ctx.translate(-w/2, -300);
+    
+    
+    ctx.fillStyle = PALETTE.uiGreen;
+    ctx.font = '12px Arial, Helvetica, sans-serif';
+    for(let i=0; i<25; i++) {
+        const hex = Math.floor(Math.random() * 0xFFFFFF).toString(16).toUpperCase().padStart(6, '0');
+        const stat = Math.random() > 0.8 ? 'ERR' : 'OK ';
+        ctx.fillText(`0x${hex} ... SECTOR ${i.toString().padStart(2,'0')} ... [ ${stat} ] ... VAL: ${(Math.random()*100).toFixed(2)}`, 24, 550 + (i * 18));
+    }
+});
+const paradoxPanel = createPanelMesh(9, 18, paradoxTex);
+paradoxPanel.position.set(16, 10, -5);
+
+paradoxPanel.rotation.y = -Math.PI / 2;
+sceneGroup.add(paradoxPanel);
+
+
+
+const loopTex = createUITexture(512, 512, (ctx, w, h) => {
+    ctx.fillStyle = PALETTE.uiBg;
+    ctx.fillRect(0, 0, w, h);
+    
+    
+    ctx.strokeStyle = PALETTE.uiRed;
+    ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(0,30); ctx.lineTo(0,0); ctx.lineTo(30,0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w,30); ctx.lineTo(w,0); ctx.lineTo(w-30,0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,h-30); ctx.lineTo(0,h); ctx.lineTo(30,h); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w,h-30); ctx.lineTo(w,h); ctx.lineTo(w-30,h); ctx.stroke();
+    
+    ctx.fillStyle = PALETTE.uiRed;
+    ctx.font = 'bold 24px Arial, Helvetica, sans-serif';
+    ctx.fillText('CAUSALITY LOOP ARRAYS', 20, 20);
+    
+    
+    const cx = w/2;
+    const cy = h/2 + 20;
+    const rMax = 160;
+    
+    ctx.strokeStyle = PALETTE.uiPurple;
+    ctx.lineWidth = 1;
+    for(let r=40; r<=rMax; r+=40) {
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.stroke();
+    }
+    for(let angle=0; angle<Math.PI*2; angle+=Math.PI/4) {
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(angle)*rMax, cy + Math.sin(angle)*rMax); ctx.stroke();
+    }
+    
+    
+    ctx.strokeStyle = PALETTE.uiGreen;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for(let angle=0; angle<Math.PI*2; angle+=0.05) {
+        const rad = 100 + Math.sin(angle * 8) * 30 + Math.random() * 10;
+        const x = cx + Math.cos(angle) * rad;
+        const y = cy + Math.sin(angle) * rad;
+        if(angle === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.stroke();
+    
+    
+    ctx.fillStyle = '#FFF';
+    ctx.font = '12px Arial, Helvetica, sans-serif';
+    ctx.fillText(`PEAK RES: ${Math.random().toFixed(4)} MHz`, cx + 80, cy - 80);
+    ctx.fillText('PHASE 4 // LINK STABLE', cx - rMax, cy + rMax + 20);
+});
+const loopPanel = createPanelMesh(9, 9, loopTex);
+loopPanel.position.set(-14, 5, 8);
+
+sceneGroup.add(loopPanel);
+
+
+
+function createDataTag(text) {
+    const tex = createUITexture(256, 64, (ctx, w, h) => {
+        ctx.fillStyle = 'rgba(255, 23, 68, 0.9)'; 
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#050205';
+        ctx.font = 'bold 24px Arial, Helvetica, sans-serif';
+        ctx.fillText(text, 10, 20);
+        ctx.font = '12px Arial, Helvetica, sans-serif';
+        ctx.fillText(`SYS.TRACK: ${Math.floor(Math.random()*99999)}`, 10, 45);
+    });
+    const geo = new THREE.PlaneGeometry(4, 1);
+    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true });
+    return new THREE.Mesh(geo, mat);
+}
+
+const tag1 = createDataTag('RIFT_STABILITY: 89%');
+tag1.position.set(2, 8, 4);
+sceneGroup.add(tag1);
+
+const tag2 = createDataTag('DENSITY R01 MAX');
+tag2.position.set(-8, 6, -2);
+tag2.rotation.y = Math.PI / 2; 
+sceneGroup.add(tag2);
+
+
+
+const particleGeo = new THREE.BufferGeometry();
+const particleCount = 200;
+const particlePos = new Float32Array(particleCount * 3);
+for(let i=0; i<particleCount*3; i+=3) {
+    particlePos[i] = (Math.random() - 0.5) * gridSize;
+    particlePos[i+1] = Math.random() * 20;
+    particlePos[i+2] = (Math.random() - 0.5) * gridSize;
+}
+particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+const particleMat = new THREE.PointsMaterial({ color: PALETTE.energy, size: 0.1, transparent: true, opacity: 0.6 });
+const particles = new THREE.Points(particleGeo, particleMat);
+sceneGroup.add(particles);
+
+
+
+let time = 0;
+
+function animate() {
+    requestAnimationFrame(animate);
+    time += 0.01;
+    
+    
+    core.rotation.y += 0.005;
+    core.rotation.x += 0.002;
+    innerCore.rotation.y -= 0.01;
+    
+    
+    branches.forEach(branch => {
+        const positions = branch.mesh.geometry.attributes.position.array;
+        const pts = branch.originalPoints;
+        for(let i=1; i<pts.length-1; i++) {
+            
+            positions[i*3] = pts[i].x + (Math.random() - 0.5) * 0.4;
+            positions[i*3+1] = pts[i].y + (Math.random() - 0.5) * 0.4;
+            positions[i*3+2] = pts[i].z + (Math.random() - 0.5) * 0.4;
+        }
+        branch.mesh.geometry.attributes.position.needsUpdate = true;
+    });
+
+    
+    const pPos = particles.geometry.attributes.position.array;
+    for(let i=1; i<particleCount*3; i+=3) {
+        pPos[i] += 0.02; 
+        if(pPos[i] > 20) pPos[i] = 0; 
+    }
+    particles.geometry.attributes.position.needsUpdate = true;
+    
+    
+    sceneGroup.position.y = Math.sin(time) * 0.5;
+
+    
+    camera.position.x += (targetCameraX - camera.position.x) * 0.02;
+    camera.position.z += (targetCameraZ - camera.position.z) * 0.02;
+    camera.lookAt(0,0,0);
+
+    renderer.render(scene, camera);
+}
+
+
+let targetCameraX = 50;
+let targetCameraZ = 50;
+
+window.addEventListener('mousemove', (e) => {
+    const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    const mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+    
+    targetCameraX = 50 + mouseX * 10;
+    targetCameraZ = 50 - mouseY * 10;
+});
+
+window.addEventListener('resize', () => {
+    const aspect = window.innerWidth / window.innerHeight;
+    camera.left = -frustumSize * aspect / 2;
+    camera.right = frustumSize * aspect / 2;
+    camera.top = frustumSize / 2;
+    camera.bottom = -frustumSize / 2;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+
+animate();
+
+</script>
+
+</body></html>

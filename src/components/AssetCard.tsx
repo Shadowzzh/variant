@@ -1,105 +1,77 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-
-type ViewportSize = 'mobile' | 'tablet' | 'desktop'
+import { useState } from 'react'
 
 interface AssetCardProps {
   filename: string
-  globalViewport?: ViewportSize
+  thumbnail: string | null
 }
 
-// 卡片默认尺寸（初始值，会被动态值覆盖）
-const DEFAULT_WIDTH = 400
-const DEFAULT_HEIGHT = 300
-
-const viewportSizes = {
-  mobile: { width: 375, height: 667, label: '手机' },
-  tablet: { width: 768, height: 1024, label: '平板' },
-  desktop: { width: 1440, height: 900, label: '桌面' },
+// Generate gradient based on filename (consistent color per file)
+function getGradientFromFilename(filename: string): string {
+  let hash = 0
+  for (let i = 0; i < filename.length; i++) {
+    hash = filename.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  const hue1 = Math.abs(hash % 360)
+  const hue2 = (hue1 + 40) % 360
+  return `linear-gradient(135deg, hsl(${hue1}, 70%, 80%), hsl(${hue2}, 70%, 70%))`
 }
 
-export default function AssetCard({ filename, globalViewport = 'desktop' }: AssetCardProps) {
-  const [containerWidth, setContainerWidth] = useState(DEFAULT_WIDTH)
-  const [containerHeight, setContainerHeight] = useState(DEFAULT_HEIGHT)
-  const containerRef = useRef<HTMLDivElement>(null)
+export default function AssetCard({ filename, thumbnail }: AssetCardProps) {
+  const [imageError, setImageError] = useState(false)
 
-  // 使用 ResizeObserver 监听容器尺寸变化
-  useEffect(() => {
-    if (!containerRef.current) return
-
-    const observer = new ResizeObserver(entries => {
-      const { width, height } = entries[0].contentRect
-      setContainerWidth(width)
-      setContainerHeight(height)
-    })
-
-    observer.observe(containerRef.current)
-    return () => observer.disconnect()
-  }, [])
-
-  // 使用全局 viewport 设置
-  const currentSize = viewportSizes[globalViewport]
-
-  // 计算缩放比例
-  const scale = Math.min(containerWidth / currentSize.width, containerHeight / currentSize.height)
-
-  // 计算缩放后的实际显示尺寸
-  const scaledWidth = currentSize.width * scale
-  const scaledHeight = currentSize.height * scale
+  // Remove .html extension for display
+  const displayName = filename.replace('.html', '')
+  const assetUrl = `/assets/${filename}`
 
   return (
     <a
-      href={`/assets/${filename}`}
+      href={assetUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="block"
+      className="block group"
     >
-      <div className="border rounded-lg bg-white overflow-hidden flex flex-col cursor-pointer">
-        {/* 卡片头部 */}
-        <div className="px-4 py-3 border-b bg-gray-50">
-          <h3 className="font-semibold text-sm truncate" title={filename}>
-            {filename}
-          </h3>
-          <p className="text-xs text-gray-500 mt-1">
-            {currentSize.width} × {currentSize.height}
-          </p>
-        </div>
-
-        {/* iframe 预览区域 - 使用 transform scale 缩放 */}
+      <div className="border rounded-lg overflow-hidden bg-white cursor-pointer transition-shadow hover:shadow-lg">
+        {/* Preview area */}
         <div
-          ref={containerRef}
-          className="bg-gray-100 flex items-center justify-center relative w-full"
+          className="relative w-full aspect-[4/3] bg-gray-100"
           style={{
-            minHeight: '300px', // 最小高度，实际高度由 ResizeObserver 获取
+            background: thumbnail && !imageError
+              ? undefined
+              : getGradientFromFilename(filename),
           }}
         >
-          <div
-            className="bg-white shadow"
-            style={{
-              width: scaledWidth,
-              height: scaledHeight,
-              overflow: 'hidden',
-              position: 'relative',
-            }}
-          >
-            <iframe
-              src={`/assets/${filename}`}
-              title={filename}
-              sandbox="allow-scripts allow-same-origin"
-              className="border-0"
-              style={{
-                width: currentSize.width,
-                height: currentSize.height,
-                transform: `scale(${scale})`,
-                transformOrigin: '0 0',
-                border: 'none',
-              }}
+          {thumbnail && !imageError ? (
+            <img
+              src={thumbnail}
+              alt={displayName}
+              className="w-full h-full object-cover"
+              onError={() => setImageError(true)}
             />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-white/80 text-lg font-medium drop-shadow-sm">
+                {displayName}
+              </span>
+            </div>
+          )}
+
+          {/* Hover overlay */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+            <span className="opacity-0 group-hover:opacity-100 bg-white/90 text-black px-4 py-2 rounded-full text-sm font-medium shadow-lg transition-opacity">
+              在新标签页打开
+            </span>
           </div>
+        </div>
+
+        {/* Footer */}
+        <div className="px-4 py-3 border-t bg-white">
+          <h3 className="font-medium text-sm truncate" title={filename}>
+            {displayName}
+          </h3>
         </div>
       </div>
     </a>
-
   )
 }

@@ -1,0 +1,408 @@
+<html lang="en" vid="0"><head vid="1">
+<meta charset="UTF-8" vid="2">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+<title vid="4">Seasons - Cycle Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;family=Inter:wght@300;400;500&amp;display=swap" rel="stylesheet" vid="7">
+<style vid="8">
+    :root {
+        --bg: #FCFBFC;
+        --text-main: #2D2C2A;
+        --text-light: #8A8883;
+        --scrap-bg: #F5F0E6;
+        --violet: #8E2BBA;
+        --plum: #80264D;
+        --yellow: #F4E8C2;
+        --green: #666D46;
+        --serif: 'Cormorant Garamond', serif;
+        --sans: 'Inter', sans-serif;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        background-color: var(--bg);
+        color: var(--text-main);
+        font-family: var(--sans);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    
+    
+    header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 8vh 6vw 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        z-index: 10;
+        pointer-events: none; 
+    }
+
+    .meta-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .label {
+        font-family: var(--sans);
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--text-light);
+        font-weight: 500;
+    }
+
+    .value {
+        font-family: var(--serif);
+        font-size: 1.4rem;
+        font-style: italic;
+        color: var(--text-main);
+        line-height: 1;
+    }
+
+    .phase-indicator {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 12px;
+    }
+
+    .dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: var(--text-light);
+        opacity: 0.3;
+        transition: all 0.3s ease;
+    }
+
+    .dot.active {
+        background-color: var(--violet);
+        opacity: 1;
+        transform: scale(1.5);
+    }
+
+    
+
+    .canvas {
+        flex: 1;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .flower {
+        position: absolute;
+        pointer-events: none;
+        mix-blend-mode: multiply; 
+        filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.03));
+    }
+
+    
+    .f-violet {
+        top: 55%;
+        left: 5%;
+        width: 140px;
+        transform: rotate(-15deg);
+    }
+
+    .f-yellow {
+        top: 8%;
+        left: 15%;
+        width: 160px;
+        transform: rotate(10deg);
+    }
+
+    .f-yellow-bottom {
+        bottom: 12%;
+        right: 10%;
+        width: 180px;
+        transform: rotate(-5deg);
+    }
+
+    .f-plum {
+        top: 35%;
+        left: 38%;
+        width: 90px;
+        transform: rotate(25deg);
+    }
+
+    .f-violet-small {
+        top: 12%;
+        right: 12%;
+        width: 100px;
+        transform: rotate(45deg);
+    }
+
+    
+
+    .poetry-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .scrap {
+        position: absolute;
+        background-color: var(--scrap-bg);
+        color: var(--text-main);
+        font-family: var(--serif);
+        font-size: 1.25rem;
+        padding: 4px 8px 3px;
+        line-height: 1;
+        box-shadow: 
+            1px 1.5px 3px rgba(0,0,0,0.06),
+            inset 0.5px 0.5px 0px rgba(255,255,255,0.8);
+        white-space: nowrap;
+        pointer-events: auto; 
+        cursor: default;
+    }
+
+    
+    .w-this { top: 28%; left: 30%; transform: rotate(-2deg); }
+    .w-will { top: 48%; left: 20%; transform: rotate(1deg); }
+    .w-pass { top: 28%; left: 45%; transform: rotate(-1deg); }
+    
+    .w-and { top: 32%; left: 68%; transform: rotate(2deg); }
+    .w-we { top: 45%; left: 58%; transform: rotate(-3deg); }
+    
+    .w-never { top: 62%; left: 35%; transform: rotate(1deg); }
+    .w-be { top: 75%; left: 48%; transform: rotate(-2deg); }
+    .w-the { top: 82%; left: 25%; transform: rotate(3deg); }
+    .w-same { top: 90%; left: 52%; transform: rotate(-1deg); }
+
+    .w-this2 { top: 10%; right: 28%; transform: rotate(1deg); }
+    .w-will2 { top: 20%; right: 42%; transform: rotate(-2deg); }
+
+    
+
+    .insight-drawer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 0 6vw 8vh;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        
+        background: linear-gradient(to top, var(--bg) 40%, rgba(252,251,252,0.8) 70%, rgba(252,251,252,0) 100%);
+        pointer-events: auto;
+    }
+
+    .insight-drawer::before {
+        content: '';
+        display: block;
+        width: 1px;
+        height: 40px;
+        background-color: var(--text-light);
+        opacity: 0.3;
+        margin-left: 2px;
+        margin-bottom: 8px;
+    }
+
+    .insight-title {
+        font-family: var(--serif);
+        font-size: 2rem;
+        font-weight: 400;
+        color: var(--violet);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+    }
+
+    .insight-body {
+        font-family: var(--serif);
+        font-size: 1.1rem;
+        line-height: 1.5;
+        color: var(--text-main);
+        max-width: 85%;
+    }
+
+    .action-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 8px;
+    }
+
+    .log-btn {
+        background: none;
+        border: 1px solid rgba(45, 44, 42, 0.15);
+        padding: 10px 20px;
+        border-radius: 100px;
+        font-family: var(--sans);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .log-btn:active {
+        background: var(--text-main);
+        color: var(--bg);
+    }
+
+    
+    .svg-defs { width: 0; height: 0; position: absolute; }
+
+</style>
+</head>
+<body vid="9">
+
+    
+    <header vid="10">
+        <div class="meta-group" vid="11">
+            <span class="label" vid="12">Cycle Day</span>
+            <span class="value" vid="13">14 / 28</span>
+            <div class="phase-indicator" vid="14">
+                <div class="dot" vid="15"></div>
+                <div class="dot active" vid="16"></div>
+                <div class="dot" vid="17"></div>
+                <div class="dot" vid="18"></div>
+            </div>
+        </div>
+        <div class="meta-group" style="align-items: flex-end; text-align: right;" vid="19">
+            <span class="label" vid="20">Current Phase</span>
+            <span class="value" vid="21">Summer</span>
+        </div>
+    </header>
+
+    <main class="canvas" vid="22">
+        
+        
+        
+        
+        <svg class="flower f-yellow" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" vid="23">
+            <g stroke="#666D46" stroke-width="1.5" stroke-linecap="round" fill="none" vid="24">
+                <path d="M100,180 C95,140 100,100 80,60" vid="25"></path>
+                <path d="M90,120 C70,100 40,90 30,70" vid="26"></path>
+                <path d="M95,90 C120,80 140,50 150,30" vid="27"></path>
+            </g>
+            <g fill="var(--yellow)" fill-opacity="0.85" style="mix-blend-mode: multiply;" vid="28">
+                
+                <path d="M80,60 C70,30 90,10 110,20 C100,40 95,50 80,60 Z" vid="29"></path>
+                <path d="M80,60 C60,40 40,20 50,10 C65,25 75,45 80,60 Z" vid="30"></path>
+                <path d="M80,60 C95,45 125,30 130,45 C115,55 95,65 80,60 Z" vid="31"></path>
+                <path d="M30,70 C15,55 5,65 10,80 C20,75 25,72 30,70 Z" vid="32"></path>
+                <path d="M30,70 C20,85 10,105 25,110 C30,95 35,80 30,70 Z" vid="33"></path>
+                <path d="M150,30 C165,15 185,25 180,40 C170,35 160,32 150,30 Z" vid="34"></path>
+            </g>
+        </svg>
+
+        
+        <svg class="flower f-plum" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg" vid="35">
+            <path d="M50,130 C48,110 52,100 50,80" stroke="#4A3B32" stroke-width="2" fill="none" vid="36"></path>
+            <g fill="var(--plum)" fill-opacity="0.9" style="mix-blend-mode: multiply;" vid="37">
+                
+                <path d="M50,80 C20,60 10,20 30,10 C40,40 45,60 50,80 Z" vid="38"></path>
+                <path d="M50,80 C40,40 40,5 60,5 C55,30 52,60 50,80 Z" vid="39"></path>
+                <path d="M50,80 C70,50 90,20 80,10 C65,30 55,60 50,80 Z" vid="40"></path>
+                
+                <path d="M50,80 C40,50 30,20 45,15 C45,45 48,65 50,80 Z" fill="#5A1535" fill-opacity="0.6" vid="41"></path>
+            </g>
+        </svg>
+
+        
+        <svg class="flower f-violet" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" vid="42">
+            <path d="M50,140 C55,110 60,90 70,70" stroke="#666D46" stroke-width="1.5" fill="none" vid="43"></path>
+            <g fill="var(--violet)" fill-opacity="0.8" style="mix-blend-mode: multiply;" vid="44">
+                <path d="M70,70 C40,75 10,50 20,30 C45,40 60,60 70,70 Z" vid="45"></path>
+                <path d="M70,70 C60,40 50,10 75,5 C75,30 75,55 70,70 Z" vid="46"></path>
+                <path d="M70,70 C90,50 130,30 140,50 C110,65 85,75 70,70 Z" vid="47"></path>
+                <path d="M70,70 C100,80 130,100 120,120 C95,100 80,85 70,70 Z" vid="48"></path>
+                
+                <circle cx="70" cy="70" r="4" fill="#3D1A53" opacity="0.6" vid="49"></circle>
+                <path d="M70,70 C55,55 40,40 50,30 C60,45 65,60 70,70 Z" fill="#6A1B9A" fill-opacity="0.7" vid="50"></path>
+            </g>
+        </svg>
+
+        
+        <svg class="flower f-violet-small" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg" vid="51">
+            <path d="M50,140 C45,100 50,80 50,50" stroke="#666D46" stroke-width="2" fill="none" vid="52"></path>
+            <g fill="var(--violet)" fill-opacity="0.85" style="mix-blend-mode: multiply;" vid="53">
+                <path d="M50,50 C30,40 10,20 25,10 C35,25 45,40 50,50 Z" vid="54"></path>
+                <path d="M50,50 C60,30 80,10 90,20 C75,35 60,45 50,50 Z" vid="55"></path>
+                <path d="M50,50 C40,20 50,0 60,5 C55,25 52,40 50,50 Z" vid="56"></path>
+            </g>
+        </svg>
+
+        
+        <svg class="flower f-yellow-bottom" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg" vid="57">
+            <g stroke="#666D46" stroke-width="1.5" fill="none" vid="58">
+                <path d="M100,240 C100,180 100,140 100,100" vid="59"></path>
+                <path d="M100,160 C70,150 40,120 30,100" vid="60"></path>
+                <path d="M100,140 C130,130 160,100 170,80" vid="61"></path>
+            </g>
+            <g fill="var(--yellow)" fill-opacity="0.8" style="mix-blend-mode: multiply;" vid="62">
+                <path d="M100,100 C70,90 50,60 60,40 C80,60 90,80 100,100 Z" vid="63"></path>
+                <path d="M100,100 C90,60 100,20 120,30 C110,60 105,80 100,100 Z" vid="64"></path>
+                <path d="M100,100 C130,80 160,50 170,70 C140,85 120,95 100,100 Z" vid="65"></path>
+                
+                <path d="M30,100 C10,90 0,70 10,60 C20,80 25,90 30,100 Z" fill="#DBCFA8" vid="66"></path>
+                <path d="M170,80 C185,65 195,45 185,35 C175,55 172,70 170,80 Z" fill="#DBCFA8" vid="67"></path>
+            </g>
+        </svg>
+
+
+        
+        <div class="poetry-layer" vid="68">
+            <span class="scrap w-this2" vid="69">this</span>
+            <span class="scrap w-will2" vid="70">will</span>
+            
+            <span class="scrap w-this" vid="71">pass</span>
+            <span class="scrap w-will" vid="72">and</span>
+            <span class="scrap w-pass" vid="73">we</span>
+            
+            <span class="scrap w-and" vid="74">will</span>
+            <span class="scrap w-we" vid="75">never</span>
+            
+            <span class="scrap w-never" vid="76">be</span>
+            <span class="scrap w-be" vid="77">the</span>
+            <span class="scrap w-the" vid="78">same</span>
+            
+        </div>
+
+    </main>
+
+    
+    <div class="insight-drawer" vid="79">
+        <div vid="80">
+            <h1 class="insight-title" vid="81">Ovulation:<br vid="82">The Summer Bloom</h1>
+        </div>
+        
+        <p class="insight-body" vid="83">
+            Estrogen crests. Energy rises like sap in the stem. You are outward-facing, expansive, and luminous. Harness this peak for creation, connection, and expression.
+        </p>
+
+        <div class="action-row" vid="84">
+            <button class="log-btn" vid="85">Log Symptoms</button>
+            <button class="log-btn" style="border: none; border-bottom: 1px solid var(--text-main); border-radius: 0; padding: 2px 0;" vid="86">Journal</button>
+        </div>
+    </div>
+
+
+</body></html>

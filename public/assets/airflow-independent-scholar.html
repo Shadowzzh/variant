@@ -1,0 +1,590 @@
+<html lang="zh-Hant" vid="0"><head vid="1">
+<meta charset="UTF-8" vid="2">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+<title vid="4">気流 | 独立修士</title>
+
+<style vid="5">
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200;400;700&family=JetBrains+Mono:wght@100;400&display=swap');
+
+    :root {
+        --bg-color: #050505;
+        --text-main: #e8e8e8;
+        --text-muted: #666666;
+        --accent-red: #8b2525;
+        --line-color: rgba(232, 232, 232, 0.15);
+        
+        --font-serif: 'Noto Serif TC', serif;
+        --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        font-family: var(--font-serif);
+        overflow: hidden; 
+        height: 100vh;
+        width: 100vw;
+        display: grid;
+        grid-template-columns: 80px 1fr 400px;
+        grid-template-rows: 100%;
+    }
+
+    
+    #canvas-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        pointer-events: none; 
+    }
+
+    
+    .ui-layer {
+        position: relative;
+        z-index: 10;
+        display: contents; 
+    }
+
+    
+    .nav-column {
+        border-right: 1px solid var(--line-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 0;
+        justify-content: space-between;
+        background: linear-gradient(to right, rgba(5,5,5,0.8), transparent);
+    }
+
+    .nav-identity {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 0.5rem;
+        color: var(--text-main);
+        mix-blend-mode: difference;
+    }
+
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        writing-mode: vertical-rl;
+    }
+
+    .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+        letter-spacing: 0.2rem;
+        transition: color 0.3s ease;
+        cursor: pointer;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+        color: var(--text-main);
+    }
+
+    .nav-links a::after {
+        content: '';
+        display: inline-block;
+        width: 2px;
+        height: 0;
+        background-color: var(--accent-red);
+        margin-top: 5px;
+        transition: height 0.3s ease;
+    }
+
+    .nav-links a:hover::after, .nav-links a.active::after {
+        height: 15px;
+    }
+
+    
+    .center-space {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+    }
+
+    .calligraphy-title {
+        writing-mode: vertical-rl;
+        font-size: 8rem;
+        font-weight: 200;
+        line-height: 1;
+        letter-spacing: 2rem;
+        mix-blend-mode: exclusion;
+        color: #ffffff;
+        opacity: 0.9;
+        transform: translateX(-50px); 
+    }
+
+    .stamp {
+        position: absolute;
+        bottom: 15%;
+        left: calc(50% + 60px);
+        width: 40px;
+        height: 40px;
+        border: 2px solid var(--accent-red);
+        color: var(--accent-red);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        writing-mode: vertical-rl;
+        font-size: 0.8rem;
+        font-weight: 700;
+        border-radius: 2px;
+        opacity: 0.8;
+    }
+
+    
+    .content-column {
+        border-left: 1px solid var(--line-color);
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(to left, rgba(5,5,5,0.9), rgba(5,5,5,0.4));
+        backdrop-filter: blur(2px);
+        overflow-y: auto;
+    }
+
+    
+    .content-column::-webkit-scrollbar { display: none; }
+    .content-column { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .meta-header {
+        display: flex;
+        justify-content: space-between;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1rem;
+        border-bottom: 1px solid var(--line-color);
+        padding-bottom: 10px;
+        margin-bottom: 40px;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 60px;
+    }
+
+    .article-block {
+        display: flex;
+        flex-direction: row-reverse; 
+        gap: 20px;
+        position: relative;
+    }
+
+    .article-meta {
+        writing-mode: vertical-rl;
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        opacity: 0.7;
+    }
+
+    .article-meta .line {
+        width: 1px;
+        height: 40px;
+        background-color: var(--line-color);
+    }
+
+    .article-content {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        height: 300px; 
+    }
+
+    .article-title {
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin-left: 20px;
+        letter-spacing: 0.3rem;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+
+    .article-title:hover {
+        color: var(--accent-red);
+    }
+
+    .article-excerpt {
+        font-size: 0.85rem;
+        line-height: 2;
+        color: #aaa;
+        font-weight: 200;
+        letter-spacing: 0.1rem;
+        column-count: 2; 
+        column-gap: 20px;
+        column-rule: 1px dashed var(--line-color);
+    }
+
+    
+    .sys-coord {
+        position: fixed;
+        bottom: 20px;
+        left: 100px;
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        color: var(--text-muted);
+        letter-spacing: 0.2rem;
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    .hexagram {
+        position: fixed;
+        top: 40px;
+        right: 420px;
+        font-family: var(--font-mono);
+        font-size: 1.2rem;
+        color: var(--text-main);
+        line-height: 0.8;
+        opacity: 0.3;
+    }
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" vid="6"></script>
+</head>
+<body vid="7">
+
+    <div id="canvas-container" vid="8"></div>
+
+    <main class="ui-layer" vid="9">
+        
+        <nav class="nav-column" vid="10">
+            <div class="nav-identity" vid="11">無名修士</div>
+            <div class="nav-links" vid="12">
+                <a href="#" class="active" vid="13">卷宗 / ARCHIVE</a>
+                <a href="#" vid="14">法器 / ARTIFACTS</a>
+                <a href="#" vid="15">游記 / JOURNEYS</a>
+                <a href="#" vid="16">傳音 / RESONANCE</a>
+            </div>
+            <div class="meta-header" style="writing-mode: vertical-rl; border: none; font-size: 0.6rem;" vid="17">SYS.001</div>
+        </nav>
+
+        <section class="center-space" vid="18">
+            <h1 class="calligraphy-title" vid="19">気流</h1>
+            <div class="stamp" vid="20">封印</div>
+        </section>
+
+        <aside class="content-column" vid="21">
+            <div class="meta-header" vid="22">
+                <span vid="23">甲辰年 丁卯月</span>
+                <span vid="24">INDEX_REQ: 0x8F9</span>
+            </div>
+
+            <div class="content-grid" vid="25">
+                
+                <article class="article-block" vid="26">
+                    <div class="article-meta" vid="27">
+                        <span vid="28">零壹</span>
+                        <div class="line" vid="29"></div>
+                        <span vid="30">OBSERVATION</span>
+                    </div>
+                    <div class="article-content" vid="31">
+                        <h2 class="article-title" vid="32">神經元結丹論</h2>
+                        <div class="article-excerpt" vid="33">
+                            於極淵深處觀摩生物之流轉，察覺其脈絡與天地靈氣之運行暗合。非金丹，非元嬰，乃是以血肉神經為引，交織成網，納海量混沌之氣於一芥子。此法兇險，稍有不慎則形神俱滅，化為無意識之孢子。然若成，則思維可如氣流般無孔不入，洞察萬物生滅之理。古籍所載之『天人合一』，或為此等異化之境。
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-block" vid="34">
+                    <div class="article-meta" vid="35">
+                        <span vid="36">零貳</span>
+                        <div class="line" vid="37"></div>
+                        <span vid="38">TECHNIQUE</span>
+                    </div>
+                    <div class="article-content" vid="39">
+                        <h2 class="article-title" vid="40">墨影牽絲步</h2>
+                        <div class="article-excerpt" vid="41">
+                            身化為墨，步履如絲。此步法並非追求極致之快，而是講究『滲透』與『殘留』。施展時，身形如水中散開之濃墨，真身藏於萬千絲縷之中。敵攻之，如擊幻影；我攻之，則千絲收束，絞殺於無形。需採集冥河深處之陰沉水蛭，提取其液，輔以七七四十九日之祭煉，方可入門。
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-block" vid="42">
+                    <div class="article-meta" vid="43">
+                        <span vid="44">零參</span>
+                        <div class="line" vid="45"></div>
+                        <span vid="46">ARTIFACT</span>
+                    </div>
+                    <div class="article-content" vid="47">
+                        <h2 class="article-title" vid="48">千足百眼旛</h2>
+                        <div class="article-excerpt" vid="49">
+                            取深淵巨蜈之蛻殼為主材，熔煉百名墮落修士之神識為眼。此旛展時，遮天蔽日，無數虛影如蜈蚣之足在虛空中舞動，擾亂周遭靈氣流動，形成『氣流』絕域。旛上百眼齊睜，可發出直擊靈魂之死光。因其反噬極強，非心智堅如玄冰者不可馭。
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </aside>
+
+        
+        <div class="sys-coord" vid="50">LAT: 34.0522 N / LNG: 118.2437 W / FLUX: CRITICAL</div>
+        <div class="hexagram" vid="51">
+            ䷀<br vid="52">
+            ䷁
+        </div>
+
+    </main>
+
+    <script vid="53">
+        
+        
+
+        const container = document.getElementById('canvas-container');
+        
+        
+        const scene = new THREE.Scene();
+        
+        scene.fog = new THREE.FogExp2(0x050505, 0.002);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 150;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
+        renderer.setClearColor(0x050505, 1);
+        container.appendChild(renderer.domElement);
+
+        
+        
+        const group = new THREE.Group();
+        scene.add(group);
+
+        const numLegs = 120; 
+        const segmentsPerLeg = 50;
+        const spineLength = 100;
+
+        
+        const inkMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 },
+                color: { value: new THREE.Color(0xd0d0d0) }
+            },
+            vertexShader: `
+                uniform float time;
+                attribute float vertexIndex;
+                attribute float legIndex;
+                varying float vAlpha;
+                
+                // Simple pseudo-random noise function
+                float random(vec2 st) {
+                    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+                }
+
+                void main() {
+                    vec3 pos = position;
+                    
+                    // Create organic undulating motion based on time, vertex position, and which leg it is
+                    float noiseFreq = 0.05;
+                    float noiseAmp = 5.0;
+                    
+                    // Base movement
+                    vec3 noisePos = vec3(pos.x * noiseFreq + time * 0.5, pos.y * noiseFreq + time * 0.2, pos.z * noiseFreq);
+                    
+                    // Apply offset to simulate flowing ink/legs
+                    // The further from the center (vertexIndex), the more it moves
+                    float influence = vertexIndex / ${segmentsPerLeg}.0;
+                    
+                    pos.x += sin(time * 0.5 + legIndex + pos.y * 0.02) * influence * 15.0;
+                    pos.z += cos(time * 0.3 + legIndex + pos.x * 0.02) * influence * 10.0;
+                    pos.y += sin(time * 0.8 + legIndex) * influence * 5.0;
+
+                    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                    gl_Position = projectionMatrix * mvPosition;
+                    
+                    // Fade out towards the tips
+                    vAlpha = 1.0 - (influence * 0.8);
+                }
+            `,
+            fragmentShader: `
+                uniform vec3 color;
+                varying float vAlpha;
+                void main() {
+                    // Slight variation in color to mimic variable ink density
+                    gl_FragColor = vec4(color, vAlpha * 0.6);
+                }
+            `,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending 
+        });
+
+        
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(numLegs * segmentsPerLeg * 3);
+        const vertexIndices = new Float32Array(numLegs * segmentsPerLeg);
+        const legIndices = new Float32Array(numLegs * segmentsPerLeg);
+
+        let pIdx = 0;
+        let vIdx = 0;
+
+        for (let i = 0; i < numLegs; i++) {
+            
+            const rootY = (Math.random() - 0.5) * spineLength;
+            
+            const side = Math.random() > 0.5 ? 1 : -1;
+            const baseAngle = (Math.random() * Math.PI * 0.5 - Math.PI * 0.25); 
+            
+            let currentX = 0;
+            let currentY = rootY;
+            let currentZ = 0;
+
+            const legLengthScale = 1.0 + Math.random() * 1.5;
+
+            for (let j = 0; j < segmentsPerLeg; j++) {
+                positions[pIdx++] = currentX;
+                positions[pIdx++] = currentY;
+                positions[pIdx++] = currentZ;
+
+                vertexIndices[vIdx] = j;
+                legIndices[vIdx] = i;
+                vIdx++;
+
+                
+                const progression = j / segmentsPerLeg;
+                
+                currentX += (Math.cos(baseAngle) * side * 2.5) * (1 - progression * 0.5) * legLengthScale;
+                currentY -= (1.5 + Math.random() * 0.5) * legLengthScale; 
+                currentZ += (Math.sin(baseAngle) * 2.0);
+            }
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('vertexIndex', new THREE.BufferAttribute(vertexIndices, 1));
+        geometry.setAttribute('legIndex', new THREE.BufferAttribute(legIndices, 1));
+
+        
+        const lines = new THREE.Line(geometry, inkMaterial);
+        
+        
+        
+        
+        
+        
+        
+        group.add(lines);
+
+        
+        
+        
+        
+        
+        const grainGeometry = new THREE.PlaneGeometry(2, 2);
+        const grainMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 },
+                amount: { value: 0.08 } 
+            },
+            vertexShader: `
+                void main() {
+                    gl_Position = vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                uniform float time;
+                uniform float amount;
+                
+                // Random function
+                float rand(vec2 co){
+                    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+                }
+
+                void main() {
+                    vec2 uv = gl_FragCoord.xy / vec2(800.0, 600.0); // Arbitrary scale factor
+                    float noise = rand(uv * time) * amount;
+                    // We don't render an image, we just output grain that will be blended via CSS or drawn over
+                    // Here, we draw over the scene with additive grain
+                    gl_FragColor = vec4(vec3(noise), 1.0);
+                }
+            `,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            depthTest: false,
+            depthWrite: false
+        });
+
+        
+        const postScene = new THREE.Scene();
+        const postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        const grainMesh = new THREE.Mesh(grainGeometry, grainMaterial);
+        postScene.add(grainMesh);
+
+
+        
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX);
+            mouseY = (event.clientY - windowHalfY);
+        });
+
+        
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const time = clock.getElapsedTime();
+
+            
+            targetX = mouseX * 0.05;
+            targetY = mouseY * 0.05;
+            
+            group.rotation.y += 0.05 * (targetX * 0.01 - group.rotation.y);
+            group.rotation.x += 0.05 * (targetY * 0.01 - group.rotation.x);
+            
+            
+            group.rotation.z = Math.sin(time * 0.1) * 0.1;
+
+            
+            inkMaterial.uniforms.time.value = time;
+            grainMaterial.uniforms.time.value = time;
+
+            
+            renderer.autoClear = true;
+            renderer.render(scene, camera);
+            
+            
+            renderer.autoClear = false;
+            renderer.render(postScene, postCamera);
+        }
+
+        
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        
+        animate();
+    </script>
+
+</body></html>

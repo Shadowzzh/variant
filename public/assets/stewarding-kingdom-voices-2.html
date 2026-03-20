@@ -1,0 +1,453 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Stewarding Kingdom Voices</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&amp;family=Nanum+Pen+Script&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;family=Reenie+Beanie&amp;display=swap" rel="stylesheet" vid="7">
+    
+    <style vid="8">
+        :root {
+            --paper-bg: #F4F4F0;
+            --ink-black: #1A1A18;
+            --graphite: #A0A09A;
+            --graphite-light: rgba(160, 160, 154, 0.4);
+            --accent-orange: #FF6B00;
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
+            --shadow-hard: 2px 4px 10px rgba(0,0,0,0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100vh;
+            background-color: var(--paper-bg);
+            background-image: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.02) 100%);
+            overflow: hidden;
+            font-family: 'Space Mono', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        
+        .svg-filters {
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+
+        
+        .workspace {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        
+        .sketch-composition {
+            position: relative;
+            width: 800px;
+            height: 500px;
+            z-index: 10;
+        }
+
+        
+        .drafting-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .draft-line {
+            stroke: var(--graphite-light);
+            stroke-width: 1px;
+            fill: none;
+        }
+
+        .draft-line-dash {
+            stroke: var(--graphite-light);
+            stroke-width: 1px;
+            stroke-dasharray: 4 4;
+            fill: none;
+        }
+
+        .draft-accent {
+            stroke: var(--accent-orange);
+            stroke-width: 1px;
+            fill: none;
+        }
+
+        
+        .text-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .brief-text {
+            font-family: 'Reenie Beanie', cursive;
+            color: var(--graphite);
+            font-size: 24px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: -10px;
+            transform: rotate(-1deg);
+        }
+
+        .brief-text.bottom {
+            margin-top: 10px;
+            font-size: 20px;
+            transform: rotate(0.5deg);
+        }
+
+        .marker-text {
+            font-family: 'Caveat', cursive;
+            font-weight: 700;
+            font-size: 110px;
+            line-height: 0.9;
+            color: var(--ink-black);
+            text-align: center;
+            filter: url(#ink-bleed);
+            transform: rotate(-2deg);
+            position: relative;
+        }
+
+        .marker-word {
+            display: inline-block;
+        }
+
+        
+        .annotation {
+            position: absolute;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--graphite);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            white-space: nowrap;
+        }
+
+        .note-hand {
+            font-family: 'Nanum Pen Script', cursive;
+            font-size: 18px;
+            color: var(--graphite);
+            text-transform: none;
+            letter-spacing: 1px;
+        }
+
+        
+        .note-1 { top: 20%; left: 5%; transform: rotate(-5deg); }
+        .note-2 { top: 15%; right: 10%; transform: rotate(3deg); }
+        .note-3 { bottom: 25%; left: 15%; transform: rotate(-2deg); }
+        .note-4 { bottom: 18%; right: 15%; transform: rotate(4deg); color: var(--accent-orange); }
+
+        
+        .physical-tools {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        
+        .mech-pencil {
+            position: absolute;
+            top: -50px;
+            left: 10vw;
+            width: 12px;
+            height: 400px;
+            background: linear-gradient(to right, #e0e0e0 0%, #ffffff 30%, #a0a0a0 100%);
+            border-radius: 6px;
+            transform: rotate(25deg);
+            box-shadow: 15px 15px 20px rgba(0,0,0,0.15), inset -2px 0 5px rgba(0,0,0,0.1);
+            z-index: 21;
+        }
+        .mech-pencil::before { 
+            content: '';
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: repeating-linear-gradient(to bottom, #333, #333 2px, #222 2px, #222 4px);
+            border-radius: 2px;
+        }
+        .mech-pencil::after { 
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 60px;
+            background: linear-gradient(to right, #999, #ccc, #666);
+            clip-path: polygon(0 0, 100% 0, 80% 80%, 55% 100%, 45% 100%, 20% 80%);
+        }
+        .mech-lead {
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 10px;
+            background: #444;
+        }
+
+        
+        .black-pencil {
+            position: absolute;
+            bottom: -100px;
+            left: -50px;
+            width: 450px;
+            height: 14px;
+            background: linear-gradient(to bottom, #2a2a2a 0%, #111 50%, #2a2a2a 100%);
+            transform: rotate(-35deg);
+            box-shadow: 10px -10px 20px rgba(0,0,0,0.2);
+            z-index: 22;
+        }
+        .black-pencil::after { 
+            content: '';
+            position: absolute;
+            right: -40px;
+            top: 0;
+            width: 40px;
+            height: 100%;
+            background: #d4b58e;
+            clip-path: polygon(0 0, 0 100%, 100% 50%);
+        }
+        .black-pencil-lead {
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 4px;
+            background: #222;
+            clip-path: polygon(0 0, 0 100%, 100% 50%);
+            z-index: 2;
+        }
+        .pencil-stripe {
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #FFB000;
+        }
+
+        
+        .fineliner {
+            position: absolute;
+            top: 30vh;
+            right: -100px;
+            width: 350px;
+            height: 12px;
+            background: #111;
+            border-radius: 6px;
+            transform: rotate(-15deg);
+            box-shadow: -10px 15px 25px rgba(0,0,0,0.2), inset 0 2px 5px rgba(255,255,255,0.1);
+            z-index: 23;
+        }
+        .fineliner-cap {
+            position: absolute;
+            left: -30px;
+            top: 0;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(to bottom, #333, #111);
+            border-radius: 4px 0 0 4px;
+        }
+        .fineliner-tip {
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 4px;
+            background: #111;
+        }
+
+        
+        .eraser {
+            position: absolute;
+            top: 15vh;
+            right: 15vw;
+            width: 45px;
+            height: 35px;
+            background: #C4C4C0;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            transform: rotate(15deg);
+            box-shadow: 
+                inset 2px 2px 5px rgba(255,255,255,0.8),
+                inset -3px -3px 8px rgba(0,0,0,0.1),
+                15px 20px 20px rgba(0,0,0,0.15);
+            z-index: 24;
+            filter: contrast(0.9) sepia(0.1);
+        }
+
+        
+        .debris {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .shaving {
+            position: absolute;
+            background: #D8D8D4;
+            border-radius: 50%;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+    </style>
+</head>
+<body vid="9">
+
+    
+    <svg class="svg-filters" vid="10">
+        <defs vid="11">
+            
+            <filter id="ink-bleed" x="-10%" y="-10%" width="120%" height="120%" vid="12">
+                <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" vid="13"></feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" result="displaced" vid="14"></feDisplacementMap>
+                <feGaussianBlur in="displaced" stdDeviation="0.8" result="blurred" vid="15"></feGaussianBlur>
+                
+                <feMerge vid="16">
+                    <feMergeNode in="blurred" vid="17"></feMergeNode>
+                    <feMergeNode in="SourceGraphic" vid="18"></feMergeNode>
+                </feMerge>
+            </filter>
+        </defs>
+    </svg>
+
+    <div class="workspace" vid="19">
+        
+        
+        <div class="physical-tools" vid="20">
+            <div class="mech-pencil" vid="21"><div class="mech-lead" vid="22"></div></div>
+            <div class="black-pencil" vid="23">
+                <div class="pencil-stripe" vid="24"></div>
+                <div class="black-pencil-lead" vid="25"></div>
+            </div>
+            <div class="fineliner" vid="26">
+                <div class="fineliner-cap" vid="27"></div>
+                <div class="fineliner-tip" vid="28"></div>
+            </div>
+            <div class="eraser" vid="29"></div>
+        </div>
+
+        
+        <div class="debris" vid="30">
+            <div class="shaving" style="top: 18vh; right: 18vw; width: 4px; height: 2px; transform: rotate(45deg);" vid="31"></div>
+            <div class="shaving" style="top: 19vh; right: 16vw; width: 3px; height: 3px; transform: rotate(12deg);" vid="32"></div>
+            <div class="shaving" style="top: 14vh; right: 17vw; width: 5px; height: 2px; transform: rotate(88deg);" vid="33"></div>
+            <div class="shaving" style="top: 22vh; right: 14vw; width: 2px; height: 4px; transform: rotate(33deg);" vid="34"></div>
+            <div class="shaving" style="top: 16vh; right: 19vw; width: 6px; height: 2px; transform: rotate(-15deg); opacity: 0.7;" vid="35"></div>
+            
+            
+            <div class="shaving" style="bottom: 120px; left: 100px; width: 1px; height: 1px; background:#444;" vid="36"></div>
+            <div class="shaving" style="bottom: 115px; left: 105px; width: 1.5px; height: 1px; background:#444;" vid="37"></div>
+            <div class="shaving" style="bottom: 125px; left: 95px; width: 1px; height: 1px; background:#444;" vid="38"></div>
+        </div>
+
+        <div class="sketch-composition" vid="39">
+            
+            
+            <svg class="drafting-layer" viewBox="0 0 800 500" vid="40">
+                
+                <line x1="100" y1="0" x2="100" y2="500" class="draft-line-dash" vid="41"></line>
+                <line x1="700" y1="0" x2="700" y2="500" class="draft-line-dash" vid="42"></line>
+                
+                
+                <line x1="50" y1="180" x2="750" y2="180" class="draft-line" vid="43"></line>
+                <line x1="50" y1="260" x2="750" y2="260" class="draft-line" vid="44"></line>
+                <line x1="50" y1="360" x2="750" y2="360" class="draft-line" vid="45"></line>
+                
+                
+                <line x1="150" y1="150" x2="650" y2="400" class="draft-line" style="opacity: 0.3;" vid="46"></line>
+                <line x1="100" y1="250" x2="700" y2="200" class="draft-line" style="opacity: 0.3;" vid="47"></line>
+
+                
+                <path d="M 400 30 L 400 50 M 390 40 L 410 40" stroke="var(--graphite)" stroke-width="1" fill="none" vid="48"></path>
+                <path d="M 400 450 L 400 470 M 390 460 L 410 460" stroke="var(--graphite)" stroke-width="1" fill="none" vid="49"></path>
+                <circle cx="400" cy="40" r="6" stroke="var(--graphite)" stroke-width="0.5" fill="none" vid="50"></circle>
+                
+                <path d="M 100 250 L 120 250 M 110 240 L 110 260" stroke="var(--accent-orange)" stroke-width="1" fill="none" vid="51"></path>
+                <path d="M 700 250 L 680 250 M 690 240 L 690 260" stroke="var(--accent-orange)" stroke-width="1" fill="none" vid="52"></path>
+
+                
+                
+                <path d="M 160 130 Q 180 180 200 200" stroke="var(--graphite)" stroke-width="1" fill="none" marker-end="url(#arrowhead)" vid="53"></path>
+                
+                <path d="M 520 120 Q 500 160 490 200" stroke="var(--graphite)" stroke-width="1" fill="none" marker-end="url(#arrowhead)" vid="54"></path>
+                
+                <path d="M 420 310 Q 450 330 480 300" stroke="var(--graphite)" stroke-width="1" fill="none" marker-end="url(#arrowhead)" vid="55"></path>
+
+                
+                <path d="M 250 280 Q 400 340 550 280" stroke="var(--accent-orange)" stroke-width="1" stroke-dasharray="2 3" fill="none" vid="56"></path>
+                <circle cx="400" cy="220" r="140" stroke="var(--graphite-light)" stroke-width="0.5" fill="none" vid="57"></circle>
+
+                
+                <defs vid="58">
+                    <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" vid="59">
+                        <polygon points="0 0, 6 3, 0 6" fill="var(--graphite)" vid="60"></polygon>
+                    </marker>
+                </defs>
+            </svg>
+
+            
+            <div class="text-layer" vid="61">
+                <div class="brief-text" vid="62">Stewarding</div>
+                <div class="marker-text" vid="63">
+                    <span class="marker-word" vid="64">Kingdom</span> <span class="marker-word" vid="65">Voices</span>
+                </div>
+                <div class="brief-text bottom" vid="66">With Strategy, Creativity, &amp; Impact.</div>
+            </div>
+
+            
+            <div class="annotation note-1 note-hand" vid="67">Check ascender height</div>
+            <div class="annotation note-2" vid="68">
+                COMPLETE.<br vid="69">
+                <span style="font-size: 8px; opacity: 0.6;" vid="70">(REF: BRAND_V3)</span>
+            </div>
+            <div class="annotation note-3 note-hand" vid="71">Respect margin</div>
+            <div class="annotation note-4" vid="72">CHECK KERNING</div>
+            
+            <div class="annotation" style="top: 80px; left: 380px;" vid="73">CENTER LINE</div>
+            <div class="annotation" style="bottom: 70px; right: 120px; text-align: right;" vid="74">
+                DRAFT: 04<br vid="75">
+                SCALE: 1:1
+            </div>
+
+        </div>
+    </div>
+
+
+</body></html>

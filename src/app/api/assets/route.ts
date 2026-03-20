@@ -2,20 +2,36 @@ import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 
+interface AssetInfo {
+  filename: string
+  thumbnail: string | null
+}
+
 export async function GET() {
   try {
     const assetsDir = path.join(process.cwd(), 'public', 'assets')
+    const thumbnailsDir = path.join(process.cwd(), 'public', 'thumbnails')
 
-    // 读取目录中的所有文件
+    // Read HTML files
     const files = fs.readdirSync(assetsDir)
-
-    // 过滤出 HTML 文件并排序
     const htmlFiles = files.filter(file => file.endsWith('.html')).sort()
+
+    // Check for existing thumbnails
+    const assets: AssetInfo[] = htmlFiles.map(filename => {
+      const thumbnailFilename = filename.replace('.html', '.webp')
+      const thumbnailPath = path.join(thumbnailsDir, thumbnailFilename)
+      const hasThumbnail = fs.existsSync(thumbnailPath)
+
+      return {
+        filename,
+        thumbnail: hasThumbnail ? `/thumbnails/${thumbnailFilename}` : null,
+      }
+    })
 
     return NextResponse.json({
       success: true,
-      files: htmlFiles,
-      total: htmlFiles.length,
+      assets,
+      total: assets.length,
     })
   } catch (error) {
     console.error('Error reading assets directory:', error)
