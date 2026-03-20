@@ -1,444 +1,523 @@
-<html lang="en" vid="0"><head vid="1">
-    <meta charset="UTF-8" vid="2">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+      vid="3"
+    />
     <title vid="4">Fluid Vinyl Stream</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesque:wght@300;500;700&amp;display=swap" rel="stylesheet" vid="7">
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesque:wght@300;500;700&amp;display=swap"
+      rel="stylesheet"
+      vid="7"
+    />
     <style vid="8">
-        :root {
-            --bg: #0a0a0a;
-            --fg: #e6e6e6;
-            --accent: #808080;
-            --fluid-speed: 8s;
-            --warp-strength: 20px;
-        }
+      :root {
+        --bg: #0a0a0a;
+        --fg: #e6e6e6;
+        --accent: #808080;
+        --fluid-speed: 8s;
+        --warp-strength: 20px;
+      }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
 
-        body {
-            background-color: var(--bg);
-            color: var(--fg);
-            font-family: 'Space Grotesque', sans-serif;
-            height: 100vh;
-            height: 100dvh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
+      body {
+        background-color: var(--bg);
+        color: var(--fg);
+        font-family: 'Space Grotesque', sans-serif;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
 
-        
-        .backdrop {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            z-index: 0;
-            background: 
-                repeating-radial-gradient(
-                    circle at 50% 50%,
-                    transparent 0,
-                    transparent 10px,
-                    rgba(230, 230, 230, 0.05) 11px,
-                    rgba(230, 230, 230, 0.05) 12px
-                ),
-                repeating-linear-gradient(
-                    45deg,
-                    transparent 0,
-                    transparent 10px,
-                    rgba(230, 230, 230, 0.03) 11px,
-                    rgba(230, 230, 230, 0.03) 12px
-                );
-            filter: blur(1px);
-            animation: warpBackground 60s linear infinite;
-            pointer-events: none;
-        }
+      .backdrop {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        z-index: 0;
+        background:
+          repeating-radial-gradient(
+            circle at 50% 50%,
+            transparent 0,
+            transparent 10px,
+            rgba(230, 230, 230, 0.05) 11px,
+            rgba(230, 230, 230, 0.05) 12px
+          ),
+          repeating-linear-gradient(
+            45deg,
+            transparent 0,
+            transparent 10px,
+            rgba(230, 230, 230, 0.03) 11px,
+            rgba(230, 230, 230, 0.03) 12px
+          );
+        filter: blur(1px);
+        animation: warpBackground 60s linear infinite;
+        pointer-events: none;
+      }
 
-        @keyframes warpBackground {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.1); }
-            100% { transform: rotate(360deg) scale(1); }
+      @keyframes warpBackground {
+        0% {
+          transform: rotate(0deg) scale(1);
         }
+        50% {
+          transform: rotate(180deg) scale(1.1);
+        }
+        100% {
+          transform: rotate(360deg) scale(1);
+        }
+      }
 
-        
-        .app-container {
-            position: relative;
-            z-index: 2;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 24px;
-            backdrop-filter: blur(10px); 
-        }
+      .app-container {
+        position: relative;
+        z-index: 2;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 24px;
+        backdrop-filter: blur(10px);
+      }
 
-        
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            opacity: 0.8;
-        }
-        
-        .header-icon {
-            width: 24px;
-            height: 24px;
-            fill: var(--fg);
-        }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        opacity: 0.8;
+      }
 
-        .pill-badge {
-            border: 1px solid var(--fg);
-            padding: 6px 16px;
-            border-radius: 50px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-        }
+      .header-icon {
+        width: 24px;
+        height: 24px;
+        fill: var(--fg);
+      }
 
-        
-        .vinyl-wrapper {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            perspective: 1000px;
-        }
+      .pill-badge {
+        border: 1px solid var(--fg);
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 700;
+      }
 
-        .vinyl-disc {
-            width: 80vw;
-            height: 80vw;
-            max-width: 350px;
-            max-height: 350px;
-            border-radius: 50%;
-            background: repeating-radial-gradient(
-                #111 0, 
-                #111 2px, 
-                #222 3px, 
-                #222 4px
-            );
-            position: relative;
-            box-shadow: 0 0 0 1px var(--fg), 0 20px 50px rgba(0,0,0,0.5);
-            animation: spin 8s linear infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            
-            filter: url(#liquid-distort); 
-            will-change: transform;
-        }
+      .vinyl-wrapper {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        perspective: 1000px;
+      }
 
-        .vinyl-art {
-            width: 45%;
-            height: 45%;
-            border-radius: 50%;
-            background-color: var(--fg);
-            background-image: url('https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1000&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            z-index: 2;
-        }
+      .vinyl-disc {
+        width: 80vw;
+        height: 80vw;
+        max-width: 350px;
+        max-height: 350px;
+        border-radius: 50%;
+        background: repeating-radial-gradient(#111 0, #111 2px, #222 3px, #222 4px);
+        position: relative;
+        box-shadow:
+          0 0 0 1px var(--fg),
+          0 20px 50px rgba(0, 0, 0, 0.5);
+        animation: spin 8s linear infinite;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        
-        .vinyl-art::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 12px;
-            height: 12px;
-            background: var(--bg);
-            border-radius: 50%;
-            border: 1px solid var(--fg);
-        }
+        filter: url(#liquid-distort);
+        will-change: transform;
+      }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+      .vinyl-art {
+        width: 45%;
+        height: 45%;
+        border-radius: 50%;
+        background-color: var(--fg);
+        background-image: url('https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1000&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        z-index: 2;
+      }
 
-        
-        .track-info {
-            margin-bottom: 32px;
-            text-align: left;
-            position: relative;
-        }
+      .vinyl-art::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 12px;
+        height: 12px;
+        background: var(--bg);
+        border-radius: 50%;
+        border: 1px solid var(--fg);
+      }
 
-        .track-title {
-            font-size: 3rem;
-            line-height: 0.9;
-            font-weight: 500;
-            margin-bottom: 8px;
-            
-            background: linear-gradient(180deg, var(--fg) 0%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: url(#text-wave);
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
+      }
 
-        .track-artist {
-            font-size: 1.2rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+      .track-info {
+        margin-bottom: 32px;
+        text-align: left;
+        position: relative;
+      }
 
-        
-        .controls-area {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            padding-bottom: 24px;
-        }
+      .track-title {
+        font-size: 3rem;
+        line-height: 0.9;
+        font-weight: 500;
+        margin-bottom: 8px;
 
-        
-        .scrubber-container {
-            width: 100%;
-            height: 40px; 
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
+        background: linear-gradient(180deg, var(--fg) 0%, var(--accent) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: url(#text-wave);
+      }
 
-        .scrubber-track {
-            width: 100%;
-            height: 30px;
-            position: relative;
-            overflow: hidden;
-        }
+      .track-artist {
+        font-size: 1.2rem;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
 
-        .scrubber-wave-full {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 200%;
-            height: 100%;
-            fill: none;
-            stroke: rgba(230, 230, 230, 0.2);
-            stroke-width: 2px;
-            vector-effect: non-scaling-stroke;
-        }
+      .controls-area {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        padding-bottom: 24px;
+      }
 
-        
-        .scrubber-progress {
-            position: absolute;
-            left: 0;
-            top: 0; 
-            height: 100%;
-            width: 65%;
-            overflow: hidden;
-        }
-        
-        .scrubber-wave-active {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: calc(200% / 0.65);
-            height: 100%;
-            fill: none;
-            stroke: var(--fg);
-            stroke-width: 2px;
-            vector-effect: non-scaling-stroke;
-        }
+      .scrubber-container {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
 
-        .time-stamps {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            font-family: monospace;
-            margin-top: -10px;
-            color: var(--accent);
-        }
+      .scrubber-track {
+        width: 100%;
+        height: 30px;
+        position: relative;
+        overflow: hidden;
+      }
 
-        
-        .buttons-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      .scrubber-wave-full {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 200%;
+        height: 100%;
+        fill: none;
+        stroke: rgba(230, 230, 230, 0.2);
+        stroke-width: 2px;
+        vector-effect: non-scaling-stroke;
+      }
 
-        .btn-secondary {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 12px;
-        }
+      .scrubber-progress {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 65%;
+        overflow: hidden;
+      }
 
-        .btn-secondary svg {
-            width: 28px;
-            height: 28px;
-            fill: var(--fg);
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .btn-secondary:active svg {
-            transform: scale(0.8);
-        }
+      .scrubber-wave-active {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: calc(200% / 0.65);
+        height: 100%;
+        fill: none;
+        stroke: var(--fg);
+        stroke-width: 2px;
+        vector-effect: non-scaling-stroke;
+      }
 
-        .btn-primary {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--fg);
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-            
-            animation: blob-pulse 4s ease-in-out infinite;
-            transition: transform 0.1s;
-        }
+      .time-stamps {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        font-family: monospace;
+        margin-top: -10px;
+        color: var(--accent);
+      }
 
-        .btn-primary:active {
-            transform: scale(0.95);
-        }
+      .buttons-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-        .btn-primary svg {
-            width: 32px;
-            height: 32px;
-            fill: var(--bg);
-        }
+      .btn-secondary {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 12px;
+      }
 
-        @keyframes blob-pulse {
-            0% { border-radius: 50%; }
-            25% { border-radius: 54% 46% 50% 50% / 50% 52% 48% 50%; }
-            50% { border-radius: 50% 50% 45% 55% / 48% 48% 52% 52%; }
-            75% { border-radius: 46% 54% 50% 50% / 50% 48% 52% 50%; }
-            100% { border-radius: 50%; }
-        }
+      .btn-secondary svg {
+        width: 28px;
+        height: 28px;
+        fill: var(--fg);
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
 
-        
-        .svg-defs {
-            position: absolute;
-            width: 0;
-            height: 0;
-            overflow: hidden;
-        }
+      .btn-secondary:active svg {
+        transform: scale(0.8);
+      }
 
+      .btn-primary {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--fg);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+
+        animation: blob-pulse 4s ease-in-out infinite;
+        transition: transform 0.1s;
+      }
+
+      .btn-primary:active {
+        transform: scale(0.95);
+      }
+
+      .btn-primary svg {
+        width: 32px;
+        height: 32px;
+        fill: var(--bg);
+      }
+
+      @keyframes blob-pulse {
+        0% {
+          border-radius: 50%;
+        }
+        25% {
+          border-radius: 54% 46% 50% 50% / 50% 52% 48% 50%;
+        }
+        50% {
+          border-radius: 50% 50% 45% 55% / 48% 48% 52% 52%;
+        }
+        75% {
+          border-radius: 46% 54% 50% 50% / 50% 48% 52% 50%;
+        }
+        100% {
+          border-radius: 50%;
+        }
+      }
+
+      .svg-defs {
+        position: absolute;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+      }
     </style>
-</head>
-<body vid="9">
-
-    
+  </head>
+  <body vid="9">
     <svg class="svg-defs" vid="10">
-        <defs vid="11">
-            
-            <filter id="liquid-distort" vid="12">
-                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.005" numOctaves="3" result="warp" vid="13"></feTurbulence>
-                <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warp" vid="14"></feDisplacementMap>
-                <feGaussianBlur stdDeviation="0.5" vid="15"></feGaussianBlur>
-            </filter>
-            
-            
-            <filter id="text-wave" vid="16">
-                <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="1" result="turbulence" vid="17"></feTurbulence>
-                <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="2" xChannelSelector="R" yChannelSelector="G" vid="18"></feDisplacementMap>
-            </filter>
-        </defs>
+      <defs vid="11">
+        <filter id="liquid-distort" vid="12">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.01 0.005"
+            numOctaves="3"
+            result="warp"
+            vid="13"
+          ></feTurbulence>
+          <feDisplacementMap
+            xChannelSelector="R"
+            yChannelSelector="G"
+            scale="30"
+            in="SourceGraphic"
+            in2="warp"
+            vid="14"
+          ></feDisplacementMap>
+          <feGaussianBlur stdDeviation="0.5" vid="15"></feGaussianBlur>
+        </filter>
+
+        <filter id="text-wave" vid="16">
+          <feTurbulence
+            type="turbulence"
+            baseFrequency="0.02"
+            numOctaves="1"
+            result="turbulence"
+            vid="17"
+          ></feTurbulence>
+          <feDisplacementMap
+            in2="turbulence"
+            in="SourceGraphic"
+            scale="2"
+            xChannelSelector="R"
+            yChannelSelector="G"
+            vid="18"
+          ></feDisplacementMap>
+        </filter>
+      </defs>
     </svg>
 
-    
     <div class="backdrop" vid="19"></div>
 
     <div class="app-container" vid="20">
-        
-        
-        <header class="header" vid="21">
-            <svg class="header-icon" viewBox="0 0 24 24" vid="22"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" vid="23"></path></svg> 
-            <div class="pill-badge" vid="24">NOW PLAYING</div>
-            <svg class="header-icon" viewBox="0 0 24 24" vid="25"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" vid="26"></path></svg> 
-        </header>
+      <header class="header" vid="21">
+        <svg class="header-icon" viewBox="0 0 24 24" vid="22">
+          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" vid="23"></path>
+        </svg>
+        <div class="pill-badge" vid="24">NOW PLAYING</div>
+        <svg class="header-icon" viewBox="0 0 24 24" vid="25">
+          <path
+            d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+            vid="26"
+          ></path>
+        </svg>
+      </header>
 
-        
-        <div class="vinyl-wrapper" vid="27">
-            <div class="vinyl-disc" vid="28">
-                <div class="vinyl-art" vid="29"></div>
-            </div>
+      <div class="vinyl-wrapper" vid="27">
+        <div class="vinyl-disc" vid="28">
+          <div class="vinyl-art" vid="29"></div>
+        </div>
+      </div>
+
+      <div class="controls-area" vid="30">
+        <div class="track-info" vid="31">
+          <h1 class="track-title" vid="32">LIQUID<br vid="33" />STATIQUE</h1>
+          <p class="track-artist" vid="34">The Monochromes</p>
         </div>
 
-        
-        <div class="controls-area" vid="30">
-            
-            <div class="track-info" vid="31">
-                <h1 class="track-title" vid="32">LIQUID<br vid="33">STATIQUE</h1>
-                <p class="track-artist" vid="34">The Monochromes</p>
+        <div class="scrubber-container" vid="35">
+          <div class="scrubber-track" vid="36">
+            <svg
+              class="scrubber-wave-svg scrubber-wave-full"
+              preserveAspectRatio="none"
+              viewBox="0 0 300 30"
+              vid="37"
+            >
+              <path
+                d="M0,15 Q20,5 40,15 Q60,25 80,15 Q100,5 120,15 Q140,25 160,15 Q180,5 200,15 Q220,25 240,15 Q260,5 280,15 Q300,25 320,15 Q340,5 360,15"
+                vid="38"
+              ></path>
+              <animateTransform
+                attributeName="transform"
+                attributeType="XML"
+                type="translate"
+                from="0 0"
+                to="-80 0"
+                dur="2s"
+                repeatCount="indefinite"
+                vid="39"
+              ></animateTransform>
+            </svg>
+            <div class="scrubber-progress" vid="40">
+              <svg
+                class="scrubber-wave-svg scrubber-wave-active"
+                preserveAspectRatio="none"
+                viewBox="0 0 300 30"
+                vid="41"
+              >
+                <path
+                  d="M0,15 Q20,5 40,15 Q60,25 80,15 Q100,5 120,15 Q140,25 160,15 Q180,5 200,15 Q220,25 240,15 Q260,5 280,15 Q300,25 320,15 Q340,5 360,15"
+                  vid="42"
+                ></path>
+                <animateTransform
+                  attributeName="transform"
+                  attributeType="XML"
+                  type="translate"
+                  from="0 0"
+                  to="-80 0"
+                  dur="2s"
+                  repeatCount="indefinite"
+                  vid="43"
+                ></animateTransform>
+              </svg>
             </div>
-
-            
-            <div class="scrubber-container" vid="35">
-                <div class="scrubber-track" vid="36">
-                    <svg class="scrubber-wave-svg scrubber-wave-full" preserveAspectRatio="none" viewBox="0 0 300 30" vid="37">
-                        <path d="M0,15 Q20,5 40,15 Q60,25 80,15 Q100,5 120,15 Q140,25 160,15 Q180,5 200,15 Q220,25 240,15 Q260,5 280,15 Q300,25 320,15 Q340,5 360,15" vid="38"></path>
-                        <animateTransform attributeName="transform" attributeType="XML" type="translate" from="0 0" to="-80 0" dur="2s" repeatCount="indefinite" vid="39"></animateTransform>
-                    </svg>
-                    <div class="scrubber-progress" vid="40">
-                        <svg class="scrubber-wave-svg scrubber-wave-active" preserveAspectRatio="none" viewBox="0 0 300 30" vid="41">
-                            <path d="M0,15 Q20,5 40,15 Q60,25 80,15 Q100,5 120,15 Q140,25 160,15 Q180,5 200,15 Q220,25 240,15 Q260,5 280,15 Q300,25 320,15 Q340,5 360,15" vid="42"></path>
-                            <animateTransform attributeName="transform" attributeType="XML" type="translate" from="0 0" to="-80 0" dur="2s" repeatCount="indefinite" vid="43"></animateTransform>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="time-stamps" vid="44">
-                <span vid="45">2:41</span>
-                <span vid="46">4:20</span>
-            </div>
-
-            <div class="buttons-row" vid="47">
-                <button class="btn-secondary" aria-label="Shuffle" vid="48">
-                    <svg viewBox="0 0 24 24" vid="49"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z" vid="50"></path></svg>
-                </button>
-                
-                <button class="btn-secondary" aria-label="Previous" vid="51">
-                    <svg viewBox="0 0 24 24" vid="52"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" vid="53"></path></svg>
-                </button>
-
-                
-                <button class="btn-primary" aria-label="Pause" vid="54">
-                    <svg viewBox="0 0 24 24" vid="55"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" vid="56"></path></svg>
-                </button>
-
-                <button class="btn-secondary" aria-label="Next" vid="57">
-                    <svg viewBox="0 0 24 24" vid="58"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" vid="59"></path></svg>
-                </button>
-
-                <button class="btn-secondary" aria-label="Loop" vid="60">
-                    <svg viewBox="0 0 24 24" vid="61"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v6z" vid="62"></path></svg>
-                </button>
-            </div>
+          </div>
         </div>
 
+        <div class="time-stamps" vid="44">
+          <span vid="45">2:41</span>
+          <span vid="46">4:20</span>
+        </div>
+
+        <div class="buttons-row" vid="47">
+          <button class="btn-secondary" aria-label="Shuffle" vid="48">
+            <svg viewBox="0 0 24 24" vid="49">
+              <path
+                d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"
+                vid="50"
+              ></path>
+            </svg>
+          </button>
+
+          <button class="btn-secondary" aria-label="Previous" vid="51">
+            <svg viewBox="0 0 24 24" vid="52">
+              <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" vid="53"></path>
+            </svg>
+          </button>
+
+          <button class="btn-primary" aria-label="Pause" vid="54">
+            <svg viewBox="0 0 24 24" vid="55">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" vid="56"></path>
+            </svg>
+          </button>
+
+          <button class="btn-secondary" aria-label="Next" vid="57">
+            <svg viewBox="0 0 24 24" vid="58">
+              <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" vid="59"></path>
+            </svg>
+          </button>
+
+          <button class="btn-secondary" aria-label="Loop" vid="60">
+            <svg viewBox="0 0 24 24" vid="61">
+              <path
+                d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v6z"
+                vid="62"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
 
     <script vid="63">
-        
-        
-        const vinyl = document.querySelector('.vinyl-disc');
-        const turbulence = document.querySelector('#liquid-distort feTurbulence');
-        
-        
-        let time = 0;
-        function animateFilter() {
-            time += 0.01;
-            
-            const freqX = 0.01 + Math.sin(time) * 0.005;
-            const freqY = 0.005 + Math.cos(time) * 0.002;
-            turbulence.setAttribute('baseFrequency', `${freqX} ${freqY}`);
-            requestAnimationFrame(animateFilter);
-        }
-        animateFilter();
-    </script>
+      const vinyl = document.querySelector('.vinyl-disc')
+      const turbulence = document.querySelector('#liquid-distort feTurbulence')
 
-</body></html>
+      let time = 0
+      function animateFilter() {
+        time += 0.01
+
+        const freqX = 0.01 + Math.sin(time) * 0.005
+        const freqY = 0.005 + Math.cos(time) * 0.002
+        turbulence.setAttribute('baseFrequency', `${freqX} ${freqY}`)
+        requestAnimationFrame(animateFilter)
+      }
+      animateFilter()
+    </script>
+  </body>
+</html>

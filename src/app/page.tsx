@@ -86,11 +86,7 @@ export default function Home() {
       <main className="w-full px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredAssets.map(asset => (
-            <AssetCard
-              key={asset.filename}
-              filename={asset.filename}
-              thumbnail={asset.thumbnail}
-            />
+            <AssetCard key={asset.filename} filename={asset.filename} thumbnail={asset.thumbnail} />
           ))}
         </div>
 

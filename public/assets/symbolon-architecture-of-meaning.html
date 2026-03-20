@@ -1,423 +1,429 @@
-<html lang="en" vid="0"><head vid="1">
-    <meta charset="UTF-8" vid="2">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
     <title vid="4">SYMBOLON — Architecture of Meaning</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&amp;family=JetBrains+Mono:wght@100;400;700&amp;display=swap" rel="stylesheet" vid="7">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&amp;family=JetBrains+Mono:wght@100;400;700&amp;display=swap"
+      rel="stylesheet"
+      vid="7"
+    />
+
     <style vid="8">
-        :root {
-            --void: #030303;
-            --spine: #0F0F11;
-            --border: #222225;
-            --text-main: #C9A881;
-            --text-bright: #FFF7E0;
-            --text-meta: #6B6C70;
-            
-            --font-display: 'Cormorant Garamond', serif;
-            --font-system: 'JetBrains Mono', monospace;
-            
-            --grid-size: 1px;
-            --grid-color: rgba(255, 255, 255, 0.02);
-        }
+      :root {
+        --void: #030303;
+        --spine: #0f0f11;
+        --border: #222225;
+        --text-main: #c9a881;
+        --text-bright: #fff7e0;
+        --text-meta: #6b6c70;
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-        }
+        --font-display: 'Cormorant Garamond', serif;
+        --font-system: 'JetBrains Mono', monospace;
 
-        body {
-            background-color: var(--void);
-            color: var(--text-main);
-            font-family: var(--font-system);
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
-            
-            background-image: 
-                linear-gradient(to right, var(--grid-color) var(--grid-size), transparent var(--grid-size)),
-                linear-gradient(to bottom, var(--grid-color) var(--grid-size), transparent var(--grid-size));
-            background-size: 40px 40px;
-        }
+        --grid-size: 1px;
+        --grid-color: rgba(255, 255, 255, 0.02);
+      }
 
-        
-        #glcanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
-            pointer-events: none;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        user-select: none;
+      }
 
-        
+      body {
+        background-color: var(--void);
+        color: var(--text-main);
+        font-family: var(--font-system);
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+
+        background-image:
+          linear-gradient(
+            to right,
+            var(--grid-color) var(--grid-size),
+            transparent var(--grid-size)
+          ),
+          linear-gradient(
+            to bottom,
+            var(--grid-color) var(--grid-size),
+            transparent var(--grid-size)
+          );
+        background-size: 40px 40px;
+      }
+
+      #glcanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .ui-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        display: grid;
+        grid-template-columns: 60px 1fr 240px;
+        grid-template-rows: 1fr;
+        pointer-events: none;
+      }
+
+      .spine {
+        background-color: var(--spine);
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 40px 0;
+        pointer-events: auto;
+      }
+
+      .spine-top {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .mark {
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--text-meta);
+        border-radius: 50% 0 50% 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-bright);
+        font-family: var(--font-display);
+        font-size: 18px;
+        font-style: italic;
+        transition:
+          border-color 0.3s ease,
+          transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        cursor: pointer;
+      }
+
+      .mark:hover {
+        border-color: var(--text-bright);
+        transform: rotate(45deg);
+      }
+
+      .spine-year {
+        font-size: 10px;
+        color: var(--text-meta);
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        letter-spacing: 0.2em;
+      }
+
+      .spine-divider {
+        width: 1px;
+        height: 40px;
+        background-color: var(--border);
+      }
+
+      .spine-brand {
+        font-size: 11px;
+        color: var(--text-meta);
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+      }
+
+      .main-stage {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 4vw;
+        pointer-events: none;
+      }
+
+      .title-group {
+        text-align: center;
+        position: absolute;
+        bottom: 12vh;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        pointer-events: auto;
+      }
+
+      h1.display-title {
+        font-family: var(--font-display);
+        font-size: clamp(3rem, 8vw, 8rem);
+        font-weight: 300;
+        letter-spacing: 0.6em;
+        text-indent: 0.6em;
+        color: var(--text-main);
+        text-transform: uppercase;
+        line-height: 1;
+        margin-bottom: 24px;
+        text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8);
+        mix-blend-mode: screen;
+      }
+
+      .subtitle {
+        font-family: var(--font-display);
+        font-size: 14px;
+        letter-spacing: 0.4em;
+        color: var(--text-meta);
+        text-transform: uppercase;
+        font-weight: 400;
+      }
+
+      .data-panel {
+        border-left: 1px solid var(--border);
+        padding: 40px 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        pointer-events: auto;
+        background: linear-gradient(90deg, rgba(3, 3, 3, 0.8) 0%, rgba(3, 3, 3, 0) 100%);
+        backdrop-filter: blur(4px);
+      }
+
+      .data-block {
+        margin-bottom: 40px;
+      }
+
+      .data-label {
+        font-size: 9px;
+        color: var(--text-meta);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 4px;
+      }
+
+      .data-value {
+        font-size: 11px;
+        color: var(--text-main);
+        line-height: 1.6;
+        letter-spacing: 0.05em;
+      }
+
+      .semiotic-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .semiotic-item {
+        border: 1px solid var(--border);
+        padding: 12px;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+      }
+
+      .semiotic-item:hover {
+        background-color: rgba(255, 255, 255, 0.03);
+      }
+
+      .semiotic-item .st-title {
+        font-family: var(--font-display);
+        font-size: 16px;
+        color: var(--text-bright);
+        margin-bottom: 4px;
+        font-style: italic;
+      }
+
+      .semiotic-item .st-desc {
+        font-size: 9px;
+        color: var(--text-meta);
+        line-height: 1.4;
+      }
+
+      .top-meta {
+        position: absolute;
+        top: 40px;
+        left: 100px;
+        right: 280px;
+        display: flex;
+        justify-content: space-between;
+        pointer-events: auto;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 8px;
+      }
+
+      .meta-nav {
+        display: flex;
+        gap: 32px;
+      }
+
+      .nav-link {
+        font-size: 10px;
+        color: var(--text-meta);
+        text-decoration: none;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        transition: color 0.3s ease;
+        position: relative;
+      }
+
+      .nav-link:hover {
+        color: var(--text-bright);
+      }
+
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -9px;
+        left: 0;
+        width: 0%;
+        height: 1px;
+        background-color: var(--text-bright);
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .meta-coords {
+        font-size: 10px;
+        color: var(--text-meta);
+        letter-spacing: 0.1em;
+      }
+
+      ::-webkit-scrollbar {
+        width: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--void);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border);
+      }
+
+      @media (max-width: 1024px) {
         .ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            display: grid;
-            grid-template-columns: 60px 1fr 240px;
-            grid-template-rows: 1fr;
-            pointer-events: none;
+          grid-template-columns: 40px 1fr;
         }
-
-        
-        .spine {
-            background-color: var(--spine);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 0;
-            pointer-events: auto;
-        }
-
-        .spine-top {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .mark {
-            width: 32px;
-            height: 32px;
-            border: 1px solid var(--text-meta);
-            border-radius: 50% 0 50% 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--text-bright);
-            font-family: var(--font-display);
-            font-size: 18px;
-            font-style: italic;
-            transition: border-color 0.3s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: pointer;
-        }
-
-        .mark:hover {
-            border-color: var(--text-bright);
-            transform: rotate(45deg);
-        }
-
-        .spine-year {
-            font-size: 10px;
-            color: var(--text-meta);
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            letter-spacing: 0.2em;
-        }
-
-        .spine-divider {
-            width: 1px;
-            height: 40px;
-            background-color: var(--border);
-        }
-
-        .spine-brand {
-            font-size: 11px;
-            color: var(--text-meta);
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-        }
-
-        
-        .main-stage {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 4vw;
-            pointer-events: none;
-        }
-
-        .title-group {
-            text-align: center;
-            position: absolute;
-            bottom: 12vh;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            pointer-events: auto;
-        }
-
-        h1.display-title {
-            font-family: var(--font-display);
-            font-size: clamp(3rem, 8vw, 8rem);
-            font-weight: 300;
-            letter-spacing: 0.6em;
-            text-indent: 0.6em; 
-            color: var(--text-main);
-            text-transform: uppercase;
-            line-height: 1;
-            margin-bottom: 24px;
-            text-shadow: 0 4px 24px rgba(0,0,0,0.8);
-            mix-blend-mode: screen;
-        }
-
-        .subtitle {
-            font-family: var(--font-display);
-            font-size: 14px;
-            letter-spacing: 0.4em;
-            color: var(--text-meta);
-            text-transform: uppercase;
-            font-weight: 400;
-        }
-
-        
         .data-panel {
-            border-left: 1px solid var(--border);
-            padding: 40px 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            pointer-events: auto;
-            background: linear-gradient(90deg, rgba(3,3,3,0.8) 0%, rgba(3,3,3,0) 100%);
-            backdrop-filter: blur(4px);
+          display: none;
         }
-
-        .data-block {
-            margin-bottom: 40px;
-        }
-
-        .data-label {
-            font-size: 9px;
-            color: var(--text-meta);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 8px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 4px;
-        }
-
-        .data-value {
-            font-size: 11px;
-            color: var(--text-main);
-            line-height: 1.6;
-            letter-spacing: 0.05em;
-        }
-
-        .semiotic-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-        }
-
-        .semiotic-item {
-            border: 1px solid var(--border);
-            padding: 12px;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-        }
-
-        .semiotic-item:hover {
-            background-color: rgba(255,255,255,0.03);
-        }
-
-        .semiotic-item .st-title {
-            font-family: var(--font-display);
-            font-size: 16px;
-            color: var(--text-bright);
-            margin-bottom: 4px;
-            font-style: italic;
-        }
-
-        .semiotic-item .st-desc {
-            font-size: 9px;
-            color: var(--text-meta);
-            line-height: 1.4;
-        }
-
-        
         .top-meta {
-            position: absolute;
-            top: 40px;
-            left: 100px;
-            right: 280px;
-            display: flex;
-            justify-content: space-between;
-            pointer-events: auto;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
+          right: 40px;
         }
-
-        .meta-nav {
-            display: flex;
-            gap: 32px;
+        h1.display-title {
+          letter-spacing: 0.3em;
+          text-indent: 0.3em;
         }
-
-        .nav-link {
-            font-size: 10px;
-            color: var(--text-meta);
-            text-decoration: none;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        .nav-link:hover {
-            color: var(--text-bright);
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -9px;
-            left: 0;
-            width: 0%;
-            height: 1px;
-            background-color: var(--text-bright);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .meta-coords {
-            font-size: 10px;
-            color: var(--text-meta);
-            letter-spacing: 0.1em;
-        }
-
-        
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--void);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-        }
-
-        
-        @media (max-width: 1024px) {
-            .ui-layer {
-                grid-template-columns: 40px 1fr;
-            }
-            .data-panel {
-                display: none; 
-            }
-            .top-meta {
-                right: 40px;
-            }
-            h1.display-title {
-                letter-spacing: 0.3em;
-                text-indent: 0.3em;
-            }
-        }
+      }
     </style>
-</head>
-<body vid="9">
-
-    
+  </head>
+  <body vid="9">
     <div id="glcanvas" vid="10"></div>
 
-    
     <div class="ui-layer" vid="11">
-        
-        
-        <aside class="spine" vid="12">
-            <div class="spine-top" vid="13">
-                <div class="mark" vid="14">S</div>
-                <div class="spine-year" vid="15">2024</div>
-                <div class="spine-divider" vid="16"></div>
-            </div>
-            <div class="spine-brand" vid="17">
-                Symbolon Identity Arch.
-            </div>
-        </aside>
+      <aside class="spine" vid="12">
+        <div class="spine-top" vid="13">
+          <div class="mark" vid="14">S</div>
+          <div class="spine-year" vid="15">2024</div>
+          <div class="spine-divider" vid="16"></div>
+        </div>
+        <div class="spine-brand" vid="17">Symbolon Identity Arch.</div>
+      </aside>
 
-        
-        <main class="main-stage" vid="18">
-            
-            <div class="top-meta" vid="19">
-                <nav class="meta-nav" vid="20">
-                    <a href="#" class="nav-link" vid="21">Idx. Archive</a>
-                    <a href="#" class="nav-link" vid="22">Methodology</a>
-                    <a href="#" class="nav-link" vid="23">Transmit</a>
-                </nav>
-                <div class="meta-coords" id="coords" vid="24">TRGT: 0.000, 0.000</div>
+      <main class="main-stage" vid="18">
+        <div class="top-meta" vid="19">
+          <nav class="meta-nav" vid="20">
+            <a href="#" class="nav-link" vid="21">Idx. Archive</a>
+            <a href="#" class="nav-link" vid="22">Methodology</a>
+            <a href="#" class="nav-link" vid="23">Transmit</a>
+          </nav>
+          <div class="meta-coords" id="coords" vid="24">TRGT: 0.000, 0.000</div>
+        </div>
+
+        <div class="title-group" vid="25">
+          <h1 class="display-title" vid="26">Symbolon</h1>
+          <div class="subtitle" vid="27">The Advantage of Mystery in Semiotic Design</div>
+        </div>
+      </main>
+
+      <aside class="data-panel" vid="28">
+        <div vid="29">
+          <div class="data-block" vid="30">
+            <div class="data-label" vid="31">System Status</div>
+            <div class="data-value" vid="32">
+              OBSCURATION: ACTIVE<br vid="33" />
+              REVELATION: PENDING INTERACTION<br vid="34" />
+              FRAMEWORK: PEIRCEAN TRIAD
+            </div>
+          </div>
+
+          <div class="data-block" vid="35">
+            <div class="data-label" vid="36">Methodology</div>
+            <div class="data-value" style="margin-bottom: 16px" vid="37">
+              A brand is not a logo; it is a sign functioning within an interpretive structure. We
+              architect meaning by controlling the threshold between the known and the obscured.
             </div>
 
-            <div class="title-group" vid="25">
-                <h1 class="display-title" vid="26">Symbolon</h1>
-                <div class="subtitle" vid="27">The Advantage of Mystery in Semiotic Design</div>
-            </div>
-
-        </main>
-
-        
-        <aside class="data-panel" vid="28">
-            <div vid="29">
-                <div class="data-block" vid="30">
-                    <div class="data-label" vid="31">System Status</div>
-                    <div class="data-value" vid="32">
-                        OBSCURATION: ACTIVE<br vid="33">
-                        REVELATION: PENDING INTERACTION<br vid="34">
-                        FRAMEWORK: PEIRCEAN TRIAD
-                    </div>
+            <div class="semiotic-grid" vid="38">
+              <div class="semiotic-item" vid="39">
+                <div class="st-title" vid="40">Icon</div>
+                <div class="st-desc" vid="41">
+                  The signifier that physically resembles the signified. Form, topology, visual
+                  mimicry.
                 </div>
-
-                <div class="data-block" vid="35">
-                    <div class="data-label" vid="36">Methodology</div>
-                    <div class="data-value" style="margin-bottom: 16px;" vid="37">
-                        A brand is not a logo; it is a sign functioning within an interpretive structure. We architect meaning by controlling the threshold between the known and the obscured.
-                    </div>
-                    
-                    <div class="semiotic-grid" vid="38">
-                        <div class="semiotic-item" vid="39">
-                            <div class="st-title" vid="40">Icon</div>
-                            <div class="st-desc" vid="41">The signifier that physically resembles the signified. Form, topology, visual mimicry.</div>
-                        </div>
-                        <div class="semiotic-item" vid="42">
-                            <div class="st-title" vid="43">Index</div>
-                            <div class="st-desc" vid="44">The signifier inherently connected to the signified. Evidence, trace, implication of action.</div>
-                        </div>
-                        <div class="semiotic-item" vid="45">
-                            <div class="st-title" vid="46">Symbol</div>
-                            <div class="st-desc" vid="47">The signifier related to the signified by convention alone. Cultivated meaning, learned association.</div>
-                        </div>
-                    </div>
+              </div>
+              <div class="semiotic-item" vid="42">
+                <div class="st-title" vid="43">Index</div>
+                <div class="st-desc" vid="44">
+                  The signifier inherently connected to the signified. Evidence, trace, implication
+                  of action.
                 </div>
-            </div>
-
-            <div class="data-block" style="margin-bottom: 0;" vid="48">
-                <div class="data-label" vid="49">Operative</div>
-                <div class="data-value" style="color: var(--text-bright);" vid="50">
-                    Awaiting Input Sequence
+              </div>
+              <div class="semiotic-item" vid="45">
+                <div class="st-title" vid="46">Symbol</div>
+                <div class="st-desc" vid="47">
+                  The signifier related to the signified by convention alone. Cultivated meaning,
+                  learned association.
                 </div>
+              </div>
             </div>
-        </aside>
+          </div>
+        </div>
 
+        <div class="data-block" style="margin-bottom: 0" vid="48">
+          <div class="data-label" vid="49">Operative</div>
+          <div class="data-value" style="color: var(--text-bright)" vid="50">
+            Awaiting Input Sequence
+          </div>
+        </div>
+      </aside>
     </div>
 
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" vid="51"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+      vid="51"
+    ></script>
 
-    
     <script vid="52">
-        const vertexShader = `
+      const vertexShader = `
             varying vec2 vUv;
             void main() {
                 vUv = uv;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
             }
-        `;
+        `
 
-        const fragmentShader = `
+      const fragmentShader = `
             uniform float u_time;
             uniform vec2 u_resolution;
             uniform vec2 u_mouse;
@@ -514,67 +520,60 @@
 
                 gl_FragColor = vec4(color, 1.0);
             }
-        `;
+        `
 
-        
-        const container = document.getElementById('glcanvas');
-        const scene = new THREE.Scene();
-        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-        const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false });
-        
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
-        container.appendChild(renderer.domElement);
+      const container = document.getElementById('glcanvas')
+      const scene = new THREE.Scene()
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
+      const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false })
 
-        const geometry = new THREE.PlaneGeometry(2, 2);
-        
-        const uniforms = {
-            u_time: { value: 0.0 },
-            u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-            u_mouse: { value: new THREE.Vector2(0.5, 0.5) }
-        };
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+      container.appendChild(renderer.domElement)
 
-        const material = new THREE.ShaderMaterial({
-            vertexShader,
-            fragmentShader,
-            uniforms
-        });
+      const geometry = new THREE.PlaneGeometry(2, 2)
 
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
+      const uniforms = {
+        u_time: { value: 0.0 },
+        u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+        u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
+      }
 
-        
-        window.addEventListener('resize', () => {
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
-        });
+      const material = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
+        uniforms,
+      })
 
-        
-        const coordsDisplay = document.getElementById('coords');
-        
-        window.addEventListener('mousemove', (e) => {
-            
-            const x = e.clientX / window.innerWidth;
-            const y = 1.0 - (e.clientY / window.innerHeight); 
-            
-            
-            uniforms.u_mouse.value.x += (x - uniforms.u_mouse.value.x) * 0.05;
-            uniforms.u_mouse.value.y += (y - uniforms.u_mouse.value.y) * 0.05;
+      const mesh = new THREE.Mesh(geometry, material)
+      scene.add(mesh)
 
-            
-            coordsDisplay.textContent = `TRGT: ${x.toFixed(3)}, ${y.toFixed(3)}`;
-        });
+      window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight)
+      })
 
-        
-        const clock = new THREE.Clock();
-        
-        function animate() {
-            requestAnimationFrame(animate);
-            uniforms.u_time.value = clock.getElapsedTime();
-            renderer.render(scene, camera);
-        }
+      const coordsDisplay = document.getElementById('coords')
 
-        animate();
+      window.addEventListener('mousemove', e => {
+        const x = e.clientX / window.innerWidth
+        const y = 1.0 - e.clientY / window.innerHeight
+
+        uniforms.u_mouse.value.x += (x - uniforms.u_mouse.value.x) * 0.05
+        uniforms.u_mouse.value.y += (y - uniforms.u_mouse.value.y) * 0.05
+
+        coordsDisplay.textContent = `TRGT: ${x.toFixed(3)}, ${y.toFixed(3)}`
+      })
+
+      const clock = new THREE.Clock()
+
+      function animate() {
+        requestAnimationFrame(animate)
+        uniforms.u_time.value = clock.getElapsedTime()
+        renderer.render(scene, camera)
+      }
+
+      animate()
     </script>
-
-</body></html>
+  </body>
+</html>

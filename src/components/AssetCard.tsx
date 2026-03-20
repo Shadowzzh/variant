@@ -26,20 +26,13 @@ export default function AssetCard({ filename, thumbnail }: AssetCardProps) {
   const assetUrl = `/assets/${filename}`
 
   return (
-    <a
-      href={assetUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block group"
-    >
+    <a href={assetUrl} target="_blank" rel="noopener noreferrer" className="block group">
       <div className="border rounded-lg overflow-hidden bg-white cursor-pointer transition-shadow hover:shadow-lg">
         {/* Preview area */}
         <div
           className="relative w-full aspect-[4/3] bg-gray-100"
           style={{
-            background: thumbnail && !imageError
-              ? undefined
-              : getGradientFromFilename(filename),
+            background: thumbnail && !imageError ? undefined : getGradientFromFilename(filename),
           }}
         >
           {thumbnail && !imageError ? (

@@ -1,370 +1,406 @@
-<html lang="en" vid="0"><head vid="1">
-    <meta charset="UTF-8" vid="2">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+<html lang="en" vid="0">
+  <head vid="1">
+    <meta charset="UTF-8" vid="2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3" />
     <title vid="4">Groove Candy - 90s House Underground</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet" vid="7">
-    
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;display=swap"
+      rel="stylesheet"
+      vid="7"
+    />
 
     <style vid="8">
-        :root {
-            --ink: #393375; 
-            --paper-bg: transparent; 
-            --border-width: 3px;
-        }
+      :root {
+        --ink: #393375;
+        --paper-bg: transparent;
+        --border-width: 3px;
+      }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            background-color: #d8d2b8; 
-            overflow-x: hidden;
-            font-family: 'Space Mono', monospace;
-            color: var(--ink);
-            
-            mix-blend-mode: multiply; 
-        }
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        background-color: #d8d2b8;
+        overflow-x: hidden;
+        font-family: 'Space Mono', monospace;
+        color: var(--ink);
 
-        
-        #paper-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-        }
+        mix-blend-mode: multiply;
+      }
 
-        
-        .poster-wrapper {
-            width: 100%;
-            max-width: 600px; 
-            margin: 0 auto;
-            padding: 4vw;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            
-            filter: url(#ink-bleed) contrast(1.1);
-        }
+      #paper-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        pointer-events: none;
+      }
 
-        
-        .section {
-            width: 100%;
-            padding: 4vw 0;
-        }
+      .poster-wrapper {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 4vw;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
 
-        .divider {
-            width: 100%;
-            height: var(--border-width);
-            background-color: var(--ink);
-        }
+        filter: url(#ink-bleed) contrast(1.1);
+      }
 
-        
-        h1, h2, h3, .display-text {
-            font-family: 'Archivo Black', sans-serif;
-            text-transform: uppercase;
-            line-height: 0.9;
-        }
+      .section {
+        width: 100%;
+        padding: 4vw 0;
+      }
 
-        .text-mono {
-            font-family: 'Space Mono', monospace;
-            font-weight: 700;
-            font-size: 0.8rem;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-            text-transform: uppercase;
-        }
+      .divider {
+        width: 100%;
+        height: var(--border-width);
+        background-color: var(--ink);
+      }
 
-        
-        .top-grid {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 2vw;
-            align-items: stretch;
-            padding-bottom: 3vw;
-        }
+      h1,
+      h2,
+      h3,
+      .display-text {
+        font-family: 'Archivo Black', sans-serif;
+        text-transform: uppercase;
+        line-height: 0.9;
+      }
 
-        .col-left, .col-right {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+      .text-mono {
+        font-family: 'Space Mono', monospace;
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: -0.5px;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
 
-        .vert-divider {
-            width: 2px;
-            background-color: var(--ink);
-        }
+      .top-grid {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 2vw;
+        align-items: stretch;
+        padding-bottom: 3vw;
+      }
 
-        .top-grid .display-text {
-            font-size: clamp(2rem, 8vw, 3rem);
-            letter-spacing: 2px;
-        }
-        
-        .top-grid .sub-display {
-            font-size: clamp(1rem, 4vw, 1.5rem);
-            letter-spacing: 4px;
-            margin-bottom: 0.5rem;
-        }
+      .col-left,
+      .col-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
 
-        
-        .graphic-section {
-            position: relative;
-            padding: 8vw 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
+      .vert-divider {
+        width: 2px;
+        background-color: var(--ink);
+      }
 
-        .arch-text-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-bottom: -4vw;
-            z-index: 2;
-        }
+      .top-grid .display-text {
+        font-size: clamp(2rem, 8vw, 3rem);
+        letter-spacing: 2px;
+      }
 
-        
-        .svg-text-arch {
-            width: 90%;
-            max-width: 400px;
-            height: auto;
-            fill: var(--ink);
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 48px;
-            letter-spacing: 10px;
-        }
+      .top-grid .sub-display {
+        font-size: clamp(1rem, 4vw, 1.5rem);
+        letter-spacing: 4px;
+        margin-bottom: 0.5rem;
+      }
 
-        .main-graphic {
-            width: 80%;
-            max-width: 350px;
-            fill: none;
-            stroke: var(--ink);
-            stroke-width: 3;
-            z-index: 1;
-        }
+      .graphic-section {
+        position: relative;
+        padding: 8vw 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
 
-        
-        .star {
-            position: absolute;
-            top: 2vw;
-            left: 2vw;
-            width: 30px;
-            height: 30px;
-            fill: none;
-            stroke: var(--ink);
-            stroke-width: 2;
-        }
+      .arch-text-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: -4vw;
+        z-index: 2;
+      }
 
-        
-        .title-section {
-            text-align: center;
-            padding: 5vw 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+      .svg-text-arch {
+        width: 90%;
+        max-width: 400px;
+        height: auto;
+        fill: var(--ink);
+        font-family: 'Archivo Black', sans-serif;
+        font-size: 48px;
+        letter-spacing: 10px;
+      }
 
-        .pre-title {
-            width: 100%;
-            text-align: justify;
-            text-align-last: justify;
-            font-size: clamp(0.7rem, 3vw, 1rem);
-            letter-spacing: 2px;
-            margin-bottom: 2vw;
-        }
+      .main-graphic {
+        width: 80%;
+        max-width: 350px;
+        fill: none;
+        stroke: var(--ink);
+        stroke-width: 3;
+        z-index: 1;
+      }
 
-        .huge-title {
-            font-size: clamp(4rem, 16vw, 8rem);
-            letter-spacing: 2vw;
-            margin-left: 2vw; 
-            word-wrap: break-word;
-            line-height: 0.85;
-            text-align: center;
-            width: 100%;
-        }
+      .star {
+        position: absolute;
+        top: 2vw;
+        left: 2vw;
+        width: 30px;
+        height: 30px;
+        fill: none;
+        stroke: var(--ink);
+        stroke-width: 2;
+      }
 
-        .huge-title span {
-            display: block;
-            width: 100%;
-            text-align: justify;
-            text-align-last: justify;
-        }
+      .title-section {
+        text-align: center;
+        padding: 5vw 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-        .xxx {
-            font-family: 'Archivo Black', sans-serif;
-            font-size: clamp(2rem, 8vw, 4rem);
-            letter-spacing: 4vw;
-            margin: 3vw 0 1vw 4vw;
-        }
+      .pre-title {
+        width: 100%;
+        text-align: justify;
+        text-align-last: justify;
+        font-size: clamp(0.7rem, 3vw, 1rem);
+        letter-spacing: 2px;
+        margin-bottom: 2vw;
+      }
 
-        .genre-tags {
-            font-size: clamp(1.5rem, 6vw, 2.5rem);
-            letter-spacing: 1vw;
-            text-align: justify;
-            text-align-last: justify;
-            width: 100%;
-            line-height: 1;
-        }
+      .huge-title {
+        font-size: clamp(4rem, 16vw, 8rem);
+        letter-spacing: 2vw;
+        margin-left: 2vw;
+        word-wrap: break-word;
+        line-height: 0.85;
+        text-align: center;
+        width: 100%;
+      }
 
-        .footer-text {
-            text-align: center;
-            font-size: clamp(0.6rem, 2.5vw, 0.9rem);
-            letter-spacing: 1px;
-            padding: 2vw 0;
-        }
+      .huge-title span {
+        display: block;
+        width: 100%;
+        text-align: justify;
+        text-align-last: justify;
+      }
+
+      .xxx {
+        font-family: 'Archivo Black', sans-serif;
+        font-size: clamp(2rem, 8vw, 4rem);
+        letter-spacing: 4vw;
+        margin: 3vw 0 1vw 4vw;
+      }
+
+      .genre-tags {
+        font-size: clamp(1.5rem, 6vw, 2.5rem);
+        letter-spacing: 1vw;
+        text-align: justify;
+        text-align-last: justify;
+        width: 100%;
+        line-height: 1;
+      }
+
+      .footer-text {
+        text-align: center;
+        font-size: clamp(0.6rem, 2.5vw, 0.9rem);
+        letter-spacing: 1px;
+        padding: 2vw 0;
+      }
     </style>
-</head>
-<body vid="9">
-
-    
+  </head>
+  <body vid="9">
     <canvas id="paper-canvas" vid="10"></canvas>
 
-    
-    <svg style="display: none;" vid="11">
-        <defs vid="12">
-            <filter id="ink-bleed" x="-20%" y="-20%" width="140%" height="140%" vid="13">
-                
-                <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise" vid="14"></feTurbulence>
-                
-                <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 2 -1" in="noise" result="centeredNoise" vid="15"></feColorMatrix>
-                
-                <feDisplacementMap in="SourceGraphic" in2="centeredNoise" scale="3" xChannelSelector="R" yChannelSelector="G" result="displaced" vid="16"></feDisplacementMap>
-                
-                <feGaussianBlur in="displaced" stdDeviation="0.5" result="blurred" vid="17"></feGaussianBlur>
-                
-                <feComponentTransfer in="blurred" result="finalBleed" vid="18">
-                    <feFuncA type="linear" slope="3" intercept="-1" vid="19"></feFuncA>
-                </feComponentTransfer>
-            </filter>
-        </defs>
+    <svg style="display: none" vid="11">
+      <defs vid="12">
+        <filter id="ink-bleed" x="-20%" y="-20%" width="140%" height="140%" vid="13">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.8"
+            numOctaves="3"
+            result="noise"
+            vid="14"
+          ></feTurbulence>
+
+          <feColorMatrix
+            type="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 2 -1"
+            in="noise"
+            result="centeredNoise"
+            vid="15"
+          ></feColorMatrix>
+
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="centeredNoise"
+            scale="3"
+            xChannelSelector="R"
+            yChannelSelector="G"
+            result="displaced"
+            vid="16"
+          ></feDisplacementMap>
+
+          <feGaussianBlur
+            in="displaced"
+            stdDeviation="0.5"
+            result="blurred"
+            vid="17"
+          ></feGaussianBlur>
+
+          <feComponentTransfer in="blurred" result="finalBleed" vid="18">
+            <feFuncA type="linear" slope="3" intercept="-1" vid="19"></feFuncA>
+          </feComponentTransfer>
+        </filter>
+      </defs>
     </svg>
 
-    
     <div class="poster-wrapper" vid="20">
-        
-        <div class="top-grid" vid="21">
-            <div class="col-left" vid="22">
-                <div class="display-text" vid="23">ALL<br vid="24">NIGHT</div>
-                <div class="text-mono" style="margin-top: 1vw;" vid="25">
-                    UNDERGROUND<br vid="26">LOCATION SE19<br vid="27">07878 900 876
-                </div>
-            </div>
-            <div class="vert-divider" vid="28"></div>
-            <div class="col-right" vid="29">
-                <div class="sub-display" vid="30">SAT APRIL 11</div>
-                <div class="sub-display" vid="31">SUN APRIL 12</div>
-                <div class="text-mono" style="margin-top: auto;" vid="32">
-                    DOORS OPEN 23:59<br vid="33">
-                    CURFEW 05:30<br vid="34">
-                    TICKETS ON DOOR ONLY
-                </div>
-            </div>
+      <div class="top-grid" vid="21">
+        <div class="col-left" vid="22">
+          <div class="display-text" vid="23">ALL<br vid="24" />NIGHT</div>
+          <div class="text-mono" style="margin-top: 1vw" vid="25">
+            UNDERGROUND<br vid="26" />LOCATION SE19<br vid="27" />07878 900 876
+          </div>
+        </div>
+        <div class="vert-divider" vid="28"></div>
+        <div class="col-right" vid="29">
+          <div class="sub-display" vid="30">SAT APRIL 11</div>
+          <div class="sub-display" vid="31">SUN APRIL 12</div>
+          <div class="text-mono" style="margin-top: auto" vid="32">
+            DOORS OPEN 23:59<br vid="33" />
+            CURFEW 05:30<br vid="34" />
+            TICKETS ON DOOR ONLY
+          </div>
+        </div>
+      </div>
+
+      <div class="divider" vid="35"></div>
+
+      <div class="graphic-section" vid="36">
+        <svg class="star" viewBox="0 0 100 100" vid="37">
+          <path
+            d="M50 0 L55 45 L100 50 L55 55 L50 100 L45 55 L0 50 L45 45 Z"
+            fill="var(--ink)"
+            vid="38"
+          ></path>
+        </svg>
+
+        <div class="arch-text-container" vid="39">
+          <svg class="svg-text-arch" viewBox="0 0 500 150" vid="40">
+            <path
+              id="curve"
+              d="M 50 140 A 200 120 0 0 1 450 140"
+              fill="transparent"
+              vid="41"
+            ></path>
+            <text vid="42">
+              <textPath href="#curve" startOffset="50%" text-anchor="middle" vid="43">
+                GROOVE
+              </textPath>
+            </text>
+          </svg>
         </div>
 
-        <div class="divider" vid="35"></div>
+        <svg class="main-graphic" viewBox="0 0 200 120" vid="44">
+          <ellipse cx="100" cy="60" rx="90" ry="50" vid="45"></ellipse>
+          <ellipse cx="100" cy="60" rx="90" ry="25" vid="46"></ellipse>
+          <ellipse cx="100" cy="60" rx="90" ry="5" vid="47"></ellipse>
 
-        <div class="graphic-section" vid="36">
-            
-            <svg class="star" viewBox="0 0 100 100" vid="37">
-                <path d="M50 0 L55 45 L100 50 L55 55 L50 100 L45 55 L0 50 L45 45 Z" fill="var(--ink)" vid="38"></path>
-            </svg>
+          <path d="M 10 60 A 90 50 0 0 1 190 60 A 90 50 0 0 1 10 60" vid="48"></path>
+          <path d="M 40 13 A 60 50 0 0 0 40 107" vid="49"></path>
+          <path d="M 160 13 A 60 50 0 0 1 160 107" vid="50"></path>
+          <path d="M 70 3 A 30 50 0 0 0 70 117" vid="51"></path>
+          <path d="M 130 3 A 30 50 0 0 1 130 117" vid="52"></path>
+          <path d="M 100 0 L 100 120" vid="53"></path>
 
-            
-            <div class="arch-text-container" vid="39">
-                <svg class="svg-text-arch" viewBox="0 0 500 150" vid="40">
-                    <path id="curve" d="M 50 140 A 200 120 0 0 1 450 140" fill="transparent" vid="41"></path>
-                    <text vid="42">
-                        <textPath href="#curve" startOffset="50%" text-anchor="middle" vid="43">
-                            GROOVE
-                        </textPath>
-                    </text>
-                </svg>
-            </div>
+          <circle
+            cx="100"
+            cy="60"
+            r="35"
+            fill="#d8d2b8"
+            stroke="var(--ink)"
+            stroke-width="3"
+            vid="54"
+          ></circle>
+          <circle cx="100" cy="60" r="30" fill="var(--ink)" vid="55"></circle>
+          <circle cx="100" cy="60" r="10" fill="#d8d2b8" vid="56"></circle>
+          <circle cx="100" cy="60" r="2" fill="var(--ink)" vid="57"></circle>
 
-            
-            <svg class="main-graphic" viewBox="0 0 200 120" vid="44">
-                
-                <ellipse cx="100" cy="60" rx="90" ry="50" vid="45"></ellipse>
-                <ellipse cx="100" cy="60" rx="90" ry="25" vid="46"></ellipse>
-                <ellipse cx="100" cy="60" rx="90" ry="5" vid="47"></ellipse>
-                
-                
-                <path d="M 10 60 A 90 50 0 0 1 190 60 A 90 50 0 0 1 10 60" vid="48"></path>
-                <path d="M 40 13 A 60 50 0 0 0 40 107" vid="49"></path>
-                <path d="M 160 13 A 60 50 0 0 1 160 107" vid="50"></path>
-                <path d="M 70 3 A 30 50 0 0 0 70 117" vid="51"></path>
-                <path d="M 130 3 A 30 50 0 0 1 130 117" vid="52"></path>
-                <path d="M 100 0 L 100 120" vid="53"></path>
+          <path
+            d="M 140 30 L 125 50 L 115 50"
+            stroke="var(--ink)"
+            stroke-width="4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            fill="none"
+            vid="58"
+          ></path>
+        </svg>
+      </div>
 
-                
-                <circle cx="100" cy="60" r="35" fill="#d8d2b8" stroke="var(--ink)" stroke-width="3" vid="54"></circle>
-                <circle cx="100" cy="60" r="30" fill="var(--ink)" vid="55"></circle>
-                <circle cx="100" cy="60" r="10" fill="#d8d2b8" vid="56"></circle>
-                <circle cx="100" cy="60" r="2" fill="var(--ink)" vid="57"></circle>
-                
-                <path d="M 140 30 L 125 50 L 115 50" stroke="var(--ink)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none" vid="58"></path>
-            </svg>
-        </div>
+      <div class="divider" vid="59"></div>
 
-        <div class="divider" vid="59"></div>
+      <div class="title-section" vid="60">
+        <div class="text-mono pre-title" vid="61">ILLA SUM &amp; SUGARDADDY PRESENT</div>
 
-        <div class="title-section" vid="60">
-            <div class="text-mono pre-title" vid="61">ILLA SUM &amp; SUGARDADDY PRESENT</div>
-            
-            <h1 class="huge-title" vid="62">
-                <span vid="63">GROOVE</span>
-                <span vid="64">CANDY</span>
-            </h1>
-            
-            <div class="xxx" vid="65">X X X</div>
-            
-            <h2 class="display-text genre-tags" vid="66">
-                90S HOUSE
-            </h2>
-            <h2 class="display-text genre-tags" style="font-size: clamp(1rem, 4.5vw, 1.8rem); margin-top: 1vw;" vid="67">
-                SOULFUL • GARAGE HOUSE
-            </h2>
-        </div>
+        <h1 class="huge-title" vid="62">
+          <span vid="63">GROOVE</span>
+          <span vid="64">CANDY</span>
+        </h1>
 
-        <div class="divider" vid="68"></div>
+        <div class="xxx" vid="65">X X X</div>
 
-        <div class="text-mono footer-text" vid="69">
-            STRICTLY 18 AND OVER &nbsp;&nbsp;•&nbsp;&nbsp; RIGHT OF ADMISSION RESERVED &nbsp;&nbsp;•&nbsp;&nbsp; NO DRESS CODE
-        </div>
+        <h2 class="display-text genre-tags" vid="66">90S HOUSE</h2>
+        <h2
+          class="display-text genre-tags"
+          style="font-size: clamp(1rem, 4.5vw, 1.8rem); margin-top: 1vw"
+          vid="67"
+        >
+          SOULFUL • GARAGE HOUSE
+        </h2>
+      </div>
 
+      <div class="divider" vid="68"></div>
+
+      <div class="text-mono footer-text" vid="69">
+        STRICTLY 18 AND OVER &nbsp;&nbsp;•&nbsp;&nbsp; RIGHT OF ADMISSION RESERVED
+        &nbsp;&nbsp;•&nbsp;&nbsp; NO DRESS CODE
+      </div>
     </div>
 
-    
     <script vid="70">
-        const canvas = document.getElementById('paper-canvas');
-        const gl = canvas.getContext('webgl');
+      const canvas = document.getElementById('paper-canvas')
+      const gl = canvas.getContext('webgl')
 
-        if (!gl) {
-            console.error("WebGL not supported");
-        }
+      if (!gl) {
+        console.error('WebGL not supported')
+      }
 
-        
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            gl.viewport(0, 0, canvas.width, canvas.height);
-        }
-        window.addEventListener('resize', resize);
-        resize();
+      function resize() {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        gl.viewport(0, 0, canvas.width, canvas.height)
+      }
+      window.addEventListener('resize', resize)
+      resize()
 
-        
-        const vsSource = `
+      const vsSource = `
             attribute vec2 a_position;
             varying vec2 v_uv;
             void main() {
@@ -372,10 +408,9 @@
                 v_uv.y = 1.0 - v_uv.y; // flip Y
                 gl_Position = vec4(a_position, 0.0, 1.0);
             }
-        `;
+        `
 
-        
-        const fsSource = `
+      const fsSource = `
             precision highp float;
             varying vec2 v_uv;
             uniform vec2 u_resolution;
@@ -439,58 +474,50 @@
 
                 gl_FragColor = vec4(paper, 1.0);
             }
-        `;
+        `
 
-        function createShader(gl, type, source) {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                console.error(gl.getShaderInfoLog(shader));
-                gl.deleteShader(shader);
-                return null;
-            }
-            return shader;
+      function createShader(gl, type, source) {
+        const shader = gl.createShader(type)
+        gl.shaderSource(shader, source)
+        gl.compileShader(shader)
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          console.error(gl.getShaderInfoLog(shader))
+          gl.deleteShader(shader)
+          return null
         }
+        return shader
+      }
 
-        const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
-        const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+      const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource)
+      const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource)
 
-        const program = gl.createProgram();
-        gl.attachShader(program, vertexShader);
-        gl.attachShader(program, fragmentShader);
-        gl.linkProgram(program);
-        gl.useProgram(program);
+      const program = gl.createProgram()
+      gl.attachShader(program, vertexShader)
+      gl.attachShader(program, fragmentShader)
+      gl.linkProgram(program)
+      gl.useProgram(program)
 
-        
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        const positions = [
-            -1.0, -1.0,
-             1.0, -1.0,
-            -1.0,  1.0,
-            -1.0,  1.0,
-             1.0, -1.0,
-             1.0,  1.0,
-        ];
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+      const positionBuffer = gl.createBuffer()
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
+      const positions = [-1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0]
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
 
-        const positionLocation = gl.getAttribLocation(program, "a_position");
-        gl.enableVertexAttribArray(positionLocation);
-        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+      const positionLocation = gl.getAttribLocation(program, 'a_position')
+      gl.enableVertexAttribArray(positionLocation)
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
 
-        const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
-        const timeLocation = gl.getUniformLocation(program, "u_time");
+      const resolutionLocation = gl.getUniformLocation(program, 'u_resolution')
+      const timeLocation = gl.getUniformLocation(program, 'u_time')
 
-        function render(time) {
-            gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-            gl.uniform1f(timeLocation, time);
+      function render(time) {
+        gl.uniform2f(resolutionLocation, canvas.width, canvas.height)
+        gl.uniform1f(timeLocation, time)
 
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
-            requestAnimationFrame(render);
-        }
+        gl.drawArrays(gl.TRIANGLES, 0, 6)
+        requestAnimationFrame(render)
+      }
 
-        requestAnimationFrame(render);
+      requestAnimationFrame(render)
     </script>
-
-</body></html>
+  </body>
+</html>
