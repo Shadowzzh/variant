@@ -1,0 +1,299 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Lunar Radiance Diagram</title>
+    
+    <style vid="5">
+        :root {
+            --bg: #020202; 
+            --ink: #F2F2EF; 
+            --ink-dim: rgba(242, 242, 239, 0.4);
+            --ink-faint: rgba(242, 242, 239, 0.15);
+            
+            --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --font-serif: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Source Serif Pro", serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .diagram-container {
+            flex: 1;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            
+            filter: drop-shadow(0px 0px 2px rgba(242, 242, 239, 0.2));
+            shape-rendering: geometricPrecision;
+        }
+
+        
+        .stroke-main { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+        .stroke-thin { fill: none; stroke: var(--ink); stroke-width: 1; }
+        .stroke-dim { fill: none; stroke: var(--ink-dim); stroke-width: 1; }
+        .stroke-faint { fill: none; stroke: var(--ink-faint); stroke-width: 1; }
+        
+        .dash-long { stroke-dasharray: 6 6; }
+        .dash-short { stroke-dasharray: 2 4; }
+        
+        .fill-ink { fill: var(--ink); }
+        .fill-bg { fill: var(--bg); }
+
+        .label {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            fill: var(--ink);
+            text-transform: uppercase;
+        }
+        
+        .label-small {
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            fill: var(--ink-dim);
+        }
+
+        .text-anchor-middle { text-anchor: middle; }
+        .text-anchor-end { text-anchor: end; }
+        .text-anchor-start { text-anchor: start; }
+
+        
+        .draw-path {
+            stroke-dasharray: 3000;
+            stroke-dashoffset: 3000;
+            animation: draw 3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        .draw-path-delay-1 { animation-delay: 1s; }
+        .draw-path-delay-2 { animation-delay: 2.5s; }
+        
+        .fade-in {
+            opacity: 0;
+            animation: fade 2s ease-out forwards;
+        }
+        .fade-in-delay { animation-delay: 3s; }
+
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes fade {
+            to { opacity: 1; }
+        }
+
+        
+        .caption-container {
+            padding: 2rem 2rem 4rem 2rem;
+            text-align: center;
+        }
+
+        .caption-text {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 400;
+            line-height: 1.5;
+            letter-spacing: 0.01em;
+            margin: 0;
+            color: var(--ink);
+        }
+
+        .caption-meta {
+            font-family: var(--font-sans);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--ink-dim);
+            margin-top: 1rem;
+            display: block;
+        }
+
+        
+        @media (max-width: 500px) {
+            .caption-text { font-size: 1.1rem; }
+            .label { font-size: 13px; } 
+        }
+    </style>
+</head>
+<body vid="6">
+
+    <main vid="7">
+        <div class="diagram-container" vid="8">
+            
+            <svg viewBox="0 0 1000 1200" xmlns="http://www.w3.org/2000/svg" vid="9">
+                <defs vid="10">
+                    
+                    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse" vid="11">
+                        <path d="M 0 1 L 10 5 L 0 9" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-linejoin="miter" vid="12"></path>
+                    </marker>
+                    <marker id="arrow-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse" vid="13">
+                        <path d="M 0 1 L 10 5 L 0 9" fill="none" stroke="var(--ink-dim)" stroke-width="1.5" stroke-linejoin="miter" vid="14"></path>
+                    </marker>
+                    
+                    
+                    <path id="curveTextPath" d="M 150,600 A 350,350 0 0,1 850,600" vid="15"></path>
+                    
+                    <path id="orbitTextPath" d="M 174,751 A 360,140 0 0,1 826,449" vid="16"></path>
+                </defs>
+
+                
+                <g class="fade-in" vid="17">
+                    
+                    <path d="M 40,50 L 60,50 M 50,40 L 50,60" class="stroke-dim" vid="18"></path>
+                    <path d="M 940,50 L 960,50 M 950,40 L 950,60" class="stroke-dim" vid="19"></path>
+                    <path d="M 40,1150 L 60,1150 M 50,1140 L 50,1160" class="stroke-dim" vid="20"></path>
+                    <path d="M 940,1150 L 960,1150 M 950,1140 L 950,1160" class="stroke-dim" vid="21"></path>
+                    
+                    
+                    <line x1="500" y1="100" x2="500" y2="1100" class="stroke-faint dash-long" vid="22"></line>
+                    <line x1="100" y1="600" x2="900" y2="600" class="stroke-faint dash-long" vid="23"></line>
+                    
+                    
+                    <circle cx="500" cy="600" r="150" class="stroke-faint dash-short" vid="24"></circle>
+                    <circle cx="500" cy="600" r="250" class="stroke-faint dash-short" vid="25"></circle>
+                </g>
+
+                
+                <g vid="26">
+                    
+                    <circle cx="500" cy="600" r="350" class="stroke-main draw-path" vid="27"></circle>
+                    
+                    
+                    <path d="M 150,600 A 350,110 0 0,0 850,600" class="stroke-main draw-path" vid="28"></path>
+                    <path d="M 850,600 A 350,110 0 0,0 150,600" class="stroke-main dash-long draw-path" vid="29"></path>
+                    
+                    
+                    <g transform="rotate(-25 500 600)" vid="30">
+                        <path d="M 140,600 A 360,140 0 0,0 860,600" class="stroke-main draw-path" vid="31"></path>
+                        <path d="M 860,600 A 360,140 0 0,0 140,600" class="stroke-dim dash-long draw-path" vid="32"></path>
+                    </g>
+                </g>
+
+                
+                
+                <g class="stroke-dim dash-long draw-path draw-path-delay-1" vid="33">
+                    <line x1="50" y1="450" x2="350" y2="450" marker-end="url(#arrow-dim)" vid="34"></line>
+                    
+                    <line x1="50" y1="448" x2="820" y2="448" marker-end="url(#arrow-dim)" vid="35"></line>
+                    <line x1="50" y1="600" x2="480" y2="600" marker-end="url(#arrow-dim)" vid="36"></line>
+                    <line x1="50" y1="750" x2="350" y2="750" marker-end="url(#arrow-dim)" vid="37"></line>
+                </g>
+
+                
+                
+                <g class="stroke-main draw-path draw-path-delay-2" vid="38">
+                    <line x1="816" y1="453" x2="515" y2="593" marker-end="url(#arrow)" vid="39"></line>
+                </g>
+                
+                
+                <g class="fade-in fade-in-delay" vid="40">
+                    
+                    
+                    <path d="M 420,600 A 80,80 0 0,1 568,568" class="stroke-dim" marker-end="url(#arrow-dim)" vid="41"></path>
+                    <text x="460" y="550" class="label label-small text-anchor-middle" vid="42">PHASE α</text>
+                </g>
+
+                
+                <g class="fade-in fade-in-delay" vid="43">
+                    
+                    <circle cx="500" cy="600" r="14" class="stroke-main fill-bg" vid="44"></circle>
+                    
+                    <path d="M 500,586 A 14,14 0 0,0 500,614 Z" class="fill-ink" vid="45"></path>
+                    
+                    
+                    <circle cx="826" cy="448" r="22" class="stroke-main fill-bg" vid="46"></circle>
+                    
+                    <path d="M 826,426 A 22,22 0 0,0 826,470 Z" class="fill-ink" vid="47"></path>
+                    
+                    
+                    <circle cx="150" cy="600" r="4" class="fill-ink" vid="48"></circle>
+                    <circle cx="850" cy="600" r="4" class="fill-ink" vid="49"></circle>
+                    <circle cx="500" cy="250" r="4" class="fill-ink" vid="50"></circle>
+                    <circle cx="500" cy="950" r="4" class="fill-ink" vid="51"></circle>
+                </g>
+
+                
+                <g class="fade-in fade-in-delay label" vid="52">
+                    
+                    <text x="500" y="635" class="text-anchor-middle" vid="53">OBSERVER</text>
+                    <text x="500" y="650" class="label-small text-anchor-middle" vid="54">TERRA</text>
+
+                    
+                    <text x="865" y="445" class="text-anchor-start" vid="55">LUNA</text>
+                    <text x="865" y="460" class="label-small text-anchor-start" vid="56">ALBEDO 0.12</text>
+
+                    
+                    <text x="500" y="235" class="text-anchor-middle" vid="57">NORTH CELESTIAL POLE</text>
+                    <text x="500" y="980" class="text-anchor-middle" vid="58">SOUTH CELESTIAL POLE</text>
+
+                    
+                    <text x="60" y="440" class="text-anchor-start label-small" vid="59">INCIDENT SOLAR RADIANCE</text>
+
+                    
+                    <g transform="rotate(25 663 524)" vid="60">
+                        <text x="663" y="515" class="text-anchor-middle" vid="61">LUNAR RADIANCE</text>
+                    </g>
+
+                    
+                    <text dy="-10" vid="62">
+                        <textPath href="#curveTextPath" startOffset="50%" text-anchor="middle" class="label-small" vid="63">
+                            CELESTIAL SPHERE
+                        </textPath>
+                    </text>
+                    
+                    <text dy="-8" vid="64">
+                        
+                        <textPath href="#orbitTextPath" startOffset="25%" text-anchor="middle" class="label-small" vid="65">
+                            LUNAR ORBITAL PLANE
+                        </textPath>
+                    </text>
+                    
+                    <text x="250" y="592" class="text-anchor-middle label-small" vid="66">ECLIPTIC</text>
+
+                    
+                    <g transform="translate(60, 1050)" vid="67">
+                        <text x="0" y="0" class="text-anchor-start" vid="68">SYSTEM METRICS</text>
+                        <text x="0" y="15" class="text-anchor-start label-small" vid="69">INCIDENT λ: 380-750 NM</text>
+                        <text x="0" y="30" class="text-anchor-start label-small" vid="70">REFLECTANCE: DIFFUSE</text>
+                        <text x="0" y="45" class="text-anchor-start label-small" vid="71">EQ. INCLINATION: 5.14°</text>
+                    </g>
+                </g>
+            </svg>
+        </div>
+
+        <div class="caption-container fade-in fade-in-delay" vid="72">
+            <p class="caption-text" vid="73">It is well known that the moon receives its radiance from the sun.</p>
+            <span class="caption-meta" vid="74">Fig I. — Geometric Representation of Light Transfer</span>
+        </div>
+    </main>
+
+
+</body></html>

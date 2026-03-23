@@ -1,0 +1,690 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">Atmospheric Control Unit</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" vid="5"></script>
+    <style vid="6">
+        :root {
+            --bg-base: #000000;
+            --panel-bg: #050505;
+            --panel-raised: #0A0A0A;
+            --border-dim: #1a1a1a;
+            --border-light: #2a2a2a;
+            --text-main: #ffffff;
+            --text-muted: #666666;
+            --text-dark: #333333;
+            --accent-led: #ff3300;
+            --accent-led-off: #331100;
+            
+            --font-display: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", sans-serif;
+            --font-ui: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --font-mono: "SF Mono", "Roboto Mono", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        
+        .device {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-base);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        
+        .observation-deck {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid var(--border-dim);
+            overflow: hidden;
+            background: #000;
+        }
+
+        #webgl-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .primary-readout {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-5%);
+        }
+
+        .readout-value {
+            font-family: var(--font-display);
+            font-weight: 100; 
+            font-size: 6rem;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            font-variant-numeric: tabular-nums;
+            
+            transform: scaleX(0.9); 
+        }
+
+        .readout-unit {
+            font-family: var(--font-display);
+            font-weight: 300;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            color: #888;
+            margin-top: 0.5rem;
+        }
+
+        
+        .hud-top-left {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            z-index: 2;
+        }
+
+        .hud-label {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .hud-value {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-main);
+            letter-spacing: 0.05em;
+        }
+
+        .hud-top-right {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            z-index: 2;
+            text-align: right;
+            display: flex;
+            gap: 4px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.2;
+        }
+        .status-dot.active {
+            opacity: 1;
+            box-shadow: 0 0 8px rgba(255,255,255,0.8);
+        }
+
+        
+        .control-deck {
+            height: 40%;
+            min-height: 320px;
+            background: var(--panel-bg);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            gap: 24px;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 24px;
+            flex: 1;
+        }
+
+        
+        .dial-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .dial-housing {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #0a0a0a, #000000);
+            box-shadow: 
+                inset 0 1px 1px rgba(255,255,255,0.05),
+                0 10px 20px rgba(0,0,0,0.8),
+                0 0 0 1px var(--border-dim);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        
+        .dial-housing::before {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 50%;
+            background: repeating-conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                transparent 1deg,
+                rgba(255,255,255,0.02) 1deg,
+                rgba(255,255,255,0.02) 2deg
+            );
+            mask-image: radial-gradient(black, transparent);
+            -webkit-mask-image: radial-gradient(black, transparent);
+        }
+
+        .dial-surface {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #080808;
+            
+            background-image: conic-gradient(
+                from 180deg at 50% 50%, 
+                #050505 0%, 
+                #1a1a1a 15%, 
+                #050505 30%, 
+                #0a0a0a 50%, 
+                #050505 70%, 
+                #1a1a1a 85%, 
+                #050505 100%
+            );
+            box-shadow: 
+                inset 0 2px 4px rgba(255,255,255,0.05),
+                inset 0 -2px 4px rgba(0,0,0,0.5),
+                0 4px 8px rgba(0,0,0,0.8);
+            position: relative;
+            transform: rotate(45deg); 
+            cursor: pointer;
+            transition: transform 0.1s ease-out;
+        }
+
+        .dial-indicator {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 12px;
+            background: #fff;
+            border-radius: 1px;
+            box-shadow: 0 0 4px rgba(255,255,255,0.5);
+        }
+
+        .dial-label {
+            position: absolute;
+            bottom: -24px;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        
+        .panel-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-left: 1px solid var(--border-dim);
+            padding-left: 24px;
+        }
+
+        .system-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: auto;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid var(--border-dim);
+            padding-bottom: 4px;
+        }
+
+        .meta-label {
+            font-size: 0.5rem;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .meta-val {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--text-muted);
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .hardware-btn {
+            background: var(--panel-raised);
+            border: 1px solid var(--border-dim);
+            height: 48px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 
+                inset 0 1px 0 rgba(255,255,255,0.05),
+                0 2px 4px rgba(0,0,0,0.3);
+            transition: all 0.1s;
+        }
+
+        .hardware-btn:active {
+            background: #080808;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+            transform: translateY(1px);
+        }
+
+        .btn-led {
+            width: 4px;
+            height: 12px;
+            border-radius: 2px;
+            background: var(--accent-led-off);
+            margin-right: 16px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+            transition: all 0.2s;
+        }
+
+        .hardware-btn.is-active .btn-led {
+            background: var(--accent-led);
+            box-shadow: 0 0 8px var(--accent-led), inset 0 1px 2px rgba(255,255,255,0.5);
+        }
+
+        .btn-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .hardware-btn.is-active .btn-label {
+            color: #fff;
+        }
+
+        
+        .crosshair-h, .crosshair-v {
+            position: absolute;
+            background: var(--border-dim);
+            z-index: 0;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .crosshair-h { width: 100%; height: 1px; top: 50%; }
+        .crosshair-v { height: 100%; width: 1px; left: 50%; }
+
+    </style>
+</head>
+<body vid="7">
+
+    <div class="device" vid="8">
+        
+        <div class="observation-deck" vid="9">
+            <div id="webgl-container" vid="10"></div>
+            
+            <div class="crosshair-v" vid="11"></div>
+            <div class="crosshair-h" vid="12"></div>
+
+            <div class="hud-top-left" vid="13">
+                <div class="hud-label" vid="14">Atmospheric Density</div>
+                <div class="hud-value" vid="15">0.084 kg/m³</div>
+            </div>
+
+            <div class="hud-top-right" vid="16">
+                <div class="status-dot active" vid="17"></div>
+                <div class="status-dot active" vid="18"></div>
+                <div class="status-dot" vid="19"></div>
+            </div>
+
+            <div class="primary-readout" vid="20">
+                <div class="readout-value" id="main-value" vid="21">68</div>
+                <div class="readout-unit" vid="22">FLOW RATE</div>
+            </div>
+        </div>
+
+        
+        <div class="control-deck" vid="23">
+            <div class="hud-label" style="margin-bottom: -16px;" vid="24">SYS. CONTROLS // MK IV</div>
+            <div class="control-row" vid="25">
+                
+                
+                <div class="dial-container" vid="26">
+                    <div class="dial-housing" vid="27">
+                        <div class="dial-surface" id="primary-dial" vid="28">
+                            <div class="dial-indicator" vid="29"></div>
+                        </div>
+                    </div>
+                    <div class="dial-label" vid="30">Intensity</div>
+                </div>
+
+                
+                <div class="panel-container" vid="31">
+                    
+                    <div class="system-meta" vid="32">
+                        <div class="meta-row" vid="33">
+                            <span class="meta-label" vid="34">Core Temp</span>
+                            <span class="meta-val" vid="35">294.1K</span>
+                        </div>
+                        <div class="meta-row" vid="36">
+                            <span class="meta-label" vid="37">Resonance</span>
+                            <span class="meta-val" vid="38">432Hz</span>
+                        </div>
+                    </div>
+
+                    <div class="button-group" vid="39">
+                        <div class="hardware-btn is-active" onclick="toggleBtn(this)" vid="40">
+                            <div class="btn-led" vid="41"></div>
+                            <div class="btn-label" vid="42">Purge</div>
+                        </div>
+                        <div class="hardware-btn" onclick="toggleBtn(this)" vid="43">
+                            <div class="btn-led" vid="44"></div>
+                            <div class="btn-label" vid="45">Ionize</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script vid="46">
+        
+        const container = document.getElementById('webgl-container');
+        const scene = new THREE.Scene();
+        
+        
+        const camera = new THREE.OrthographicCamera( -1, 1, 1, -1, 0.1, 10 );
+        camera.position.z = 1;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        
+        
+        const vertexShader = `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            uniform float u_time;
+            uniform vec2 u_resolution;
+            varying vec2 vUv;
+
+            // Simplex noise function
+            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+
+            float snoise(vec2 v) {
+                const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                                    0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                                    -0.577350269189626,  // -1.0 + 2.0 * C.x
+                                    0.024390243902439); // 1.0 / 41.0
+                vec2 i  = floor(v + dot(v, C.yy) );
+                vec2 x0 = v -   i + dot(i, C.xx);
+                vec2 i1;
+                i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                vec4 x12 = x0.xyxy + C.xxzz;
+                x12.xy -= i1;
+                i = mod289(i);
+                vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+                    + i.x + vec3(0.0, i1.x, 1.0 ));
+                vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                m = m*m ;
+                m = m*m ;
+                vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                vec3 h = abs(x) - 0.5;
+                vec3 ox = floor(x + 0.5);
+                vec3 a0 = x - ox;
+                m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+                vec3 g;
+                g.x  = a0.x  * x0.x  + h.x  * x0.y;
+                g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                return 130.0 * dot(m, g);
+            }
+
+            // Fractal Brownian Motion
+            float fbm(vec2 p) {
+                float value = 0.0;
+                float amplitude = 0.5;
+                float frequency = 0.0;
+                for (int i = 0; i < 5; i++) {
+                    value += amplitude * snoise(p);
+                    p *= 2.0;
+                    amplitude *= 0.5;
+                }
+                return value;
+            }
+
+            void main() {
+                // Normalize and center UVs, adjust for aspect ratio
+                vec2 uv = (vUv - 0.5) * 2.0;
+                uv.x *= u_resolution.x / u_resolution.y;
+
+                // Polar coordinates
+                float radius = length(uv);
+                float angle = atan(uv.y, uv.x);
+
+                // Base ring parameters
+                float ringRadius = 0.5;
+                float thickness = 0.25;
+
+                // Animate noise
+                float time = u_time * 0.2;
+                
+                // Distort coordinates for organic feel
+                vec2 noiseCoord = vec2(
+                    cos(angle) * ringRadius + time,
+                    sin(angle) * ringRadius - time
+                ) * 2.0;
+                
+                // Base structure
+                float noiseVal = fbm(noiseCoord + fbm(noiseCoord * 2.0 - time));
+                
+                // Swirling filaments
+                float swirl = snoise(vec2(angle * 3.0 - time * 2.0, radius * 5.0 - time));
+                
+                // Calculate distance to ring core, applying noise distortion
+                float dist = abs(radius - ringRadius + noiseVal * 0.15);
+                
+                // Create soft, volumetric-looking band
+                float intensity = smoothstep(thickness, 0.0, dist);
+                
+                // Add sharp filaments
+                intensity *= smoothstep(-0.2, 1.0, swirl + 0.5);
+                
+                // Core glow
+                float core = smoothstep(0.05, 0.0, dist) * 0.5;
+                intensity += core;
+
+                // Color Palette mapping (Pitch black to warm metallic silver/gold)
+                // Reference has subtle tarnish/gold hues in the smoke
+                vec3 col_dark = vec3(0.0, 0.0, 0.0);
+                vec3 col_mid = vec3(0.15, 0.12, 0.10); // Subtle warm dark gray
+                vec3 col_highlight = vec3(0.8, 0.75, 0.65); // Tarnished gold/silver
+                
+                vec3 finalColor = mix(col_dark, col_mid, intensity * 1.5);
+                finalColor = mix(finalColor, col_highlight, intensity * intensity * 1.2);
+
+                // Add subtle scanline/texture to the void to match the deep digital vibe
+                float scanline = sin(vUv.y * u_resolution.y * 1.5) * 0.02;
+                finalColor -= scanline;
+
+                gl_FragColor = vec4(finalColor, intensity * 2.0); // Alpha mapped to intensity
+            }
+        `;
+
+        const uniforms = {
+            u_time: { value: 0.0 },
+            u_resolution: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) }
+        };
+
+        const geometry = new THREE.PlaneGeometry(2, 2);
+        const material = new THREE.ShaderMaterial({
+            vertexShader,
+            fragmentShader,
+            uniforms,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        
+        let clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            uniforms.u_time.value = clock.getElapsedTime();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        
+        window.addEventListener('resize', () => {
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            renderer.setSize(width, height);
+            uniforms.u_resolution.value.set(width, height);
+        });
+
+        
+        
+        
+        function toggleBtn(element) {
+            element.classList.toggle('is-active');
+        }
+
+        
+        const dial = document.getElementById('primary-dial');
+        const valueDisplay = document.getElementById('main-value');
+        let currentRotation = 45;
+        let currentValue = 68;
+        let isDragging = false;
+        let startY = 0;
+
+        dial.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startY = e.touches[0].clientY;
+            dial.style.transition = 'none'; 
+        });
+
+        window.addEventListener('touchend', () => {
+            isDragging = false;
+            dial.style.transition = 'transform 0.1s ease-out';
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            
+            const currentY = e.touches[0].clientY;
+            const deltaY = startY - currentY;
+            
+            
+            if (Math.abs(deltaY) > 2) { 
+                const direction = deltaY > 0 ? 1 : -1;
+                
+                currentRotation += direction * 3;
+                
+                currentRotation = Math.max(-135, Math.min(225, currentRotation));
+                
+                dial.style.transform = `rotate(${currentRotation}deg)`;
+                
+                
+                if (Math.random() > 0.5) { 
+                    currentValue += direction;
+                    currentValue = Math.max(0, Math.min(99, currentValue));
+                    valueDisplay.innerText = currentValue.toString().padStart(2, '0');
+                }
+                
+                startY = currentY; 
+            }
+        }, { passive: false }); 
+
+        
+        dial.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startY = e.clientY;
+            dial.style.transition = 'none';
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            dial.style.transition = 'transform 0.1s ease-out';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const currentY = e.clientY;
+            const deltaY = startY - currentY;
+            if (Math.abs(deltaY) > 2) {
+                const direction = deltaY > 0 ? 1 : -1;
+                currentRotation += direction * 3;
+                currentRotation = Math.max(-135, Math.min(225, currentRotation));
+                dial.style.transform = `rotate(${currentRotation}deg)`;
+                if (Math.random() > 0.5) {
+                    currentValue += direction;
+                    currentValue = Math.max(0, Math.min(99, currentValue));
+                    valueDisplay.innerText = currentValue.toString().padStart(2, '0');
+                }
+                startY = currentY;
+            }
+        });
+    </script>
+
+</body></html>
